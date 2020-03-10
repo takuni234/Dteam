@@ -32,6 +32,11 @@ namespace basecross {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
+			AddGameObject<FixedBox>(
+				Vec3(30.0f,1.0f,30.0f),	//const Vec3& Scale,
+				Vec3(0.0f),				//const Vec3& Rotation,
+				Vec3(0.0f,-1.0f,0.0f)	//const Vec3& Position
+				);
 		}
 		catch (...) {
 			throw;

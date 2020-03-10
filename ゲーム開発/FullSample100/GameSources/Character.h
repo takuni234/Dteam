@@ -7,7 +7,64 @@
 #include "stdafx.h"
 
 namespace basecross{
+	//--------------------------------------------------------------------------------------
+	//	class FixedBox : public GameObject;
+	//--------------------------------------------------------------------------------------
+	class FixedBox : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+	public:
+		//ç\ízÇ∆îjä¸
+		FixedBox(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+		virtual ~FixedBox();
+		//èâä˙âª
+		virtual void OnCreate() override;
+		//ëÄçÏ
+	};
 
+	//--------------------------------------------------------------------------------------
+	//	class FixedSphere : public GameObject;
+	//--------------------------------------------------------------------------------------
+	class FixedSphere : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+	public:
+		//ç\ízÇ∆îjä¸
+		FixedSphere(const shared_ptr<Stage>& StagePtr,
+			const float Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+		virtual ~FixedSphere();
+		//èâä˙âª
+		virtual void OnCreate() override;
+		//ëÄçÏ
+	};
 
+	//--------------------------------------------------------------------------------------
+	//	class FixedCapsule : public GameObject;
+	//--------------------------------------------------------------------------------------
+	class FixedCapsule : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+	public:
+		//ç\ízÇ∆îjä¸
+		FixedCapsule(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+		virtual ~FixedCapsule();
+		//èâä˙âª
+		virtual void OnCreate() override;
+		//ëÄçÏ
+	};
 }
 //end basecross
