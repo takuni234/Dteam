@@ -10,6 +10,8 @@
 #include "ProjectBehavior.h"
 #include "Scene.h"
 #include "GameStage.h"
+#include "TitleStage.h"
+#include "LoadStage.h"
 #include "Character.h"
 #include "Player.h"
 

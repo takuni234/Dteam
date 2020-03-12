@@ -7,7 +7,12 @@
 #include "stdafx.h"
 
 namespace basecross{
-
+	enum SceneKey {
+		Title,
+		Game,
+		Result,
+		Load
+	};
 	//--------------------------------------------------------------------------------------
 	///	ÉQÅ[ÉÄÉVÅ[Éì
 	//--------------------------------------------------------------------------------------
@@ -40,6 +45,7 @@ namespace basecross{
 		*/
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
+		void ChangeScene(SceneKey key);
 	};
 
 }

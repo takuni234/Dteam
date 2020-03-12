@@ -14,14 +14,12 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	void Scene::CreateResourses() {
 		wstring dataDir;
-		//サンプルのためアセットディレクトリを取得
-		App::GetApp()->GetAssetsDirectory(dataDir);
 		//各ゲームは以下のようにデータディレクトリを取得すべき
-		//App::GetApp()->GetDataDirectory(dataDir);
+		App::GetApp()->GetDataDirectory(dataDir);
 		wstring strTexture = dataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
 		strTexture = dataDir + L"sky.jpg";
-		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
+		App::GetApp()->RegisterTexture(L"sky.jpg", strTexture);
 		strTexture = dataDir + L"wall.jpg";
 		App::GetApp()->RegisterTexture(L"WALL_TX", strTexture);
 
@@ -38,7 +36,7 @@ namespace basecross{
 
 			//自分自身にイベントを送る
 			//これにより各ステージやオブジェクトがCreate時にシーンにアクセスできる
-			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
+			ChangeScene(SceneKey::Load);
 		}
 		catch (...) {
 			throw;
@@ -53,7 +51,35 @@ namespace basecross{
 			//最初のアクティブステージの設定
 			ResetActiveStage<GameStage>();
 		}
+		else if (event->m_MsgStr == L"ToTitleStage") {
+			ResetActiveStage<TitleStage>();
+		}
+		else if (event->m_MsgStr == L"ToResultStage") {
+
+		}
+		else if (event->m_MsgStr == L"ToLoadStage") {
+			ResetActiveStage<LoadStage>();
+		}
 	}
 
+	void Scene::ChangeScene(SceneKey key) {
+		switch (key)
+		{
+		case SceneKey::Title:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			break;
+		case SceneKey::Game:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");
+			break;
+		case SceneKey::Result:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToResultStage");
+			break;
+		case SceneKey::Load:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToLoadStage");
+			break;
+		default:
+			break;
+		}
+	}
 }
 //end basecross
