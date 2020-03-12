@@ -33,6 +33,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h">
       <Filter>Stage</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)LoadStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -54,6 +60,12 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)LoadStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
   </ItemGroup>
