@@ -15,5 +15,7 @@
 #include "Character.h"
 #include "Player.h"
 
+#include "Sprite.h"
+
 
 
