@@ -64,8 +64,8 @@ namespace basecross {
 	//スプライトの作成
 	void LoadStage::CreateTitleSprite() {
 		AddGameObject<Sprite>(L"WAIT_TX", Vec2(300.0f, 150.0f), Vec3(450.0f,-400.0f,0.0f));
-		AddGameObject<SerialAnimeSprite>(L"MOVETEST_TX", true,
-			Vec2(256.0f, 256.0f), Vec2(400.0f, -200.0f), 3, 2, 0.1f);
+		AddGameObject<SerialAnimeSprite>(L"LOADTEST_TX", true,
+			Vec2(256.0f, 256.0f), Vec2(400.0f, -200.0f), 4, 1, 0.1f);
 	}
 
 	//初期化
@@ -78,6 +78,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"WAIT_TX", strTexture);
 		strTexture = DataDir + L"movetest.png";
 		App::GetApp()->RegisterTexture(L"MOVETEST_TX", strTexture);
+		strTexture = DataDir + L"タンク.png";
+		App::GetApp()->RegisterTexture(L"LOADTEST_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
 		//他のリソースを読み込むスレッドのスタート
