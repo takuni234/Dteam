@@ -16,6 +16,7 @@
 #include "Player.h"
 
 #include "Sprite.h"
+#include "UISprite.h"
 
 
 

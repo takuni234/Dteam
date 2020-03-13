@@ -10,6 +10,9 @@
     <Filter Include="Stage">
       <UniqueIdentifier>{c31fda6f-dbe7-48af-bd16-4f6a93ace1b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sprites">
+      <UniqueIdentifier>{ceb1f4d5-aa73-410e-836f-31028b7ff3c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -40,7 +43,10 @@
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h">
-      <Filter>Headers</Filter>
+      <Filter>Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UISprite.h">
+      <Filter>Sprites</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +78,10 @@
       <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UISprite.cpp">
+      <Filter>Sprites</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -63,11 +63,9 @@ namespace basecross {
 
 	//スプライトの作成
 	void LoadStage::CreateTitleSprite() {
-		//AddGameObject<AnimeSprite>(L"WAIT_TX", true,
-		//	Vec2(256.0f, 64.0f), Vec2(0.0f, 100.0f));
-		//AddGameObject<SerialAnimeSprite>(L"MOVETEST_TX", true,
-		//	Vec2(256.0f, 256.0f), Vec2(400.0f, -200.0f), 3, 2, 0.1f);
 		AddGameObject<Sprite>(L"WAIT_TX", Vec2(300.0f, 150.0f), Vec3(450.0f,-400.0f,0.0f));
+		AddGameObject<SerialAnimeSprite>(L"MOVETEST_TX", true,
+			Vec2(256.0f, 256.0f), Vec2(400.0f, -200.0f), 3, 2, 0.1f);
 	}
 
 	//初期化
