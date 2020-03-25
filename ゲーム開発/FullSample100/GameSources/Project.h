@@ -14,7 +14,7 @@
 #include "LoadStage.h"
 #include "Character.h"
 #include "Player.h"
-
+#include "PlayerCamera.h"
 #include "Sprite.h"
 #include "UISprite.h"
 

@@ -115,6 +115,15 @@ namespace basecross{
 
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"DEFAULT_CAPSULE");
+		
+		//カメラを得る
+		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
+		if (ptrCamera) {
+			//MyCameraである
+			//MyCameraに注目するオブジェクト（プレイヤー）の設定
+			ptrCamera->SetTargetObject(GetThis<GameObject>());
+			ptrCamera->SetTargetToAt(Vec3(0, 0.25f, 0));
+		}
 	}
 
 	void Player::OnUpdate() {
