@@ -13,6 +13,9 @@
     <Filter Include="Sprites">
       <UniqueIdentifier>{ceb1f4d5-aa73-410e-836f-31028b7ff3c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RescurTarget">
+      <UniqueIdentifier>{b8c7083b-2ffe-4267-8498-458d290f3d6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -51,6 +54,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UISprite.h">
       <Filter>Sprites</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RescurTarget.h">
+      <Filter>RescurTarget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -88,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UISprite.cpp">
       <Filter>Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RescurTarget.cpp">
+      <Filter>RescurTarget</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

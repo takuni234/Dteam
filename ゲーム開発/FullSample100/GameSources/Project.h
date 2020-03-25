@@ -18,5 +18,7 @@
 #include "Sprite.h"
 #include "UISprite.h"
 
+//‹~o‘ÎÛ
+#include "RescurTarget.h"
 
 

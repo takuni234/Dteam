@@ -38,6 +38,7 @@ namespace basecross {
 				Vec3(0.0f,-1.0f,0.0f)	//const Vec3& Position
 				);
 			AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f,1.0f,0.0f));
+			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(1), Vec3(0));
 		}
 		catch (...) {
 			throw;
