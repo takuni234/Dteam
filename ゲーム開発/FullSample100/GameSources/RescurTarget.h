@@ -12,5 +12,7 @@ namespace basecross {
 
 		void OnCreate() override;
 		void OnUpdate() override;
+		float INPLAYERLANGSE();
+		Vec3 PlayerPos();
 	};
 }
