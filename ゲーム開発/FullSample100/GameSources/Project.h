@@ -20,5 +20,6 @@
 
 //‹~o‘ÎÛ
 #include "RescurTarget.h"
+#include "Bullet.h"
 
 

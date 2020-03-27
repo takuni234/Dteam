@@ -57,6 +57,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RescurTarget.h">
       <Filter>RescurTarget</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Bullet.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)RescurTarget.cpp">
       <Filter>RescurTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Bullet.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
