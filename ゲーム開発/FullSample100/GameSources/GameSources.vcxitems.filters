@@ -57,6 +57,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RescurTarget.h">
       <Filter>RescurTarget</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">

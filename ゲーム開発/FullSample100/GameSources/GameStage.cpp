@@ -42,6 +42,7 @@ namespace basecross {
 			SetSharedGameObject(L"Player", player);
 
 			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(0.25f), Vec3(0));
+			AddGameObject<RescurTarget_1>(Vec3(-2, 0, -2), Vec3(0.25f), Vec3(0));
 		}
 		catch (...) {
 			throw;
