@@ -7,8 +7,10 @@ namespace basecross {
 		Vec3 m_StartPos;
 		bool m_Trace;
 		wstring m_Key;
+		Col4 m_Color;
 	public:
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key);
+		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Col4& color);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& startPos);
