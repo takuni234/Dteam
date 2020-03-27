@@ -33,15 +33,13 @@ namespace basecross {
 			SetPhysicsActive(true);
 			//ビューとライトの作成
 			CreateViewLight();
-			AddGameObject<FixedBox>(
-				Vec3(30.0f,1.0f,30.0f),	//const Vec3& Scale,
-				Vec3(0.0f),				//const Vec3& Rotation,
-				Vec3(0.0f,-1.0f,0.0f)	//const Vec3& Position
-				);
-			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f, 1.0f, 0.0f));
-			SetSharedGameObject(L"Player", player);
 
+			auto ground = AddGameObject<FixedBox>(Vec3(30.0f, 1.0f, 30.0f), Vec3(0.0f), Vec3(0.0f, -1.0f, 0.0f));
+			ground->AddTag(L"Ground");
+			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f,1.0f,0.0f));
+			SetSharedGameObject(L"Player", player);
 			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(0.25f), Vec3(0));
+			CreateSharedObjectGroup(L"PlayerBullet");
 		}
 		catch (...) {
 			throw;

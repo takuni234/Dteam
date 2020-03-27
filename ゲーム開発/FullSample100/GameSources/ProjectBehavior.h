@@ -19,7 +19,7 @@ namespace basecross {
 				Obj->OnPushB();
 				return;
 			}
-			if (keyState.m_bPressedKeyTbl[VK_SPACE]) {
+			if (keyState.m_bPushKeyTbl[VK_SPACE]) {
 				Obj->OnPushX();
 				return;
 			}
@@ -29,22 +29,17 @@ namespace basecross {
 			}
 			auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 			if (cntlVec[0].bConnected) {
-				switch (cntlVec[0].wPressedButtons)
-				{
-				case XINPUT_GAMEPAD_A:
-					Obj->OnPushA();
-					break;
-				case XINPUT_GAMEPAD_B:
-					Obj->OnPushB();
-					break;
-				case XINPUT_GAMEPAD_X:
+				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
+
+				}				
+				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
+
+				}
+				if (cntlVec[0].wButtons & XINPUT_GAMEPAD_X) {
 					Obj->OnPushX();
-					break;
-				case XINPUT_GAMEPAD_Y:
-					Obj->OnPushY();
-					break;
-				default:
-					break;
+				}
+				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_Y) {
+
 				}
 			}
 		}

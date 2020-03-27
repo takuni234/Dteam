@@ -8,35 +8,48 @@ namespace basecross {
 		m_Trace(true),
 		m_StartScale(Vec2(200.0f)),
 		m_StartPos(Vec3(0.0f)),
-		m_Key(key)
+		m_Key(key),
+		m_Color(Col4(1.0f,1.0f,1.0f,1.0f))
+	{}
+	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Col4& color)
+		:GameObject(stage),
+		m_Trace(true),
+		m_StartScale(Vec2(200.0f)),
+		m_StartPos(Vec3(0.0f)),
+		m_Key(key),
+		m_Color(color)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace)
 		:GameObject(stage),
 		m_Trace(trace),
 		m_StartScale(Vec2(200.0f)),
 		m_StartPos(Vec3(0.0f)),
-		m_Key(key)
+		m_Key(key),
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale)
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(startScale),
 		m_StartPos(Vec3(0.0f)),
-		m_Key(key)
+		m_Key(key),
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& startPos)
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(startScale),
 		m_StartPos(startPos),
-		m_Key(key)
+		m_Key(key),
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace, const Vec2& startScale, const Vec3& startPos)
 		:GameObject(stage),
 		m_Trace(trace),
 		m_StartScale(startScale),
 		m_StartPos(startPos),
-		m_Key(key)
+		m_Key(key),
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
 	{}
 
 	Sprite::~Sprite() {
@@ -61,6 +74,7 @@ namespace basecross {
 
 		auto ptrDraw = AddComponent<PCTSpriteDraw>(vertex, indices);
 		ptrDraw->SetTextureResource(m_Key);
+		ptrDraw->SetDiffuse(m_Color);
 	}
 
 	void Sprite::OnUpdate() {
