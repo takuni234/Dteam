@@ -58,6 +58,7 @@
       <Filter>RescurTarget</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)GameEvent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -99,5 +100,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)RescurTarget.cpp">
       <Filter>RescurTarget</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Bullet.cpp" />
   </ItemGroup>
 </Project>
