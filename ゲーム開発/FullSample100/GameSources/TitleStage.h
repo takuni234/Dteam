@@ -14,6 +14,7 @@ namespace basecross {
 		float m_Time;
 		//ƒrƒ…[‚Ìì¬
 		void CreateViewLight();
+		void CreateSprite();
 	public:
 		//\’z‚Æ”jŠü
 		TitleStage() :Stage(), m_Time(0.0f) {}
