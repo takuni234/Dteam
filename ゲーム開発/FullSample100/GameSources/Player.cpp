@@ -174,11 +174,21 @@ namespace basecross{
 
 		auto ptrCol = AddComponent<CollisionCapsule>();
 
+		Mat4x4 spanMat; // モデルとトランスフォームの間の差分行列
+		spanMat.affineTransformation(
+			Vec3(1.0f, 1.0f, 1.0f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, -1.0f, 0.0f)
+		);
+
 		auto ptrShadow = AddComponent<Shadowmap>();
-		ptrShadow->SetMeshResource(L"DEFAULT_CAPSULE");
+		ptrShadow->SetMeshResource(L"Player_MESH");
+		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
-		ptrDraw->SetMeshResource(L"DEFAULT_CAPSULE");
+		ptrDraw->SetMeshResource(L"Player_MESH");
+		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetTextureResource(L"SKY_TX");
 
 		//カメラを得る

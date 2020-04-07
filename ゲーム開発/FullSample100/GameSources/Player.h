@@ -37,6 +37,7 @@ namespace basecross{
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other) override;
 
 		//“ü—ÍƒCƒxƒ“ƒg
+		void OnPushStart(){}
 		void OnPushA(){}
 		void OnPushB(){}
 		void OnPushX();
