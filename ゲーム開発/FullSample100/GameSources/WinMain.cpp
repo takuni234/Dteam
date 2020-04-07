@@ -151,6 +151,7 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 			'C',
 			'B',
 			'M',
+			'Z',
 			VK_LEFT,
 			VK_RIGHT,
 			VK_SPACE,
@@ -245,7 +246,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	int iClientHeight = 800;
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fが設定されていたらフルスクリーンにする
-	bool isFullScreen = false;
+	bool isGamePlay = false;
+	bool isFullScreen = isGamePlay;
 	wstring wstrcmd = lpCmdLine;
 	if (wstrcmd == L"/f" || wstrcmd == L"/F") {
 		isFullScreen = true;     // フラグをtrueに設定
@@ -254,7 +256,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	MyRegisterClass(hInstance);
 	// アプリケーションの初期化を実行します:
 	HWND hWnd = InitInstance(hInstance, nCmdShow, isFullScreen, iClientWidth, iClientHeight);
-
+	if (isGamePlay) {
+		ShowWindow(hWnd, SW_MAXIMIZE);
+		ShowCursor(false);
+	}
 	if (!hWnd)
 	{
 		return FALSE;

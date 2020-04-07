@@ -27,6 +27,10 @@ namespace basecross {
 				Obj->OnPushY();
 				return;
 			}
+			if (keyState.m_bPressedKeyTbl['Z']) {
+				Obj->OnPushStart();
+				return;
+			}
 			auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 			if (cntlVec[0].bConnected) {
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A) {
@@ -40,6 +44,9 @@ namespace basecross {
 				}
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_Y) {
 
+				}
+				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START) {
+					Obj->OnPushStart();
 				}
 			}
 		}

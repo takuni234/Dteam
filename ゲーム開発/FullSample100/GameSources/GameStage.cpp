@@ -33,17 +33,17 @@ namespace basecross {
 			SetPhysicsActive(true);
 			//ビューとライトの作成
 			CreateViewLight();
-			AddGameObject<FixedBox>(
-				Vec3(30.0f,1.0f,30.0f),	//const Vec3& Scale,
-				Vec3(0.0f),				//const Vec3& Rotation,
-				Vec3(0.0f,-1.0f,0.0f)	//const Vec3& Position
-				);
+			auto ground = AddGameObject<FixedBox>(Vec3(30.0f, 1.0f, 30.0f), Vec3(0.0f), Vec3(0.0f, -1.0f, 0.0f));
+			ground->AddTag(L"Ground");
+
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 
 			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(0.25f), Vec3(0));
 			AddGameObject<RescurTarget_1>(Vec3(-2, 0, -2), Vec3(0.25f), Vec3(0));
-		
+			//BGM
+			auto XAPtr = App::GetApp()->GetXAudio2Manager();
+			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
 			CreateSharedObjectGroup(L"PlayerBullet");
 		}
 		catch (...) {
@@ -51,5 +51,26 @@ namespace basecross {
 		}
 	}
 
+	void GameStage::UpdateStage() {
+		m_InputHandler.PushHandle(GetThis<GameStage>());
+		if (m_IsUpdate) {
+			Stage::UpdateStage();
+		}
+	}
+
+	void GameStage::OnDestroy() {
+		//BGMのストップ
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		XAPtr->Stop(m_BGM);
+	}
+
+	void GameStage::OnPushStart() {
+		if (m_IsUpdate) {
+			m_IsUpdate = false;
+		}
+		else {
+			m_IsUpdate = true;
+		}
+	}
 }
 //end basecross
