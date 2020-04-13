@@ -178,7 +178,7 @@ namespace basecross{
 		spanMat.affineTransformation(
 			Vec3(1.0f, 1.0f, 1.0f),
 			Vec3(0.0f, 0.0f, 0.0f),
-			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, XM_PI, 0.0f),
 			Vec3(0.0f, -1.0f, 0.0f)
 		);
 
@@ -189,7 +189,7 @@ namespace basecross{
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"Player_MESH");
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
-		ptrDraw->SetTextureResource(L"SKY_TX");
+		ptrDraw->SetTextureResource(L"SURVIVOR_TX");
 
 		//ƒJƒƒ‰‚ğ“¾‚é
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
