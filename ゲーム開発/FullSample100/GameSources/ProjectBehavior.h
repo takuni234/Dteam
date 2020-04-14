@@ -43,7 +43,7 @@ namespace basecross {
 					Obj->OnPushX();
 				}
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_Y) {
-
+					Obj->OnPushY();
 				}
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START) {
 					Obj->OnPushStart();

@@ -18,6 +18,7 @@ namespace basecross{
 		float m_IntervalTime;
 		//インプットハンドラー
 		InputHandler<Player> m_InputHandler;
+		int m_Animflg;
 
 		//入力を取得
 		Vec2 GetInputState() const;
@@ -41,7 +42,7 @@ namespace basecross{
 		void OnPushA(){}
 		void OnPushB(){}
 		void OnPushX();
-		void OnPushY(){}
+		void OnPushY();
 	};
 
 }
