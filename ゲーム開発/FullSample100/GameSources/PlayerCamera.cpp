@@ -12,7 +12,8 @@ namespace basecross {
 
 	void PlayerCamera::OnUpdate() {
 		auto elapsedTime = App::GetApp()->GetElapsedTime();
-		auto cntlVec = App::GetApp()->GetInputDevice().GetKeyState();
+		auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		auto keyState = App::GetApp()->GetInputDevice().GetKeyState();
 
 		Vec3 newEye = GetEye();
 		Vec3 newAt = GetAt();
@@ -20,11 +21,14 @@ namespace basecross {
 		bsm::Vec3 armVec = newEye - newAt;
 		armVec.normalize();
 
-		if (!(cntlVec.m_bPushKeyTbl[VK_LEFT] && cntlVec.m_bPushKeyTbl[VK_RIGHT])) {
-			if (cntlVec.m_bPushKeyTbl[VK_RIGHT]) {
+		if (cntlVec[0].bConnected) {
+			m_Rad += cntlVec[0].fThumbRX * 3.0f * elapsedTime;
+		}
+		else if (!(keyState.m_bPushKeyTbl[VK_LEFT] && keyState.m_bPushKeyTbl[VK_RIGHT])) {
+			if (keyState.m_bPushKeyTbl[VK_RIGHT]) {
 				m_Rad += 3.0f * elapsedTime;
 			}
-			if (cntlVec.m_bPushKeyTbl[VK_LEFT]) {
+			if (keyState.m_bPushKeyTbl[VK_LEFT]) {
 				m_Rad -= 3.0f * elapsedTime;
 			}
 		}

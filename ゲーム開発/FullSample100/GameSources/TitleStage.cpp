@@ -25,10 +25,16 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
+	void TitleStage::CreateSprite() {
+		//タイトル画像
+		AddGameObject<Sprite>(L"TITLELOGO_TX");
+	}
+
 	void TitleStage::OnCreate() {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
+			CreateSprite();
 		}
 		catch (...) {
 			throw;
@@ -36,8 +42,15 @@ namespace basecross {
 	}
 
 	void TitleStage::OnUpdate() {
-		m_Time += App::GetApp()->GetElapsedTime();
-		if (m_Time >= 5.0f) {
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+
+		bool start =
+			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START ||
+			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B ||
+			KeyState.m_bPushKeyTbl[VK_SPACE];
+
+		if (start) {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Game);
 		}
 	}

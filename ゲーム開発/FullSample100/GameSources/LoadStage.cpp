@@ -34,6 +34,16 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"FIRE_TX", strTexture);
 		strTexture = DataDir + L"StageMessage.png";
 		App::GetApp()->RegisterTexture(L"MESSAGE_TX", strTexture);
+		strTexture = DataDir + L"StageMessage.png";
+		App::GetApp()->RegisterTexture(L"TITLELOGO_TX", strTexture);
+		strTexture = DataDir + L"Text_Gray.png";
+		App::GetApp()->RegisterTexture(L"HELPTEXT_TX", strTexture);
+		strTexture = DataDir + L"Tx_survivor.tga";
+		App::GetApp()->RegisterTexture(L"SURVIVOR_TX", strTexture);
+		
+		auto modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"survivor.bmf");
+		App::GetApp()->RegisterResource(L"Player_MESH", modelMesh);
+
 		//ƒTƒEƒ“ƒh
 		wstring CursorWav = DataDir + L"cursor.wav";
 		App::GetApp()->RegisterWav(L"cursor", CursorWav);

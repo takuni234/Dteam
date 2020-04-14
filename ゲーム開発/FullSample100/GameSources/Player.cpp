@@ -12,7 +12,8 @@ namespace basecross{
 		m_Scale(scale),
 		m_Rotation(rot),
 		m_Position(pos),
-		m_Speed(1.0f)
+		m_Speed(2.0f),
+		m_IntervalTime(0.0f)
 	{}
  
 	Player::~Player() {}
@@ -28,23 +29,24 @@ namespace basecross{
 			ret.x = cntlVec[0].fThumbLX;
 			ret.y = cntlVec[0].fThumbLY;
 		}
-		//キーボードの取得(キーボード優先)
-		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
-		if (KeyState.m_bPushKeyTbl['W']) {
-			//前
-			ret.y = 1.0f;
-		}
-		else if (KeyState.m_bPushKeyTbl['A']) {
-			//左
-			ret.x = -1.0f;
-		}
-		else if (KeyState.m_bPushKeyTbl['S']) {
-			//後ろ
-			ret.y = -1.0f;
-		}
-		else if (KeyState.m_bPushKeyTbl['D']) {
-			//右
-			ret.x = 1.0f;
+		else {
+			auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+			if (KeyState.m_bPushKeyTbl['W']) {
+				//前
+				ret.y = 1.0f;
+			}
+			else if (KeyState.m_bPushKeyTbl['A']) {
+				//左
+				ret.x = -1.0f;
+			}
+			else if (KeyState.m_bPushKeyTbl['S']) {
+				//後ろ
+				ret.y = -1.0f;
+			}
+			else if (KeyState.m_bPushKeyTbl['D']) {
+				//右
+				ret.x = 1.0f;
+			}
 		}
 		return ret;
 	}
@@ -100,22 +102,95 @@ namespace basecross{
 		}
 	}
 
+	void Player::DrawStrings() {
+		//文字列表示
+		auto fps = App::GetApp()->GetStepTimer().GetFramesPerSecond();
+		wstring fpsStr(L"FPS: ");
+		fpsStr += Util::UintToWStr(fps);
+		fpsStr += L"\nElapsedTime: ";
+		float ElapsedTime = App::GetApp()->GetElapsedTime();
+		fpsStr += Util::FloatToWStr(ElapsedTime);
+		fpsStr += L"\n";
+
+		auto transPtr = GetComponent<Transform>();
+
+		auto pos = transPtr->GetPosition();
+		wstring positionStr(L"Position:\t");
+		positionStr += L"X=" + Util::FloatToWStr(pos.x, 6, Util::FloatModify::Fixed) + L",\t";
+		positionStr += L"Y=" + Util::FloatToWStr(pos.y, 6, Util::FloatModify::Fixed) + L",\t";
+		positionStr += L"Z=" + Util::FloatToWStr(pos.z, 6, Util::FloatModify::Fixed) + L"\n";
+		
+		auto rot = transPtr->GetRotation();
+		wstring rotationStr(L"Rotation:\t");
+		rotationStr += L"X=" + Util::FloatToWStr(rot.x, 6, Util::FloatModify::Fixed) + L",\t";
+		rotationStr += L"Y=" + Util::FloatToWStr(rot.y, 6, Util::FloatModify::Fixed) + L",\t";
+		rotationStr += L"Z=" + Util::FloatToWStr(rot.z, 6, Util::FloatModify::Fixed) + L"\n";
+
+		wstring gravStr(L"GravityVelocoty:\t");
+		auto gravVelocity = GetComponent<Gravity>()->GetGravityVelocity();
+		gravStr += L"X=" + Util::FloatToWStr(gravVelocity.x, 6, Util::FloatModify::Fixed) + L",\t";
+		gravStr += L"Y=" + Util::FloatToWStr(gravVelocity.y, 6, Util::FloatModify::Fixed) + L",\t";
+		gravStr += L"Z=" + Util::FloatToWStr(gravVelocity.z, 6, Util::FloatModify::Fixed) + L"\n";
+
+		wstring updatePerStr(L"UpdatePerformance:\t");
+		updatePerStr += Util::FloatToWStr(GetStage()->GetUpdatePerformanceTime());
+		updatePerStr += L"\tmillisecond\n";
+
+		wstring drawPerStr(L"DrawPerformance:\t");
+		drawPerStr += Util::FloatToWStr(GetStage()->GetDrawPerformanceTime());
+		drawPerStr += L"\tmillisecond\n";
+
+		wstring collPerStr(L"CollisionPerform:\t");
+		collPerStr += Util::FloatToWStr(GetStage()->GetCollisionPerformanceTime(), 5);
+		collPerStr += L"\tmillisecond\n";
+
+		wstring collMiscStr(L"ColMiscPerform:\t");
+		collMiscStr += Util::FloatToWStr(GetStage()->GetCollisionManager()->GetMiscPerformanceTime(), 5);
+		collMiscStr += L"\tmillisecond\n";
+
+		wstring collTernCountStr(L"CollisionCountOfTern:\t");
+		collTernCountStr += Util::UintToWStr(GetStage()->GetCollisionManager()->GetCollisionCountOfTern());
+		collTernCountStr += L"\n";
+		wstring str = fpsStr + positionStr + rotationStr + gravStr + updatePerStr + drawPerStr + collPerStr + collMiscStr
+			+ collTernCountStr;
+
+		//文字列コンポーネントの取得
+		auto ptrString = GetComponent<StringSprite>();
+		ptrString->SetText(str);
+	}
+
 	void Player::OnCreate() {
 		auto ptrTrans = GetComponent<Transform>();
 		ptrTrans->SetScale(m_Scale);
 		ptrTrans->SetRotation(m_Rotation);
 		ptrTrans->SetPosition(m_Position);
 
-		AddComponent<Gravity>();
+		auto gravPtr = AddComponent<Gravity>();
+
+		//文字列をつける
+		auto ptrString = AddComponent<StringSprite>();
+		ptrString->SetText(L"");
+		ptrString->SetTextRect(Rect2D<float>(16.0f, 16.0f, 640.0f, 480.0f));
 
 		auto ptrCol = AddComponent<CollisionCapsule>();
 
+		Mat4x4 spanMat; // モデルとトランスフォームの間の差分行列
+		spanMat.affineTransformation(
+			Vec3(1.0f, 1.0f, 1.0f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, XM_PI, 0.0f),
+			Vec3(0.0f, -1.0f, 0.0f)
+		);
+
 		auto ptrShadow = AddComponent<Shadowmap>();
-		ptrShadow->SetMeshResource(L"DEFAULT_CAPSULE");
+		ptrShadow->SetMeshResource(L"Player_MESH");
+		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
-		ptrDraw->SetMeshResource(L"DEFAULT_CAPSULE");
-		
+		ptrDraw->SetMeshResource(L"Player_MESH");
+		ptrDraw->SetMeshToTransformMatrix(spanMat);
+		ptrDraw->SetTextureResource(L"SURVIVOR_TX");
+
 		//カメラを得る
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
 		if (ptrCamera) {
@@ -131,13 +206,23 @@ namespace basecross{
 		MovePlayer();
 	}
 
+	void Player::OnUpdate2() {
+		DrawStrings();
+	}
+
 	void Player::OnCollisionEnter(shared_ptr<GameObject>& Other) {
 
 	}
 
 	void Player::OnPushX() {
-		auto ptrGra = GetComponent<Gravity>();
-		ptrGra->SetGravityVerocity(Vec3(0.0f,3.0f,0.0f));
+		auto elapsedTime = App::GetApp()->GetElapsedTime();
+		m_IntervalTime += elapsedTime;
+		if (m_IntervalTime >= 0.05f) {
+			auto transPtr = GetComponent<Transform>();
+			Vec3 createPos = Vec3(transPtr->GetPosition() + transPtr->GetForword() * transPtr->GetScale().getX());
+			GetStage()->AddGameObject<Bullet>(Vec3(0.1f, 0.1f, 0.1f), transPtr->GetRotation(), createPos, transPtr->GetForword(), 5.0f);
+			m_IntervalTime = 0.0f;
+		}
 	}
 }
 //end basecross
