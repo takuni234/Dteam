@@ -13,7 +13,8 @@ namespace basecross{
 		m_Rotation(rot),
 		m_Position(pos),
 		m_Speed(2.0f),
-		m_IntervalTime(0.0f)
+		m_IntervalTime(0.0f),
+		m_Animflg(0)
 	{}
  
 	Player::~Player() {}
@@ -90,15 +91,25 @@ namespace basecross{
 	void Player::MovePlayer() {
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		auto angle = GetMoveVector();
-		if (angle.length() > 0.0f) {
-			auto pos = GetComponent<Transform>()->GetPosition();
-			pos += angle * elapsedTime * m_Speed;
-			GetComponent<Transform>()->SetPosition(pos);
-		}
-		//âÒì]ÇÃåvéZ
-		if (angle.length() > 0.0f) {
-			auto utilPtr = GetBehavior<UtilBehavior>();
-			utilPtr->RotToHead(angle, 1.0f);
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		if (m_Animflg != 2) {
+			if (angle.length() > 0.0f) {
+				auto pos = GetComponent<Transform>()->GetPosition();
+				pos += angle * elapsedTime * m_Speed;
+				GetComponent<Transform>()->SetPosition(pos);
+				auto utilPtr = GetBehavior<UtilBehavior>();
+				utilPtr->RotToHead(angle, 1.0f);
+				if (m_Animflg != 0) {
+					ptrDraw->ChangeCurrentAnimation(L"Walk");
+					m_Animflg = 0;
+				}
+			}
+			else {
+				if (m_Animflg != 1) {
+					ptrDraw->ChangeCurrentAnimation(L"Default");
+					m_Animflg = 1;
+				}
+			}
 		}
 	}
 
@@ -183,13 +194,18 @@ namespace basecross{
 		);
 
 		auto ptrShadow = AddComponent<Shadowmap>();
-		ptrShadow->SetMeshResource(L"Player_MESH");
+		ptrShadow->SetMeshResource(L"PLAYER_MESH");
 		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
-		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
-		ptrDraw->SetMeshResource(L"Player_MESH");
+		auto ptrDraw = AddComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"PLAYER_MESH");
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetTextureResource(L"SURVIVOR_TX");
+
+		ptrDraw->AddAnimation(L"Default", 35, 1, false, 60.0f);
+		ptrDraw->AddAnimation(L"Walk", 0, 30,true, 60.0f);
+		ptrDraw->AddAnimation(L"HelpMe", 40, 30, true, 60.0f);
+		ptrDraw->ChangeCurrentAnimation(L"Default");
 
 		//ÉJÉÅÉâÇìæÇÈ
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
@@ -204,6 +220,9 @@ namespace basecross{
 	void Player::OnUpdate() {
 		m_InputHandler.PushHandle(GetThis<Player>());
 		MovePlayer();
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->UpdateAnimation(elapsedTime);
 	}
 
 	void Player::OnUpdate2() {
@@ -222,6 +241,17 @@ namespace basecross{
 			Vec3 createPos = Vec3(transPtr->GetPosition() + transPtr->GetForword() * transPtr->GetScale().getX());
 			GetStage()->AddGameObject<Bullet>(Vec3(0.1f, 0.1f, 0.1f), transPtr->GetRotation(), createPos, transPtr->GetForword(), 5.0f);
 			m_IntervalTime = 0.0f;
+		}
+	}
+
+	void Player::OnPushY() {
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		if (m_Animflg != 2) {
+			ptrDraw->ChangeCurrentAnimation(L"HelpMe");
+			m_Animflg = 2;
+		}
+		else {
+			m_Animflg = 3;
 		}
 	}
 }
