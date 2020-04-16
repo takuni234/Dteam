@@ -195,16 +195,16 @@ namespace basecross{
 
 	}
 	void IncreaseObject::OnUpdate() {
-		if (count != 15) {
+		if (count != 50) {
 			//for (int i = 0; i < 5; i++) {
 			if (time == 60) {	
-				randomx = rand()%2;
-				randomz = rand() % 2;
+				randomx = rand() % 3-1;
+				randomz = rand() % 3-1;
 				if (!(randomx == 0 && randomz == 0)) {
 					x = x + randomx;
 					z = z + randomz;
 				}
-				GetStage()->AddGameObject<IncreaseBox>(Vec3(1, 1, 1), Vec3(0), Vec3(x, 0, z));
+				GetStage()->AddGameObject<IncreaseBox>(Vec3(0.2), Vec3(0), Vec3(x*0.2, 0-0.4, z*0.2));
 				count++;
 				time = 0;
 			}	

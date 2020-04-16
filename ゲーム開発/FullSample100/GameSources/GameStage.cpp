@@ -41,6 +41,7 @@ namespace basecross {
 
 			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(0.25f), Vec3(0));
 			AddGameObject<RescurTarget_1>(Vec3(-2, 0, -2), Vec3(0.25f), Vec3(0));
+			AddGameObject<IncreaseObject>();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
