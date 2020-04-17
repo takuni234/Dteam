@@ -126,7 +126,7 @@ namespace basecross {
 			Rot.z = (torkns[9] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[9].c_str());
 
 			Vec3 Rot2(Rot.x-45/3.1415f, Rot.y/3.1415f, Rot.z-90/3.1415f);
-			AddGameObject<Rock>(Pos, Scale, Rot2);		
+			AddGameObject<Rock>(Pos, Scale, Rot);		
 		}
 		
 	}
@@ -138,7 +138,7 @@ namespace basecross {
 			csvfile_1.ReadCsv();
 			csvfile_2.SetFileName(detadir + L"Stage_Csv_2.csv");// GameStageA.csv");
 			csvfile_2.ReadCsv();
-			ObjCsvfile.SetFileName(detadir + L"SaveData_2.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
