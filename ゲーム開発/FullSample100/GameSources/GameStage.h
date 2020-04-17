@@ -12,8 +12,16 @@ namespace basecross {
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
+		//CSV
+		CsvFile csvfile_1;
+		CsvFile csvfile_2;
+		CsvFile ObjCsvfile;
+		void CreateObjectACSV();
+		void CreateObjectB_CSV();
+
 		shared_ptr<SoundItem> m_BGM;
 		//ビューの作成
+
 		void CreateViewLight();
 		bool m_IsUpdate;
 

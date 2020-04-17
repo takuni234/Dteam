@@ -15,17 +15,19 @@ namespace basecross {
 
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);
-		Trans->SetScale(Vec3(0.25f,0.25f,0.25f));
+		Trans->SetScale(Vec3(0.25f, 0.25f, 0.25f));
 		Trans->SetRotation(m_Rotation);
 
 		auto collisiton = AddComponent<CollisionCapsule>();
-		
+
 		auto gravity = AddComponent<Gravity>();
 		gravity->GetGravityVelocity();
 
 		auto shadow = AddComponent<Shadowmap>();
 		shadow->SetMeshResource(L"DEFAULT_CAPSULE");
 		shadow->SetDrawActive(true);
+
+		INFlg = false;
 	}
 
 	void RescurNomalTarget::OnUpdate() {
@@ -41,7 +43,8 @@ namespace basecross {
 		auto Trans = GetComponent<Transform>();
 		auto Pos = Trans->GetPosition();
 		Vec3 langthPos = Pos - plyPos;
-		return langthPos.length();
+		float langth = langthPos.length();
+		return langth;
 
 	}
 	Vec3 RescurNomalTarget::PlayerPos() {
@@ -56,13 +59,13 @@ namespace basecross {
 		Vec3 movePos = Vec3(0);
 		float length = INPLAYERLANGSE();
 		if (length < 2) {
-			
+
 			plyPos = plyPos - Trans->GetPosition();
 		}
 		else {
 			plyPos = Vec3(0);
-		}	
-		m_Position += plyPos * deltatime*0.25f;
+		}
+		m_Position += plyPos * deltatime*0.5f;
 		Trans->SetPosition(m_Position);
 
 
@@ -73,11 +76,10 @@ namespace basecross {
 			return true;
 		}
 
-		if (INFlg==false&&App::GetApp()->GetInputDevice().GetControlerVec()[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+		if (INFlg == false && App::GetApp()->GetInputDevice().GetControlerVec()[0].wPressedButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 			INFlg = true;
 			return true;
 		}
-
 	}
 	bool RescurNomalTarget::OUTPLAYER_CALL() {
 		float Length = INPLAYERLANGSE();
@@ -101,7 +103,11 @@ namespace basecross {
 	}
 
 	void RescurTarget_1::OnUpdate() {
-		RescurNomalTarget::OnUpdate();
+
+		if (MoveSwitch()) {
+			PLAYERCHASE();
+		}
+
 	}
 
 	//
@@ -111,8 +117,6 @@ namespace basecross {
 		Draw->SetDiffuse(Col4(1, 1, 0, 1));
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);
-
-
 	}
 
 	void RescurTarget_2::OnUpdate() {
@@ -120,4 +124,46 @@ namespace basecross {
 	}
 
 
+
+	//-----------------------------------------------------
+	//<<<<<<<<<<<<<
+	void Rock::OnCreate() {
+		auto Draw = AddComponent<PNTStaticDraw>();
+		Draw->SetMeshResource(L"DEFAULT_CUBE");
+
+		auto Trans = GetComponent<Transform>();
+		Trans->SetPosition(m_Position);
+		Trans->SetScale(m_Scale);
+		Trans->SetRotation(m_Rotation);
+
+		auto Collision = AddComponent<CollisionObb>();
+		Collision->SetFixed(true);
+	}
+	void Slope::OnCreate() {
+		auto Draw = AddComponent<PNTStaticDraw>();
+		Draw->SetMeshResource(L"DEFAULT_CUBE");
+
+		auto Trans = GetComponent<Transform>();
+		Trans->SetPosition(m_Position);
+		Trans->SetScale(m_Scale);
+		Trans->SetRotation(m_Rotation);
+
+		auto Collision = AddComponent<CollisionObb>();
+		Collision->SetFixed(true);
+		Collision->SetDrawActive(true);
+	}
+	void CollisionBox::OnCreate() {
+		auto Trans = GetComponent<Transform>();
+		Trans->SetPosition(m_Position);
+		Trans->SetScale(m_Scale);
+		Trans->SetRotation(m_Rotation);
+
+		auto Collision = AddComponent<CollisionObb>();
+		Collision->SetFixed(true);
+		Collision->SetDrawActive(true);
+	}
+
+	//>>>>>>>>>>>>>>>>
+	//--------------------------------------------------------
 }
+
