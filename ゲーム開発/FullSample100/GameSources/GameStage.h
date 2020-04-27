@@ -31,7 +31,9 @@ namespace basecross {
 		void OnPushA(){}
 		void OnPushB(){}
 		void OnPushX(){}
+		void OnUpX(){}
 		void OnPushY(){}
+		void OnUpY() {}
 	};
 }
 //end basecross

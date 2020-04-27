@@ -13,8 +13,7 @@ namespace basecross{
 		m_Rotation(rot),
 		m_Position(pos),
 		m_Speed(2.0f),
-		m_IntervalTime(0.0f),
-		m_Animflg(0)
+		m_IntervalTime(0.0f)
 	{}
  
 	Player::~Player() {}
@@ -50,67 +49,6 @@ namespace basecross{
 			}
 		}
 		return ret;
-	}
-
-
-	Vec3 Player::GetMoveVector() const {
-		Vec3 angle(0, 0, 0);
-		//入力の取得
-		auto inPut = GetInputState();
-		float moveX = inPut.x;
-		float moveZ = inPut.y;
-		if (moveX != 0 || moveZ != 0) {
-			float moveLength = 0;	//動いた時のスピード
-			auto ptrTransform = GetComponent<Transform>();
-			auto ptrCamera = OnGetDrawCamera();
-			//進行方向の向きを計算
-			auto front = ptrTransform->GetPosition() - ptrCamera->GetEye();
-			front.y = 0;
-			front.normalize();
-			//進行方向向きからの角度を算出
-			float frontAngle = atan2(front.z, front.x);
-			//コントローラの向き計算
-			Vec2 moveVec(moveX, moveZ);
-			float moveSize = moveVec.length();
-			//コントローラの向きから角度を計算
-			float cntlAngle = atan2(-moveX, moveZ);
-			//トータルの角度を算出
-			float totalAngle = frontAngle + cntlAngle;
-			//角度からベクトルを作成
-			angle = Vec3(cos(totalAngle), 0, sin(totalAngle));
-			//正規化する
-			angle.normalize();
-			//移動サイズを設定。
-			angle *= moveSize;
-			//Y軸は変化させない
-			angle.y = 0;
-		}
-		return angle;
-	}
-
-	void Player::MovePlayer() {
-		float elapsedTime = App::GetApp()->GetElapsedTime();
-		auto angle = GetMoveVector();
-		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
-		if (m_Animflg != 2) {
-			if (angle.length() > 0.0f) {
-				auto pos = GetComponent<Transform>()->GetPosition();
-				pos += angle * elapsedTime * m_Speed;
-				GetComponent<Transform>()->SetPosition(pos);
-				auto utilPtr = GetBehavior<UtilBehavior>();
-				utilPtr->RotToHead(angle, 1.0f);
-				if (m_Animflg != 0) {
-					ptrDraw->ChangeCurrentAnimation(L"Walk");
-					m_Animflg = 0;
-				}
-			}
-			else {
-				if (m_Animflg != 1) {
-					ptrDraw->ChangeCurrentAnimation(L"Default");
-					m_Animflg = 1;
-				}
-			}
-		}
 	}
 
 	void Player::DrawStrings() {
@@ -194,17 +132,20 @@ namespace basecross{
 		);
 
 		auto ptrShadow = AddComponent<Shadowmap>();
-		ptrShadow->SetMeshResource(L"PLAYER_MESH");
+		ptrShadow->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
 		auto ptrDraw = AddComponent<BcPNTBoneModelDraw>();
-		ptrDraw->SetMeshResource(L"PLAYER_MESH");
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
-		ptrDraw->SetTextureResource(L"SURVIVOR_TX");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 
-		ptrDraw->AddAnimation(L"Default", 35, 1, false, 60.0f);
+		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
 		ptrDraw->AddAnimation(L"Walk", 0, 30,true, 60.0f);
-		ptrDraw->AddAnimation(L"HelpMe", 40, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Shot", 120, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->ChangeCurrentAnimation(L"Default");
 
 		//カメラを得る
@@ -215,14 +156,14 @@ namespace basecross{
 			ptrCamera->SetTargetObject(GetThis<GameObject>());
 			ptrCamera->SetTargetToAt(Vec3(0, 0.25f, 0));
 		}
+		//ステートマシンの構築
+		m_StateMachine.reset(new StateMachine<Player>(GetThis<Player>()));
+		//最初のステートをSeekFarStateに設定
+		m_StateMachine->ChangeState(DefaultState::Instance());
 	}
 
 	void Player::OnUpdate() {
-		m_InputHandler.PushHandle(GetThis<Player>());
-		MovePlayer();
-		float elapsedTime = App::GetApp()->GetElapsedTime();
-		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
-		ptrDraw->UpdateAnimation(elapsedTime);
+		m_StateMachine->Update();
 	}
 
 	void Player::OnUpdate2() {
@@ -233,8 +174,51 @@ namespace basecross{
 
 	}
 
-	void Player::OnPushX() {
+	Vec3 Player::GetMoveVector() const {
+		Vec3 angle(0, 0, 0);
+		//入力の取得
+		auto inPut = GetInputState();
+		float moveX = inPut.x;
+		float moveZ = inPut.y;
+		if (moveX != 0 || moveZ != 0) {
+			float moveLength = 0;	//動いた時のスピード
+			auto ptrTransform = GetComponent<Transform>();
+			auto ptrCamera = OnGetDrawCamera();
+			//進行方向の向きを計算
+			auto front = ptrTransform->GetPosition() - ptrCamera->GetEye();
+			front.y = 0;
+			front.normalize();
+			//進行方向向きからの角度を算出
+			float frontAngle = atan2(front.z, front.x);
+			//コントローラの向き計算
+			Vec2 moveVec(moveX, moveZ);
+			float moveSize = moveVec.length();
+			//コントローラの向きから角度を計算
+			float cntlAngle = atan2(-moveX, moveZ);
+			//トータルの角度を算出
+			float totalAngle = frontAngle + cntlAngle;
+			//角度からベクトルを作成
+			angle = Vec3(cos(totalAngle), 0, sin(totalAngle));
+			//正規化する
+			angle.normalize();
+			//移動サイズを設定。
+			angle *= moveSize;
+			//Y軸は変化させない
+			angle.y = 0;
+		}
+		return angle;
+	}
+
+	void Player::PlayerMove() {
+		m_InputHandler.PushHandle(GetThis<Player>());
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->UpdateAnimation(elapsedTime);
+	}
+
+	void Player::PlayerShot() {
 		auto elapsedTime = App::GetApp()->GetElapsedTime();
+
 		m_IntervalTime += elapsedTime;
 		if (m_IntervalTime >= 0.05f) {
 			auto transPtr = GetComponent<Transform>();
@@ -244,15 +228,117 @@ namespace basecross{
 		}
 	}
 
-	void Player::OnPushY() {
+	void Player::PlayerWalk() {
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		auto angle = GetMoveVector();
 		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
-		if (m_Animflg != 2) {
-			ptrDraw->ChangeCurrentAnimation(L"HelpMe");
-			m_Animflg = 2;
+		if (angle.length() > 0.0f) {
+			auto pos = GetComponent<Transform>()->GetPosition();
+			pos += angle * elapsedTime * m_Speed;
+			GetComponent<Transform>()->SetPosition(pos);
+			auto utilPtr = GetBehavior<UtilBehavior>();
+			utilPtr->RotToHead(angle, 1.0f);
 		}
-		else {
-			m_Animflg = 3;
+	}
+
+	void Player::OnPushA() {
+
+	}
+
+	void Player::OnPushX() {
+		this->GetStateMachine()->ChangeState(ShotState::Instance());
+	}
+
+	void Player::OnUpX() {
+		this->GetStateMachine()->ChangeState(DefaultState::Instance());
+	}
+
+	void Player::OnPushY() {
+		this->GetStateMachine()->ChangeState(AttackState::Instance());
+	}
+
+	void Player::OnUpY() {
+		this->GetStateMachine()->ChangeState(DefaultState::Instance());
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DefaultState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<DefaultState> DefaultState::Instance() {
+		static shared_ptr<DefaultState> instance(new DefaultState);
+		return instance;
+	}
+	void DefaultState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Default");
+	}
+	void DefaultState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+		if (Obj->GetMoveVector().length() != 0.0f) {
+			Obj->GetStateMachine()->ChangeState(WalkState::Instance());
 		}
+	}
+
+	void DefaultState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class WalkState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<WalkState> WalkState::Instance() {
+		static shared_ptr<WalkState> instance(new WalkState);
+		return instance;
+	}
+	void WalkState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Walk");
+	}
+	void WalkState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+		Obj->PlayerWalk();
+		if (Obj->GetMoveVector().length() == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(DefaultState::Instance());
+		}
+	}
+
+	void WalkState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	
+	//--------------------------------------------------------------------------------------
+	//	class ShotState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<ShotState> ShotState::Instance() {
+		static shared_ptr<ShotState> instance(new ShotState);
+		return instance;
+	}
+	void ShotState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Shot");
+	}
+	void ShotState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+		Obj->PlayerShot();
+	}
+
+	void ShotState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	
+	//--------------------------------------------------------------------------------------
+	//	class AttackState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<AttackState> AttackState::Instance() {
+		static shared_ptr<AttackState> instance(new AttackState);
+		return instance;
+	}
+	void AttackState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Break");
+	}
+	void AttackState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+	}
+
+	void AttackState::Exit(const shared_ptr<Player>& Obj) {
 	}
 }
 //end basecross
