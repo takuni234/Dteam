@@ -17,6 +17,7 @@
 #include "PlayerCamera.h"
 #include "Sprite.h"
 #include "UISprite.h"
+#include "UI.h"
 
 //‹~o‘ÎÛ
 #include "RescurTarget.h"

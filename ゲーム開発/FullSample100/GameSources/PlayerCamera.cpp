@@ -5,7 +5,7 @@ namespace basecross {
 	PlayerCamera::PlayerCamera()
 		:m_Rad(0.0f),
 		m_TargetToAt(0,0,0),
-		m_ArmLen(5.0f)
+		m_ArmLen(2.0f)
 	{}
 
 	PlayerCamera::~PlayerCamera(){}
@@ -40,7 +40,7 @@ namespace basecross {
 		Mat4x4 Mat;
 		Mat.strTransformation(
 			bsm::Vec3(1.0f, 1.0f, 1.0f),
-			bsm::Vec3(0.0f, 0.0f, -1.0f),
+			bsm::Vec3(0.0f, 0.0f, -4.0f),
 			qtXZ
 		);
 
