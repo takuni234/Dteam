@@ -136,8 +136,19 @@ namespace basecross {
 		Trans->SetScale(m_Scale);
 		Trans->SetRotation(m_Rotation);
 
-		auto Collision = AddComponent<CollisionObb>();
-		Collision->SetFixed(true);
+		//auto Collision = AddComponent<CollisionObb>();
+		//Collision->SetFixed(true);
+	}
+	void Rock::OnUpdate() {		
+		if (flg) {		
+		}
+	}
+	void Rock::OnCollisionEnter(shared_ptr<GameObject>& obj) {
+		int x = 1;
+		m_Position.x += x * 2 * App::GetApp()->GetElapsedTime();
+		GetComponent<Transform>()->SetPosition(m_Position);
+
+		flg = true;
 	}
 	void Slope::OnCreate() {
 		auto Draw = AddComponent<PNTStaticDraw>();

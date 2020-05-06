@@ -102,7 +102,7 @@ namespace basecross {
 		//CSVの行単位の配列
 		vector<wstring> LineVec;
 		//0番目のカラムがL"TilingFixedBox"である行を抜き出す
-		ObjCsvfile.GetSelect(LineVec, 0, L"Rock");
+		ObjCsvfile.GetSelect(LineVec, 0, L"Tx_Box(Clone)");
 		for (auto& v : LineVec) {
 			//トークン（カラム）の配列
 			vector<wstring> torkns;
@@ -125,11 +125,38 @@ namespace basecross {
 			Rot.y = (torkns[8] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[8].c_str());
 			Rot.z = (torkns[9] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[9].c_str());
 
-			Vec3 Rot2(Rot.x-45/3.1415f, Rot.y/3.1415f, Rot.z-90/3.1415f);
-			AddGameObject<Rock>(Pos, Scale, Rot);		
+			Vec3 Rot2(Rot.x - 45 / 3.1415f, Rot.y / 3.1415f, Rot.z - 90 / 3.1415f);
+			AddGameObject<Rock>(Vec3(Pos.x, Pos.y - 0.5f, Pos.z), Scale, Rot);
 		}
-		
+
+		ObjCsvfile.GetSelect(LineVec, 0, L"Cube");
+		for (auto& v : LineVec) {
+			//トークン（カラム）の配列
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+
+			Vec3 col_Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+			Vec3 col_Scale(
+				(float)_wtof(torkns[4].c_str()),
+				(float)_wtof(torkns[5].c_str()),
+				(float)_wtof(torkns[6].c_str())
+			);
+			Vec3 col_Rot;
+			//回転はXM_PIDIV2の文字列になっている場合がある
+			col_Rot.x = (torkns[7] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[7].c_str());
+			col_Rot.y = (torkns[8] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[8].c_str());
+			col_Rot.z = (torkns[9] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[9].c_str());
+
+			//Vec3 Rot2(Rot.x - 45 / 3.1415f, Rot.y / 3.1415f, Rot.z - 90 / 3.1415f);
+			AddGameObject<CollisionBox>(Vec3(col_Pos.x, col_Pos.y - 0.5f, col_Pos.z), col_Scale,  col_Rot); //-1 * (* 13.74f )
+		}
 	}
+
 	void GameStage::OnCreate() {
 		try {
 			wstring detadir;
@@ -138,16 +165,16 @@ namespace basecross {
 			csvfile_1.ReadCsv();
 			csvfile_2.SetFileName(detadir + L"Stage_Csv_2.csv");// GameStageA.csv");
 			csvfile_2.ReadCsv();
-			ObjCsvfile.SetFileName(detadir + L"SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
 
-			SetPhysicsActive(true);
+			//SetPhysicsActive(true);
 			//ビューとライトの作成
 			CreateViewLight();
 
-			auto ground = AddGameObject<FixedBox>(Vec3(30.0f, 1.0f, 30.0f), Vec3(0.0f), Vec3(0.0f, -1.0f, 0.0f));
+			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
 			ground->AddTag(L"Ground");
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f, 1.0f, 0.0f));
