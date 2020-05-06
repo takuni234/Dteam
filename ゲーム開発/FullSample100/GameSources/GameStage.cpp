@@ -155,6 +155,48 @@ namespace basecross {
 			//Vec3 Rot2(Rot.x - 45 / 3.1415f, Rot.y / 3.1415f, Rot.z - 90 / 3.1415f);
 			AddGameObject<CollisionBox>(Vec3(col_Pos.x, col_Pos.y - 0.5f, col_Pos.z), col_Scale,  col_Rot); //-1 * (* 13.74f )
 		}
+
+		ObjCsvfile.GetSelect(LineVec, 0, L"Player");
+		for (auto& v : LineVec) {
+			//トークン（カラム）の配列
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			PlayerPos.x = (float)_wtof(torkns[1].c_str());
+			PlayerPos.y = (float)_wtof(torkns[2].c_str());
+			PlayerPos.z = (float)_wtof(torkns[3].c_str());
+
+		}
+
+		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_1");
+		for (auto& v : LineVec) {
+			//トークン（カラム）の配列
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+
+			AddGameObject<RescurNomalTarget>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+
+		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
+		for (auto& v : LineVec) {
+			//トークン（カラム）の配列
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+
+			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+		}
 	}
 
 	void GameStage::OnCreate() {
@@ -177,12 +219,13 @@ namespace basecross {
 			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
 			ground->AddTag(L"Ground");
 
-			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), Vec3(0.0f, 1.0f, 0.0f));
+			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 
 
-			AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
-			AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
+
+			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
+			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
 			AddGameObject<IncreaseObject>();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();

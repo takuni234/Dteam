@@ -25,6 +25,8 @@ namespace basecross {
 		void CreateViewLight();
 		bool m_IsUpdate;
 
+		Vec3 PlayerPos;
+
 		InputHandler<GameStage> m_InputHandler;
 	public:
 		//\’z‚Æ”jŠü
