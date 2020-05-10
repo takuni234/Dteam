@@ -66,16 +66,17 @@ namespace basecross {
 		void OnUpdate() override;
 		void OnCollisionEnter(shared_ptr<GameObject>& obj);
 	};
-	class Slope :public GameObject {
+	class ObjRock :public GameObject {
 		Vec3 m_Position, m_Scale, m_Rotation;
 	public:
-		Slope(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
+		ObjRock(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
 			: GameObject(stage), m_Position(pos), m_Scale(scale), m_Rotation(rotate) {
 
 		}
-		~Slope(){}
+		~ObjRock() {}
 
 		void OnCreate() override;
+		void OnUpdate() override;
 	};
 	class CollisionBox :public GameObject {
 		Vec3 m_Position, m_Scale, m_Rotation;
