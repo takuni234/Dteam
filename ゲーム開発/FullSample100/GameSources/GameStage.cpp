@@ -26,8 +26,32 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-
-
+	void GameStage::CreateStageCellMap() {
+		float  PieceSize = 0.2f;
+		auto Ptr = AddGameObject<StageCellMap>(Vec3(-3.5f*0.2, -0.5f, -3.5f*0.2), PieceSize, 7, 7);
+		//セルマップの区画を表示する場合は以下の設定
+		Ptr->SetDrawActive(true);
+		//さらにセルのインデックスとコストを表示する場合は以下の設定
+		//Ptr->SetCellStringActive(true);
+		SetSharedGameObject(L"StageCellMap", Ptr);
+		//セルマップへのボックスのコスト設定
+		SetCellMapCost();
+	}
+	void GameStage::SetCellMapCost() {
+		auto PtrCellmap = GetSharedGameObject<StageCellMap>(L"StageCellMap");
+		//セルマップからセルの配列を取得
+		auto& CellVec = PtrCellmap->GetCellVec();
+		//CellVec={
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//	{4,4,4,4,4,4,4},
+		//};
+		
+	}
 	void GameStage::OnCreate() {
 		try {
 			SetPhysicsActive(true);
@@ -41,7 +65,9 @@ namespace basecross {
 
 			AddGameObject<RescurNomalTarget>(Vec3(1, 0, 1), Vec3(0.25f), Vec3(0));
 			AddGameObject<RescurTarget_1>(Vec3(-2, 0, -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>();
+			AddGameObject<IncreaseObject>(Vec3(0,0,0));
+
+
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);

@@ -17,6 +17,11 @@ namespace basecross {
 		void CreateViewLight();
 		bool m_IsUpdate;
 
+		//セルマップの作成
+		void CreateStageCellMap();
+		//コストをセルマップに反映
+		void SetCellMapCost();
+
 		InputHandler<GameStage> m_InputHandler;
 	public:
 		//構築と破棄

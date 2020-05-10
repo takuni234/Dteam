@@ -45,7 +45,7 @@ namespace basecross{
 			const Vec3& Rotation,
 			const Vec3& Position
 		);
-		virtual int checkkansu();
+		//virtual int checkkansu();
 		void OnCollisionEnter(shared_ptr<GameObject>& Other);
 		
 
@@ -54,6 +54,30 @@ namespace basecross{
 		virtual void OnCreate() override;
 		//ëÄçÏ
 	};
+	//--------------------------------------------------------------------------------------
+//	class ColdBox : public GameObject;
+//--------------------------------------------------------------------------------------
+	class ColdBox : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+
+	public:
+		
+		//ç\ízÇ∆îjä¸
+		ColdBox(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+
+
+		virtual ~ColdBox();
+		//èâä˙âª
+		virtual void OnCreate() override;
+		//ëÄçÏ
+	};
+
 	//--------------------------------------------------------------------------------------
 	//	class IncreaseObject: public GameObject;
 	//--------------------------------------------------------------------------------------
@@ -66,13 +90,20 @@ namespace basecross{
 		int z;
 		int randomx;
 		int randomz;
+		Vec3 m_Position;
+		//weak_ptr<StageCellMap> m_CelMap;
+
 	public:
-		IncreaseObject(const shared_ptr<Stage>& StagePtr);
+		IncreaseObject(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Position
+		);
 		virtual ~IncreaseObject();
 		virtual void OnCreate() override;
 		virtual void OnUpdate() override;
 
 	};
+
+
 	//--------------------------------------------------------------------------------------
 	//	class FixedSphere : public GameObject;
 	//--------------------------------------------------------------------------------------
