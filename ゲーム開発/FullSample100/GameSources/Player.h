@@ -18,15 +18,13 @@ namespace basecross{
 		float m_IntervalTime;
 		//インプットハンドラー
 		InputHandler<Player> m_InputHandler;
-		int m_Animflg;
 
 		//入力を取得
 		Vec2 GetInputState() const;
-		//入力から移動方向を取得
-		Vec3 GetMoveVector() const;
-		void MovePlayer();
 
 		void DrawStrings();
+		//ステートマシーン
+		unique_ptr< StateMachine<Player> >  m_StateMachine;
 	public:
 		Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
 		virtual ~Player();
@@ -37,14 +35,78 @@ namespace basecross{
 		//衝突判定
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other) override;
 
+		//入力から移動方向を取得
+		Vec3 GetMoveVector() const;
+
+		void PlayerMove();
+		void PlayerShot();
+		void PlayerWalk();
+
 		//入力イベント
 		void OnPushStart(){}
-		void OnPushA(){}
+		void OnPushA();
 		void OnPushB(){}
 		void OnPushX();
+		void OnUpX();
 		void OnPushY();
+		void OnUpY();
+		//アクセサ
+		const unique_ptr<StateMachine<Player>>& GetStateMachine() {
+			return m_StateMachine;
+		}
 	};
 
+	//--------------------------------------------------------------------------------------
+	//	class DefaultState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class DefaultState : public ObjState<Player>
+	{
+		DefaultState() {}
+	public:
+		static shared_ptr<DefaultState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	
+	//--------------------------------------------------------------------------------------
+	//	class WalkState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class WalkState : public ObjState<Player>
+	{
+		WalkState() {}
+	public:
+		static shared_ptr<WalkState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class ShotState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class ShotState : public ObjState<Player>
+	{
+		ShotState(){}
+	public:
+		static shared_ptr<ShotState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class AttackState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class AttackState : public ObjState<Player>
+	{
+		AttackState(){}
+	public:
+		static shared_ptr<AttackState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
 }
 //end basecross
 

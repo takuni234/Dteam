@@ -12,15 +12,20 @@ namespace basecross {
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
+		//CSV
+		CsvFile csvfile_1;
+		CsvFile csvfile_2;
+		CsvFile ObjCsvfile;
+		void CreateObjectACSV();
+		void CreateObjectB_CSV();
+
 		shared_ptr<SoundItem> m_BGM;
 		//ビューの作成
+
 		void CreateViewLight();
 		bool m_IsUpdate;
 
-		//セルマップの作成
-		void CreateStageCellMap();
-		//コストをセルマップに反映
-		void SetCellMapCost();
+		Vec3 PlayerPos;
 
 		InputHandler<GameStage> m_InputHandler;
 	public:
@@ -36,7 +41,9 @@ namespace basecross {
 		void OnPushA(){}
 		void OnPushB(){}
 		void OnPushX(){}
+		void OnUpX(){}
 		void OnPushY(){}
+		void OnUpY() {}
 	};
 }
 //end basecross
