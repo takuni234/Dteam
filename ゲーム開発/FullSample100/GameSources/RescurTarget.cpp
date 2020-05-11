@@ -203,7 +203,7 @@ namespace basecross {
 
 	}
 	void ObjRock::OnUpdate() {
-		auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
+		/*auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
 		auto plyTrans = player->GetComponent<Transform>();
 		auto plyPos = plyTrans->GetPosition();
 		auto Trans = GetComponent<Transform>();
@@ -215,7 +215,7 @@ namespace basecross {
 				XINPUT_GAMEPAD_Y) {
 				GetStage()->RemoveGameObject<GameObject>(GetThis<GameObject>());
 			}
-		}
+		}*/
 	}
 	void CollisionBox::OnCreate() {
 		auto Trans = GetComponent<Transform>();
