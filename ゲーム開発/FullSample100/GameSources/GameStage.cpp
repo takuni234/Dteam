@@ -112,7 +112,7 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurNomalTarget>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
 		for (auto& v : LineVec) {
@@ -125,7 +125,7 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+			AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");
 		for (auto& v : LineVec) {

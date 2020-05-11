@@ -19,6 +19,8 @@
 #include "UISprite.h"
 #include "UI.h"
 
+//ステージ上のオブジェクト
+#include "StageObject.h"
 //救出対象
 #include "RescurTarget.h"
 #include "Bullet.h"
