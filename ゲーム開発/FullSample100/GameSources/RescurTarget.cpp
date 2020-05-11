@@ -36,9 +36,11 @@ namespace basecross {
 		Vec3 movePos = Vec3(0);
 		float length = INPLAYERLANGSE();
 		if (length < 2) {
+			INFlg = true;
 			plyPos = plyPos - Trans->GetPosition();
 		}
 		else {
+			INFlg = false;
 			plyPos = Vec3(0);
 		}
 		m_Position += plyPos * deltatime*0.5f;
@@ -198,7 +200,7 @@ namespace basecross {
 		Draw->SetMeshToTransformMatrix(spanMat);
 		Draw->SetTextureResource(L"SURVIVOR_TX");
 		Draw->AddAnimation(L"woak", 0, 30, true, 25);
-		Draw->AddAnimation(L"stop", 0, 30, true, 25);
+		Draw->AddAnimation(L"stop", 30, 60, true, 25);
 
 
 		auto Trans = GetComponent<Transform>();
@@ -227,11 +229,14 @@ namespace basecross {
 		draw->SetFogEnabled(true);
 		draw->SetTextureResource(L"SURVIVOR_TX");
 		draw->UpdateAnimation(time);
+        draw->GetCurrentAnimation() + L"stop";
 
-
-		if (MoveSwitch()) {
-			PLAYERCHASE();
-			draw->GetCurrentAnimation() + L"woak";
+		PLAYERCHASE();
+		if (INFlg==false) {
+			draw->ChangeCurrentAnimation(L"woak");
+		}
+		else {	
+			draw->GetCurrentAnimation()+L"stop";
 		}
 
 	}
@@ -283,9 +288,14 @@ namespace basecross {
 		draw->UpdateAnimation(time);
 
 
-		if (MoveSwitch()) {
-			PLAYERCHASE();
-			draw->GetCurrentAnimation() + L"woak";
+		PLAYERCHASE();
+		if (INFlg == false) {
+			draw->UpdateAnimation(time);
+			draw->ChangeCurrentAnimation(L"woak");
+		}
+		else {
+			draw->UpdateAnimation(time);
+			draw->GetCurrentAnimation() + L"stop";
 		}
 
 
