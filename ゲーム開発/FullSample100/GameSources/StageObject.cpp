@@ -3,8 +3,6 @@
 #include "Project.h"
 
 namespace basecross {
-	//-----------------------------------------------------
-//<<<<<<<<<<<<<
 	void Rock::OnCreate() {
 		auto Draw = AddComponent<PNTStaticDraw>();
 		Draw->SetMeshResource(L"DEFAULT_CUBE");
@@ -70,7 +68,21 @@ namespace basecross {
 			}
 		}*/
 	}
+	void ObjRock::OnUpdate2() {
+		//à íuÇÃèCê≥
+		if (m_Arrangement) {
+			auto transComp = GetComponent<Transform>();
+			transComp->SetRotation(m_SaveRot);
+			transComp->SetPosition(m_SavePos);
+		}
+	}
 	void ObjRock::OnCollisionEnter(shared_ptr<GameObject>& Other) {
+		if (!m_Arrangement) {
+			auto transComp = GetComponent<Transform>();
+			m_SaveRot = transComp->GetRotation();
+			m_SavePos = transComp->GetPosition();
+			m_Arrangement = true;
+		}
 		if (Other->FindTag(L"PlayerAttackArea")) {
 			SetDrawActive(false);
 			SetUpdateActive(false);
@@ -86,8 +98,4 @@ namespace basecross {
 		Collision->SetFixed(true);
 		Collision->SetDrawActive(true);
 	}
-
-	//>>>>>>>>>>>>>>>>
-	//--------------------------------------------------------
-
 }
