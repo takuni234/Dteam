@@ -24,7 +24,8 @@ namespace basecross{
 
 		void DrawStrings();
 		//ステートマシーン
-		unique_ptr< StateMachine<Player> >  m_StateMachine;
+		unique_ptr<StateMachine<Player>> m_StateMachine;
+		shared_ptr<AttackArea> m_PlayerAttackArea;
 	public:
 		Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
 		virtual ~Player();
@@ -41,6 +42,10 @@ namespace basecross{
 		void PlayerMove();
 		void PlayerShot();
 		void PlayerWalk();
+		void PlayerAttack();
+		shared_ptr<GameObject> GetAttackArea() {
+			return m_PlayerAttackArea;
+		}
 
 		//入力イベント
 		void OnPushStart(){}

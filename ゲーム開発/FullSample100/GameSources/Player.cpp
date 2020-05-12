@@ -116,6 +116,8 @@ namespace basecross{
 
 		auto gravPtr = AddComponent<Gravity>();
 
+		AddTag(L"Player");
+
 		//•¶š—ñ‚ğ‚Â‚¯‚é
 		auto ptrString = AddComponent<StringSprite>();
 		ptrString->SetText(L"");
@@ -147,6 +149,9 @@ namespace basecross{
 		ptrDraw->AddAnimation(L"Shot", 120, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->ChangeCurrentAnimation(L"Default");
+
+		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
+		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
 
 		//ƒJƒƒ‰‚ğ“¾‚é
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
@@ -241,6 +246,11 @@ namespace basecross{
 		}
 	}
 
+	void Player::PlayerAttack() {
+		auto coll = m_PlayerAttackArea->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(true);
+	}
+
 	void Player::OnPushA() {
 
 	}
@@ -333,12 +343,15 @@ namespace basecross{
 	void AttackState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
 		ptrDraw->ChangeCurrentAnimation(L"Break");
+		Obj->PlayerAttack();
 	}
 	void AttackState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
 	}
 
 	void AttackState::Exit(const shared_ptr<Player>& Obj) {
+		auto coll = Obj->GetAttackArea()->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(false);
 	}
 }
 //end basecross

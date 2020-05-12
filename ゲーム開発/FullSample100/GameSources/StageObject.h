@@ -29,6 +29,7 @@ namespace basecross {
 
 		void OnCreate() override;
 		void OnUpdate() override;
+		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other)override;
 	};
 	class CollisionBox :public GameObject {
 		Vec3 m_Position, m_Scale, m_Rotation;

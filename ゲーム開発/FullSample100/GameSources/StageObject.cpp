@@ -70,6 +70,12 @@ namespace basecross {
 			}
 		}*/
 	}
+	void ObjRock::OnCollisionEnter(shared_ptr<GameObject>& Other) {
+		if (Other->FindTag(L"PlayerAttackArea")) {
+			SetDrawActive(false);
+			SetUpdateActive(false);
+		}
+	}
 	void CollisionBox::OnCreate() {
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);
