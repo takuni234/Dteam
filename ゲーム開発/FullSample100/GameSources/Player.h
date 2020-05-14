@@ -6,7 +6,7 @@
 #pragma once
 #include "stdafx.h"
 
-namespace basecross{
+namespace basecross {
 	class Player : public GameObject {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
@@ -40,6 +40,7 @@ namespace basecross{
 		Vec3 GetMoveVector() const;
 
 		void PlayerMove();
+		void PlayerSneak();
 		void PlayerShot();
 		void PlayerWalk();
 		void PlayerAttack();
@@ -48,9 +49,9 @@ namespace basecross{
 		}
 
 		//“ü—ÍƒCƒxƒ“ƒg
-		void OnPushStart(){}
+		void OnPushStart() {}
 		void OnPushA();
-		void OnPushB(){}
+		void OnPushB() {}
 		void OnPushX();
 		void OnUpX();
 		void OnPushY();
@@ -73,7 +74,7 @@ namespace basecross{
 		virtual void Execute(const shared_ptr<Player>& Obj)override;
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -92,7 +93,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class ShotState : public ObjState<Player>
 	{
-		ShotState(){}
+		ShotState() {}
 	public:
 		static shared_ptr<ShotState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
@@ -105,7 +106,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class MovingShootingState : public ObjState<Player>
 	{
-		MovingShootingState(){}
+		MovingShootingState() {}
 	public:
 		static shared_ptr<MovingShootingState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
@@ -118,7 +119,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class AttackState : public ObjState<Player>
 	{
-		AttackState(){}
+		AttackState() {}
 	public:
 		static shared_ptr<AttackState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;

@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "Project.h"
 
-namespace basecross{
+namespace basecross {
 	Player::Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos)
 		:GameObject(stage),
 		m_Scale(scale),
@@ -15,7 +15,7 @@ namespace basecross{
 		m_Speed(2.0f),
 		m_IntervalTime(0.0f)
 	{}
- 
+
 	Player::~Player() {}
 
 	Vec2 Player::GetInputState() const {
@@ -68,7 +68,7 @@ namespace basecross{
 		positionStr += L"X=" + Util::FloatToWStr(pos.x, 6, Util::FloatModify::Fixed) + L",\t";
 		positionStr += L"Y=" + Util::FloatToWStr(pos.y, 6, Util::FloatModify::Fixed) + L",\t";
 		positionStr += L"Z=" + Util::FloatToWStr(pos.z, 6, Util::FloatModify::Fixed) + L"\n";
-		
+
 		auto rot = transPtr->GetRotation();
 		wstring rotationStr(L"Rotation:\t");
 		rotationStr += L"X=" + Util::FloatToWStr(rot.x, 6, Util::FloatModify::Fixed) + L",\t";
@@ -100,8 +100,13 @@ namespace basecross{
 		wstring collTernCountStr(L"CollisionCountOfTern:\t");
 		collTernCountStr += Util::UintToWStr(GetStage()->GetCollisionManager()->GetCollisionCountOfTern());
 		collTernCountStr += L"\n";
+
+		wstring moveVecStr(L"moveVecState");
+		moveVecStr += Util::FloatToWStr(GetMoveVector().length());
+		moveVecStr += L"\n";
+
 		wstring str = fpsStr + positionStr + rotationStr + gravStr + updatePerStr + drawPerStr + collPerStr + collMiscStr
-			+ collTernCountStr;
+			+ collTernCountStr + moveVecStr;
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
@@ -143,7 +148,7 @@ namespace basecross{
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 
 		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
-		ptrDraw->AddAnimation(L"Walk", 0, 30,true, 60.0f);
+		ptrDraw->AddAnimation(L"Walk", 0, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
@@ -220,6 +225,13 @@ namespace basecross{
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
 		ptrDraw->UpdateAnimation(elapsedTime);
+	}
+
+	void Player::PlayerSneak() {
+		m_InputHandler.PushHandle(GetThis<Player>());
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->UpdateAnimation(elapsedTime * GetMoveVector().length());
 	}
 
 	void Player::PlayerShot() {
@@ -310,7 +322,7 @@ namespace basecross{
 		ptrDraw->ChangeCurrentAnimation(L"Walk");
 	}
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
-		Obj->PlayerMove();
+		Obj->PlayerSneak();
 		Obj->PlayerWalk();
 		if (Obj->GetMoveVector().length() == 0.0f) {
 			Obj->GetStateMachine()->ChangeState(DefaultState::Instance());
@@ -319,7 +331,7 @@ namespace basecross{
 
 	void WalkState::Exit(const shared_ptr<Player>& Obj) {
 	}
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class ShotState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -341,7 +353,7 @@ namespace basecross{
 
 	void ShotState::Exit(const shared_ptr<Player>& Obj) {
 	}
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class MovingShootingState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -354,7 +366,7 @@ namespace basecross{
 		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
 	}
 	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
-		Obj->PlayerMove();
+		Obj->PlayerSneak();
 		Obj->PlayerWalk();
 		Obj->PlayerShot();
 		if (Obj->GetMoveVector().length() == 0.0f) {
@@ -364,7 +376,7 @@ namespace basecross{
 
 	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
 	}
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class AttackState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
