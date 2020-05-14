@@ -146,7 +146,8 @@ namespace basecross{
 		ptrDraw->AddAnimation(L"Walk", 0, 30,true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Shot", 120, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Shoot", 240, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->ChangeCurrentAnimation(L"Default");
 
@@ -256,7 +257,12 @@ namespace basecross{
 	}
 
 	void Player::OnPushX() {
-		this->GetStateMachine()->ChangeState(ShotState::Instance());
+		if (GetMoveVector().length() != 0.0f) {
+			this->GetStateMachine()->ChangeState(MovingShootingState::Instance());
+		}
+		else {
+			this->GetStateMachine()->ChangeState(ShotState::Instance());
+		}
 	}
 
 	void Player::OnUpX() {
@@ -323,14 +329,40 @@ namespace basecross{
 	}
 	void ShotState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
-		ptrDraw->ChangeCurrentAnimation(L"Shot");
+		ptrDraw->ChangeCurrentAnimation(L"Shoot");
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
 		Obj->PlayerShot();
+		if (Obj->GetMoveVector().length() != 0.0f) {
+			Obj->GetStateMachine()->ChangeState(MovingShootingState::Instance());
+		}
 	}
 
 	void ShotState::Exit(const shared_ptr<Player>& Obj) {
+	}
+	
+	//--------------------------------------------------------------------------------------
+	//	class MovingShootingState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<MovingShootingState> MovingShootingState::Instance() {
+		static shared_ptr<MovingShootingState> instance(new MovingShootingState);
+		return instance;
+	}
+	void MovingShootingState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
+	}
+	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+		Obj->PlayerWalk();
+		Obj->PlayerShot();
+		if (Obj->GetMoveVector().length() == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(ShotState::Instance());
+		}
+	}
+
+	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
 	}
 	
 	//--------------------------------------------------------------------------------------

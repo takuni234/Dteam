@@ -49,11 +49,11 @@ namespace basecross {
 		strTexture = DataDir + L"Tx_rock2.png";
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
 		
-		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor3.bmf");
+		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
 		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"survivor4.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_2", modelMesh);
-		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Rescuecharacter3.bmf");
+		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Rescuecharacter7.bmf");
 		App::GetApp()->RegisterResource(L"RESCUECHARACTER_MESH", modelMesh);
 		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"HotRock3.bmf");
 		App::GetApp()->RegisterResource(L"HOTROCK_MESH", modelMesh);

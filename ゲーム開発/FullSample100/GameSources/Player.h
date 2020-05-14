@@ -101,6 +101,19 @@ namespace basecross{
 	};
 
 	//--------------------------------------------------------------------------------------
+	//	class MovingShootingState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class MovingShootingState : public ObjState<Player>
+	{
+		MovingShootingState(){}
+	public:
+		static shared_ptr<MovingShootingState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
 	//	class AttackState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
 	class AttackState : public ObjState<Player>
