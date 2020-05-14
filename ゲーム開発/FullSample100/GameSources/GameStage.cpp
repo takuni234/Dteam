@@ -97,6 +97,14 @@ namespace basecross {
 		}
 
 	}
+	//スコアスプライト作成
+	void GameStage::CreateScoreSprite() {
+		AddGameObject<ScoreSprite>(4,
+			L"NUMBER_TX",
+			true,
+			Vec2(320.0f, 80.0f),
+			Vec3(0.0f, 0.0f, 0.0f));
+	}
 
 	void GameStage::CreateObjectB_CSV() {
 		//CSVの行単位の配列
@@ -227,6 +235,8 @@ namespace basecross {
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
 			AddGameObject<IncreaseObject>(Vec3(0,0,0));
+
+			CreateScoreSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
@@ -236,6 +246,19 @@ namespace basecross {
 			throw;
 		}
 	}
+
+
+	void GameStage::OnUpdate() {
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		m_TotalTime += elapsedTime;
+		if (m_TotalTime >= 10000.0f) {
+			m_TotalTime = 0.0f;
+		}
+		//スコアを更新する
+		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
+		ptrScor->SetScore(m_TotalTime);
+	}
+
 
 	void GameStage::UpdateStage() {
 		m_InputHandler.PushHandle(GetThis<GameStage>());

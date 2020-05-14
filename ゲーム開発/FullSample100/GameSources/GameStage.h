@@ -18,6 +18,11 @@ namespace basecross {
 		CsvFile ObjCsvfile;
 		void CreateObjectACSV();
 		void CreateObjectB_CSV();
+		//スコアスプライト作成
+		void CreateScoreSprite();
+		//トータル時間
+		float m_TotalTime;
+
 
 		shared_ptr<SoundItem> m_BGM;
 		//ビューの作成
@@ -29,11 +34,14 @@ namespace basecross {
 
 		InputHandler<GameStage> m_InputHandler;
 	public:
+
 		//構築と破棄
-		GameStage() :Stage(), m_IsUpdate(true) {}
+		GameStage() :Stage(), m_IsUpdate(true),m_TotalTime(0) {}
 		virtual ~GameStage() {}
 		//初期化
 		virtual void OnCreate()override;
+		virtual void OnUpdate()override;
+
 		virtual void UpdateStage() override;
 		virtual void OnDestroy() override;
 
