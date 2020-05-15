@@ -144,6 +144,8 @@ namespace basecross{
 		//操作
 	};
 
+
+
 	//--------------------------------------------------------------------------------------
 ///	スコア表示のスプライト
 //--------------------------------------------------------------------------------------
@@ -169,6 +171,7 @@ namespace basecross{
 		@param[in]	StartPos	初期位置
 		*/
 		//--------------------------------------------------------------------------------------
+	
 		ScoreSprite(const shared_ptr<Stage>& StagePtr, UINT NumberOfDigits,
 			const wstring& TextureKey, bool Trace,
 			const Vec2& StartScale, const Vec3& StartPos);
@@ -203,6 +206,5 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
 	};
-
 }
 //end basecross
