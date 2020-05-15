@@ -40,7 +40,7 @@ namespace basecross{
 		shadowPtr->SetMeshResource(L"DEFAULT_CUBE");
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"DEFAULT_CUBE");
-		ptrDraw->SetTextureResource(L"SKY_TX");
+		ptrDraw->SetTextureResource(L"GROUND_TX");
 		ptrDraw->SetFogEnabled(true);
 		ptrDraw->SetOwnShadowActive(true);
 
@@ -226,6 +226,44 @@ namespace basecross{
 		ptrDraw->SetTextureResource(L"SKY_TX");
 		ptrDraw->SetFogEnabled(true);
 		ptrDraw->SetOwnShadowActive(true);
+	}
+
+	AttackArea::AttackArea(const shared_ptr<Stage>& Stage, const Vec3& scale, const Vec3& rotation, const Vec3& position)
+		:GameObject(Stage),
+		m_Scale(scale),
+		m_Rotation(rotation),
+		m_Position(position)
+	{}
+
+	void AttackArea::OnCreate() {
+		auto transComp = GetComponent<Transform>();
+		transComp->SetScale(m_Scale);
+		transComp->SetRotation(m_Rotation);
+		transComp->SetPosition(m_Position);
+	
+		AddTag(L"PlayerAttackArea");
+
+		auto drawComp = AddComponent<BcPNTStaticDraw>();
+		drawComp->SetMeshResource(L"DEFAULT_CUBE");
+
+		auto collComp = AddComponent<CollisionObb>();
+		collComp->SetFixed(true);
+		collComp->SetUpdateActive(false);
+	}
+
+	void AttackArea::OnUpdate() {
+		auto collComp = GetComponent<CollisionObb>();
+		auto drawComp = GetComponent<BcPNTStaticDraw>();
+		if (collComp->IsUpdateActive()) {
+			drawComp->SetDrawActive(true);
+		}
+		else {
+			drawComp->SetDrawActive(false);
+		}
+	}
+
+	void AttackArea::OnCollisionEnter(shared_ptr<GameObject>& Other) {
+
 	}
 
 	//--------------------------------------------------------------------------------------

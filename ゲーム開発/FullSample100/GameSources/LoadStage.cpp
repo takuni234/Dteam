@@ -26,8 +26,12 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
-		strTexture = DataDir + L"number.png";
-		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
+		strTexture = DataDir + L"trace.png";
+		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
+		strTexture = DataDir + L"Ground.png";
+		App::GetApp()->RegisterTexture(L"GROUND_TX", strTexture);
+		strTexture = DataDir + L"Ground2.png";
+		App::GetApp()->RegisterTexture(L"GROUND2_TX", strTexture);
 		strTexture = DataDir + L"spark.png";
 		App::GetApp()->RegisterTexture(L"SPARK_TX", strTexture);
 		strTexture = DataDir + L"fire.png";
@@ -45,9 +49,11 @@ namespace basecross {
 		strTexture = DataDir + L"Tx_rock2.png";
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
 		
-		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"survivor4.bmf");
-		App::GetApp()->RegisterResource(L"PLAYER_MESH", modelMesh);
-		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Rescuecharacter3.bmf");
+		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
+		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
+		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"survivor4.bmf");
+		App::GetApp()->RegisterResource(L"SURVIVOR_2", modelMesh);
+		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Rescuecharacter7.bmf");
 		App::GetApp()->RegisterResource(L"RESCUECHARACTER_MESH", modelMesh);
 		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"HotRock3.bmf");
 		App::GetApp()->RegisterResource(L"HOTROCK_MESH", modelMesh);

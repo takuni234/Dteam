@@ -10,6 +10,8 @@ namespace basecross {
 
 		Vec3 m_MoveDir;
 		float m_Speed;
+		bool m_Hit;
+		float m_ExistenceTime;
 	public:
 		Bullet(const shared_ptr<Stage>& StagePtr, const Vec3& ScalePtr, const Vec3& RotPtr, const Vec3& PosPtr, const Vec3& MoveDirPtr, const float& SpeedPtr);
 		virtual ~Bullet();

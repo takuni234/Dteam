@@ -6,7 +6,7 @@
 #pragma once
 #include "stdafx.h"
 
-namespace basecross{
+namespace basecross {
 	class Player : public GameObject {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
@@ -24,7 +24,8 @@ namespace basecross{
 
 		void DrawStrings();
 		//ステートマシーン
-		unique_ptr< StateMachine<Player> >  m_StateMachine;
+		unique_ptr<StateMachine<Player>> m_StateMachine;
+		shared_ptr<AttackArea> m_PlayerAttackArea;
 	public:
 		Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
 		virtual ~Player();
@@ -39,13 +40,18 @@ namespace basecross{
 		Vec3 GetMoveVector() const;
 
 		void PlayerMove();
+		void PlayerSneak();
 		void PlayerShot();
 		void PlayerWalk();
+		void PlayerAttack();
+		shared_ptr<GameObject> GetAttackArea() {
+			return m_PlayerAttackArea;
+		}
 
 		//入力イベント
-		void OnPushStart(){}
+		void OnPushStart() {}
 		void OnPushA();
-		void OnPushB(){}
+		void OnPushB() {}
 		void OnPushX();
 		void OnUpX();
 		void OnPushY();
@@ -68,7 +74,7 @@ namespace basecross{
 		virtual void Execute(const shared_ptr<Player>& Obj)override;
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
 	};
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class WalkState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -87,9 +93,22 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class ShotState : public ObjState<Player>
 	{
-		ShotState(){}
+		ShotState() {}
 	public:
 		static shared_ptr<ShotState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class MovingShootingState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class MovingShootingState : public ObjState<Player>
+	{
+		MovingShootingState() {}
+	public:
+		static shared_ptr<MovingShootingState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		virtual void Execute(const shared_ptr<Player>& Obj)override;
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
@@ -100,7 +119,7 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class AttackState : public ObjState<Player>
 	{
-		AttackState(){}
+		AttackState() {}
 	public:
 		static shared_ptr<AttackState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;

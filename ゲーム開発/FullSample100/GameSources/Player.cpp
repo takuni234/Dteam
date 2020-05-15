@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "Project.h"
 
-namespace basecross{
+namespace basecross {
 	Player::Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos)
 		:GameObject(stage),
 		m_Scale(scale),
@@ -15,7 +15,7 @@ namespace basecross{
 		m_Speed(2.0f),
 		m_IntervalTime(0.0f)
 	{}
- 
+
 	Player::~Player() {}
 
 	Vec2 Player::GetInputState() const {
@@ -68,7 +68,7 @@ namespace basecross{
 		positionStr += L"X=" + Util::FloatToWStr(pos.x, 6, Util::FloatModify::Fixed) + L",\t";
 		positionStr += L"Y=" + Util::FloatToWStr(pos.y, 6, Util::FloatModify::Fixed) + L",\t";
 		positionStr += L"Z=" + Util::FloatToWStr(pos.z, 6, Util::FloatModify::Fixed) + L"\n";
-		
+
 		auto rot = transPtr->GetRotation();
 		wstring rotationStr(L"Rotation:\t");
 		rotationStr += L"X=" + Util::FloatToWStr(rot.x, 6, Util::FloatModify::Fixed) + L",\t";
@@ -100,8 +100,13 @@ namespace basecross{
 		wstring collTernCountStr(L"CollisionCountOfTern:\t");
 		collTernCountStr += Util::UintToWStr(GetStage()->GetCollisionManager()->GetCollisionCountOfTern());
 		collTernCountStr += L"\n";
+
+		wstring moveVecStr(L"moveVecState");
+		moveVecStr += Util::FloatToWStr(GetMoveVector().length());
+		moveVecStr += L"\n";
+
 		wstring str = fpsStr + positionStr + rotationStr + gravStr + updatePerStr + drawPerStr + collPerStr + collMiscStr
-			+ collTernCountStr;
+			+ collTernCountStr + moveVecStr;
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
@@ -115,6 +120,8 @@ namespace basecross{
 		ptrTrans->SetPosition(m_Position);
 
 		auto gravPtr = AddComponent<Gravity>();
+
+		AddTag(L"Player");
 
 		//文字列をつける
 		auto ptrString = AddComponent<StringSprite>();
@@ -141,12 +148,16 @@ namespace basecross{
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 
 		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
-		ptrDraw->AddAnimation(L"Walk", 0, 30,true, 60.0f);
+		ptrDraw->AddAnimation(L"Walk", 0, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Shot", 120, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Shoot", 240, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->ChangeCurrentAnimation(L"Default");
+
+		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
+		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
 
 		//カメラを得る
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
@@ -216,6 +227,13 @@ namespace basecross{
 		ptrDraw->UpdateAnimation(elapsedTime);
 	}
 
+	void Player::PlayerSneak() {
+		m_InputHandler.PushHandle(GetThis<Player>());
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->UpdateAnimation(elapsedTime * GetMoveVector().length());
+	}
+
 	void Player::PlayerShot() {
 		auto elapsedTime = App::GetApp()->GetElapsedTime();
 
@@ -241,12 +259,22 @@ namespace basecross{
 		}
 	}
 
+	void Player::PlayerAttack() {
+		auto coll = m_PlayerAttackArea->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(true);
+	}
+
 	void Player::OnPushA() {
 
 	}
 
 	void Player::OnPushX() {
-		this->GetStateMachine()->ChangeState(ShotState::Instance());
+		if (GetMoveVector().length() != 0.0f) {
+			this->GetStateMachine()->ChangeState(MovingShootingState::Instance());
+		}
+		else {
+			this->GetStateMachine()->ChangeState(ShotState::Instance());
+		}
 	}
 
 	void Player::OnUpX() {
@@ -294,7 +322,7 @@ namespace basecross{
 		ptrDraw->ChangeCurrentAnimation(L"Walk");
 	}
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
-		Obj->PlayerMove();
+		Obj->PlayerSneak();
 		Obj->PlayerWalk();
 		if (Obj->GetMoveVector().length() == 0.0f) {
 			Obj->GetStateMachine()->ChangeState(DefaultState::Instance());
@@ -303,7 +331,7 @@ namespace basecross{
 
 	void WalkState::Exit(const shared_ptr<Player>& Obj) {
 	}
-	
+
 	//--------------------------------------------------------------------------------------
 	//	class ShotState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -313,16 +341,42 @@ namespace basecross{
 	}
 	void ShotState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
-		ptrDraw->ChangeCurrentAnimation(L"Shot");
+		ptrDraw->ChangeCurrentAnimation(L"Shoot");
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
 		Obj->PlayerShot();
+		if (Obj->GetMoveVector().length() != 0.0f) {
+			Obj->GetStateMachine()->ChangeState(MovingShootingState::Instance());
+		}
 	}
 
 	void ShotState::Exit(const shared_ptr<Player>& Obj) {
 	}
-	
+
+	//--------------------------------------------------------------------------------------
+	//	class MovingShootingState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<MovingShootingState> MovingShootingState::Instance() {
+		static shared_ptr<MovingShootingState> instance(new MovingShootingState);
+		return instance;
+	}
+	void MovingShootingState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
+	}
+	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSneak();
+		Obj->PlayerWalk();
+		Obj->PlayerShot();
+		if (Obj->GetMoveVector().length() == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(ShotState::Instance());
+		}
+	}
+
+	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
 	//--------------------------------------------------------------------------------------
 	//	class AttackState : public ObjState<Player>;
 	//--------------------------------------------------------------------------------------
@@ -333,12 +387,15 @@ namespace basecross{
 	void AttackState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
 		ptrDraw->ChangeCurrentAnimation(L"Break");
+		Obj->PlayerAttack();
 	}
 	void AttackState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
 	}
 
 	void AttackState::Exit(const shared_ptr<Player>& Obj) {
+		auto coll = Obj->GetAttackArea()->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(false);
 	}
 }
 //end basecross

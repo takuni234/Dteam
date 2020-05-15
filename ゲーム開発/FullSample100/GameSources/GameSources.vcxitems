@@ -27,6 +27,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)RescurTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Scene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Sprite.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StageObject.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TitleStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UISprite.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)RescurTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Sprite.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StageObject.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TitleStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UISprite.cpp" />

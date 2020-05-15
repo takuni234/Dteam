@@ -8,7 +8,9 @@ namespace basecross {
 		m_Rotation(RotPtr),
 		m_Position(PosPtr),
 		m_MoveDir(MoveDirPtr),
-		m_Speed(SpeedPtr)
+		m_Speed(SpeedPtr),
+		m_Hit(false),
+		m_ExistenceTime(0.5f)
 	{}
 
 	Bullet::~Bullet(){}
@@ -37,6 +39,15 @@ namespace basecross {
 		auto ptrTrans = GetComponent<Transform>();
 		if (ptrTrans->GetPosition().y > -10.0f) {
 			auto elapsedTime = App::GetApp()->GetElapsedTime();
+			if (m_Hit) {
+				if (m_ExistenceTime > 0.0f) {
+					m_ExistenceTime -= elapsedTime;
+				}
+				else {
+					SetDrawActive(false);
+					SetUpdateActive(false);
+				}
+			}
 			Vec3 newPos = Vec3(ptrTrans->GetPosition() + m_MoveDir * m_Speed * elapsedTime);
 			ptrTrans->SetPosition(newPos);
 		}
@@ -47,9 +58,10 @@ namespace basecross {
 	}
 
 	void Bullet::OnCollisionEnter(shared_ptr<GameObject>& Other) {
-		if (Other->FindTag(L"Ground")) {
-			SetDrawActive(false);
-			SetUpdateActive(false);
-		}
+		//if (Other->FindTag(L"Ground")) {
+		//	SetDrawActive(false);
+		//	SetUpdateActive(false);
+		//}
+		m_Hit = true;
 	}
 }
