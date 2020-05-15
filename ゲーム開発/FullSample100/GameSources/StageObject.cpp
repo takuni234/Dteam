@@ -6,7 +6,7 @@ namespace basecross {
 	void Rock::OnCreate() {
 		auto Draw = AddComponent<PNTStaticDraw>();
 		Draw->SetMeshResource(L"DEFAULT_CUBE");
-		Draw->SetTextureResource(L"SKY_TX");
+		Draw->SetTextureResource(L"GROUND2_TX");
 
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);

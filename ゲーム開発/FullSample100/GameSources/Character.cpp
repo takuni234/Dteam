@@ -371,8 +371,8 @@ namespace basecross{
 	}
 
 	//--------------------------------------------------------------------------------------
-///	スコア表示のスプライト
-//--------------------------------------------------------------------------------------
+	///	スコア表示のスプライト
+	//--------------------------------------------------------------------------------------
 	ScoreSprite::ScoreSprite(const shared_ptr<Stage>& StagePtr, UINT NumberOfDigits,
 		const wstring& TextureKey, bool Trace,
 		const Vec2& StartScale, const Vec3& StartPos) :
