@@ -5,7 +5,8 @@ namespace basecross {
 		:GameObject(Stage),
 		m_Scale(scale),
 		m_Rotation(rotation),
-		m_Position(position)
+		m_Position(position),
+		m_GrabPos(Vec3(0.0f))
 	{}
 
 	void GrabArea::OnCreate() {
@@ -39,5 +40,11 @@ namespace basecross {
 
 	void GrabArea::OnCollisionEnter(shared_ptr<GameObject>& Other) {
 
+	}
+	void GrabArea::OnCollisionExcute(shared_ptr<GameObject>& Other) {
+		auto transPtr = Other->GetComponent<Transform>();
+		m_GrabPos = transPtr->GetPosition();
+		auto posPtr = transPtr->GetPosition();
+		transPtr->SetPosition(Vec3(posPtr.x, m_GrabPos.y, posPtr.z));
 	}
 }

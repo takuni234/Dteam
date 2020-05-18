@@ -251,7 +251,9 @@ namespace basecross {
 		m_IntervalTime += elapsedTime;
 		if (m_IntervalTime >= 0.05f) {
 			auto transPtr = GetComponent<Transform>();
-			Vec3 createPos = Vec3(transPtr->GetPosition() + transPtr->GetForword() * transPtr->GetScale().getX());
+			auto posPtr = transPtr->GetPosition();
+			auto playerGunPos = Vec3(posPtr.x, posPtr.y + 0.2f, posPtr.z);
+			Vec3 createPos = Vec3(playerGunPos + transPtr->GetForword() * transPtr->GetScale().getX());
 			GetStage()->AddGameObject<Bullet>(Vec3(0.1f, 0.1f, 0.1f), transPtr->GetRotation(), createPos, transPtr->GetForword(), 5.0f);
 			m_IntervalTime = 0.0f;
 		}
