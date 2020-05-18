@@ -102,11 +102,19 @@ namespace basecross {
 		collTernCountStr += L"\n";
 
 		wstring moveVecStr(L"moveVecState");
-		moveVecStr += Util::FloatToWStr(GetMoveVector().length());
+		moveVecStr += L"Length=" + Util::FloatToWStr(GetMoveVector().length()) + L"\n";
+		moveVecStr += L"X=" + Util::FloatToWStr(GetMoveVector().x, 6, Util::FloatModify::Fixed) + L",\t";
+		moveVecStr += L"Z=" + Util::FloatToWStr(GetMoveVector().z, 6, Util::FloatModify::Fixed) + L"\n";
 		moveVecStr += L"\n";
 
+		wstring forwordVecStr(L"forwordVec");
+		forwordVecStr += L"Length=" + Util::FloatToWStr(transPtr->GetForword().length(), 6, Util::FloatModify::Fixed) + L"\n";
+		forwordVecStr += L"X=" + Util::FloatToWStr(transPtr->GetForword().x, 6, Util::FloatModify::Fixed) + L",\t";
+		forwordVecStr += L"Z=" + Util::FloatToWStr(transPtr->GetForword().z, 6, Util::FloatModify::Fixed) + L"\n";
+		forwordVecStr += L"\n";
+
 		wstring str = fpsStr + positionStr + rotationStr + gravStr + updatePerStr + drawPerStr + collPerStr + collMiscStr
-			+ collTernCountStr + moveVecStr;
+			+ collTernCountStr + moveVecStr + forwordVecStr;
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
@@ -154,10 +162,13 @@ namespace basecross {
 		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Shoot", 240, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Grab", 280, 30, true, 60.0f);
 		ptrDraw->ChangeCurrentAnimation(L"Default");
 
 		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
 		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
+		m_PlayerGrabArea = GetStage()->AddGameObject<GrabArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z));
+		m_PlayerGrabArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
 
 		//カメラを得る
 		auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(OnGetDrawCamera());
@@ -264,8 +275,21 @@ namespace basecross {
 		coll->SetUpdateActive(true);
 	}
 
+	void Player::PlayerGrab() {
+		auto coll = m_PlayerGrabArea->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(true);
+	}
+
 	void Player::OnPushA() {
 
+	}
+
+	void Player::OnPushB() {
+		this->GetStateMachine()->ChangeState(GrabState::Instance());
+	}
+
+	void Player::OnUpB() {
+		this->GetStateMachine()->ChangeState(DefaultState::Instance());
 	}
 
 	void Player::OnPushX() {
@@ -394,8 +418,81 @@ namespace basecross {
 	}
 
 	void AttackState::Exit(const shared_ptr<Player>& Obj) {
+		//判定を非アクティブ化
 		auto coll = Obj->GetAttackArea()->GetComponent<CollisionObb>();
 		coll->SetUpdateActive(false);
+	}
+	
+	//--------------------------------------------------------------------------------------
+	//	class GrabState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<GrabState> GrabState::Instance() {
+		static shared_ptr<GrabState> instance(new GrabState);
+		return instance;
+	}
+	void GrabState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Grab");
+	}
+	void GrabState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerMove();
+		if (Obj->GetMoveVector().length() > 0.0f) {
+			Obj->GetStateMachine()->ChangeState(PushState::Instance());
+		}
+	}
+
+	void GrabState::Exit(const shared_ptr<Player>& Obj) {
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class PushState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<PushState> PushState::Instance() {
+		static shared_ptr<PushState> instance(new PushState);
+		return instance;
+	}
+	void PushState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Push");
+		Obj->SetSpeed(1.0f);
+		Obj->PlayerGrab();
+	}
+	void PushState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSneak();
+		Obj->PlayerWalk();
+		if (Obj->GetMoveVector().length() == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(GrabState::Instance());
+		}
+	}
+	void PushState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->SetSpeed(2.0f);
+		//判定を非アクティブ化
+		auto coll = Obj->GetGrabArea()->GetComponent<CollisionObb>();
+		coll->SetUpdateActive(false);
+	}
+	
+	//--------------------------------------------------------------------------------------
+	//	class PullState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<PullState> PullState::Instance() {
+		static shared_ptr<PullState> instance(new PullState);
+		return instance;
+	}
+	void PullState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Pull");
+		Obj->SetSpeed(1.0f);
+	}
+	void PullState::Execute(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSneak();
+		Obj->PlayerWalk();
+		if (Obj->GetMoveVector().length() == 0.0f) {
+			Obj->GetStateMachine()->ChangeState(GrabState::Instance());
+		}
+	}
+
+	void PullState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->SetSpeed(2.0f);
 	}
 }
 //end basecross

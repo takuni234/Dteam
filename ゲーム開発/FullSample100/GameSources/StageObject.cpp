@@ -88,6 +88,13 @@ namespace basecross {
 			SetUpdateActive(false);
 		}
 	}
+	void ObjRock::OnCollisionExcute(shared_ptr<GameObject>& Other) {
+		if (Other->FindTag(L"PlayerGrabArea")) {
+			auto transComp = GetComponent<Transform>();
+			m_SaveRot = transComp->GetRotation();
+			m_SavePos = transComp->GetPosition();
+		}
+	}
 	void CollisionBox::OnCreate() {
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);

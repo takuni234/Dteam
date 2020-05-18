@@ -26,8 +26,12 @@ namespace basecross {
 	}
 
 	void TitleStage::CreateSprite() {
+		float logoScale = 300.0f;
+		//”ä—¦
+		auto logoRatio = Vec2(3.7f, 1.0f);
+		logoRatio *= logoScale;
 		//ƒ^ƒCƒgƒ‹‰æ‘œ
-		AddGameObject<Sprite>(L"TITLELOGO_TX");
+		AddGameObject<Sprite>(L"TITLELOGO_TX", true, logoRatio, Vec3(0.0f));
 	}
 
 	void TitleStage::OnCreate() {

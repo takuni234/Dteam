@@ -13,6 +13,8 @@
 #include "TitleStage.h"
 #include "LoadStage.h"
 #include "Character.h"
+#include "PlayerGrabArea.h"
+#include "PlayerIceaxArea.h"
 #include "Player.h"
 #include "PlayerCamera.h"
 #include "Sprite.h"
@@ -24,5 +26,7 @@
 //ã~èoëŒè€
 #include "RescurTarget.h"
 #include "Bullet.h"
+
+#include "GoalObject.h"
 
 

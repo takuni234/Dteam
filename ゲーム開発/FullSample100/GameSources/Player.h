@@ -26,6 +26,7 @@ namespace basecross {
 		//ステートマシーン
 		unique_ptr<StateMachine<Player>> m_StateMachine;
 		shared_ptr<AttackArea> m_PlayerAttackArea;
+		shared_ptr<GrabArea> m_PlayerGrabArea;
 	public:
 		Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
 		virtual ~Player();
@@ -44,14 +45,19 @@ namespace basecross {
 		void PlayerShot();
 		void PlayerWalk();
 		void PlayerAttack();
+		void PlayerGrab();
 		shared_ptr<GameObject> GetAttackArea() {
 			return m_PlayerAttackArea;
+		}
+		shared_ptr<GameObject> GetGrabArea() {
+			return m_PlayerGrabArea;
 		}
 
 		//入力イベント
 		void OnPushStart() {}
 		void OnPushA();
-		void OnPushB() {}
+		void OnPushB();
+		void OnUpB();
 		void OnPushX();
 		void OnUpX();
 		void OnPushY();
@@ -59,6 +65,12 @@ namespace basecross {
 		//アクセサ
 		const unique_ptr<StateMachine<Player>>& GetStateMachine() {
 			return m_StateMachine;
+		}
+		float GetSpeed() const {
+			return m_Speed;
+		}
+		void SetSpeed(float speed) {
+			m_Speed = speed;
 		}
 	};
 
@@ -122,6 +134,45 @@ namespace basecross {
 		AttackState() {}
 	public:
 		static shared_ptr<AttackState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	
+	//--------------------------------------------------------------------------------------
+	//	class GrabState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class GrabState : public ObjState<Player>
+	{
+		GrabState() {}
+	public:
+		static shared_ptr<GrabState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	
+	//--------------------------------------------------------------------------------------
+	//	class PushState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class PushState : public ObjState<Player>
+	{
+		PushState() {}
+	public:
+		static shared_ptr<PushState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+	
+	//--------------------------------------------------------------------------------------
+	//	class PullState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class PullState : public ObjState<Player>
+	{
+		PullState() {}
+	public:
+		static shared_ptr<PullState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		virtual void Execute(const shared_ptr<Player>& Obj)override;
 		virtual void Exit(const shared_ptr<Player>& Obj)override;
