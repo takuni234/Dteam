@@ -243,7 +243,7 @@ namespace basecross {
 			AddGameObject<IncreaseObject>(Vec3(3,3,3));
 
 			CreateScoreSprite();
-			CreateWallSprite();
+			CreatePushSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
