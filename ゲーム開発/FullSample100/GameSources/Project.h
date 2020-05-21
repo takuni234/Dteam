@@ -13,6 +13,8 @@
 #include "TitleStage.h"
 #include "LoadStage.h"
 #include "Character.h"
+#include "PlayerGrabArea.h"
+#include "PlayerIceaxArea.h"
 #include "Player.h"
 #include "PlayerCamera.h"
 #include "Sprite.h"
@@ -21,8 +23,11 @@
 
 //ステージ上のオブジェクト
 #include "StageObject.h"
+#include "IncreaseBox.h"
 //救出対象
 #include "RescurTarget.h"
 #include "Bullet.h"
+
+#include "GoalObject.h"
 
 

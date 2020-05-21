@@ -15,7 +15,15 @@ namespace basecross {
 				Obj->OnPushA();
 				return;
 			}
+			if (keyState.m_bUpKeyTbl['B']) {
+				Obj->OnPushA();
+				return;
+			}
 			if (keyState.m_bPressedKeyTbl['M']) {
+				Obj->OnPushB();
+				return;
+			}			
+			if (keyState.m_bUpKeyTbl['M']) {
 				Obj->OnPushB();
 				return;
 			}
@@ -48,7 +56,10 @@ namespace basecross {
 
 				}
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B) {
-
+					Obj->OnPushB();
+				}
+				if (cntlVec[0].wReleasedButtons & XINPUT_GAMEPAD_B) {
+					Obj->OnUpB();
 				}
 				if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_X) {
 					Obj->OnPushX();

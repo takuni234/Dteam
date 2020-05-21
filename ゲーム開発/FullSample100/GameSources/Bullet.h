@@ -12,11 +12,14 @@ namespace basecross {
 		float m_Speed;
 		bool m_Hit;
 		float m_ExistenceTime;
+		float m_Time;
 	public:
 		Bullet(const shared_ptr<Stage>& StagePtr, const Vec3& ScalePtr, const Vec3& RotPtr, const Vec3& PosPtr, const Vec3& MoveDirPtr, const float& SpeedPtr);
 		virtual ~Bullet();
 		virtual void OnCreate() override;
 		virtual void OnUpdate() override;
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other) override;
+		//’e‚ÌƒŠƒZƒbƒg
+		void Reset(const Vec3& rot, const Vec3& pos, const Vec3& moveDirPtr);
 	};
 }

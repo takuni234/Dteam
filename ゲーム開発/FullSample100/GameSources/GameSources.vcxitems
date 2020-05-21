@@ -18,9 +18,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameEvent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameStage.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GoalObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LoadStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Player.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)PlayerCamera.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Project.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ProjectBehavior.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ProjectShader.h" />
@@ -36,9 +40,13 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Bullet.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GoalObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)LoadStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Player.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)PlayerCamera.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectBehavior.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ProjectShader.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RescurTarget.cpp" />

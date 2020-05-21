@@ -30,81 +30,6 @@ namespace basecross{
 	};
 
 	//--------------------------------------------------------------------------------------
-//	class IncreaseBox : public GameObject;
-//--------------------------------------------------------------------------------------
-	class IncreaseBox : public GameObject {
-		Vec3 m_Scale;
-		Vec3 m_Rotation;
-		Vec3 m_Position;
-
-	public:
-		int check;
-		//構築と破棄
-	IncreaseBox(const shared_ptr<Stage>& StagePtr,
-			const Vec3& Scale,
-			const Vec3& Rotation,
-			const Vec3& Position
-		);
-		//virtual int checkkansu();
-		void OnCollisionEnter(shared_ptr<GameObject>& Other);
-		
-
-		virtual ~IncreaseBox();
-		//初期化
-		virtual void OnCreate() override;
-		//操作
-	};
-	//--------------------------------------------------------------------------------------
-//	class ColdBox : public GameObject;
-//--------------------------------------------------------------------------------------
-	class ColdBox : public GameObject {
-		Vec3 m_Scale;
-		Vec3 m_Rotation;
-		Vec3 m_Position;
-
-	public:
-		
-		//構築と破棄
-		ColdBox(const shared_ptr<Stage>& StagePtr,
-			const Vec3& Scale,
-			const Vec3& Rotation,
-			const Vec3& Position
-		);
-
-
-		virtual ~ColdBox();
-		//初期化
-		virtual void OnCreate() override;
-		//操作
-	};
-
-	//--------------------------------------------------------------------------------------
-	//	class IncreaseObject: public GameObject;
-	//--------------------------------------------------------------------------------------
-
-	class IncreaseObject : public GameObject {
-		Vec3 m_Vec3;
-		int count;
-		int time;
-		int x;
-		int z;
-		int randomx;
-		int randomz;
-		Vec3 m_Position;
-		//weak_ptr<StageCellMap> m_CelMap;
-
-	public:
-		IncreaseObject(const shared_ptr<Stage>& StagePtr,
-			const Vec3& Position
-		);
-		virtual ~IncreaseObject();
-		virtual void OnCreate() override;
-		virtual void OnUpdate() override;
-
-	};
-
-
-	//--------------------------------------------------------------------------------------
 	//	class FixedSphere : public GameObject;
 	//--------------------------------------------------------------------------------------
 	class FixedSphere : public GameObject {
@@ -144,24 +69,9 @@ namespace basecross{
 		//操作
 	};
 
-	class AttackArea : public GameObject {
-		Vec3 m_Scale;
-		Vec3 m_Rotation;
-		Vec3 m_Position;
-	public:
-		AttackArea(const shared_ptr<Stage>& Stage, const Vec3& scale, const Vec3& rotation, const Vec3& position);
-		virtual ~AttackArea() {}
-
-		virtual void OnCreate() override;
-		virtual void OnUpdate() override;
-
-		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other) override;
-
-	};
-
 	//--------------------------------------------------------------------------------------
-///	スコア表示のスプライト
-//--------------------------------------------------------------------------------------
+	///	スコア表示のスプライト
+	//--------------------------------------------------------------------------------------
 	class ScoreSprite : public GameObject {
 		bool m_Trace;
 		Vec2 m_StartScale;

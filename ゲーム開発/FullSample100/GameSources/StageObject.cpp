@@ -6,7 +6,7 @@ namespace basecross {
 	void Rock::OnCreate() {
 		auto Draw = AddComponent<PNTStaticDraw>();
 		Draw->SetMeshResource(L"DEFAULT_CUBE");
-		Draw->SetTextureResource(L"SKY_TX");
+		Draw->SetTextureResource(L"GROUND2_TX");
 
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);
@@ -88,6 +88,13 @@ namespace basecross {
 			SetUpdateActive(false);
 		}
 	}
+	void ObjRock::OnCollisionExcute(shared_ptr<GameObject>& Other) {
+		if (Other->FindTag(L"PlayerGrabArea")) {
+			auto transComp = GetComponent<Transform>();
+			m_SaveRot = transComp->GetRotation();
+			m_SavePos = transComp->GetPosition();
+		}
+	}
 	void CollisionBox::OnCreate() {
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);
@@ -97,5 +104,7 @@ namespace basecross {
 		auto Collision = AddComponent<CollisionObb>();
 		Collision->SetFixed(true);
 		Collision->SetDrawActive(true);
+
+		AddTag(L"StageObjColl");
 	}
 }
