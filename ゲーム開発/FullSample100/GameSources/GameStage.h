@@ -20,6 +20,9 @@ namespace basecross {
 		void CreateObjectB_CSV();
 		//スコアスプライト作成
 		void CreateScoreSprite();
+		//壁模様のスプライト作成
+		void CreatePushSprite();
+
 		//トータル時間
 		float m_TotalTime;
 

@@ -28,7 +28,88 @@ namespace basecross {
 
 	//CSV出力
 	void GameStage::CreateObjectACSV() {
+		//グループ化
+		auto group = CreateSharedObjectGroup(L"CSV_Obj_1");
+		auto& lineVec_1 = csvfile_1.GetCsvVec();
+		auto& lineVec_2 = csvfile_2.GetCsvVec();
 
+		for (size_t i = 0; i < lineVec_1.size(); i++) {
+			vector<wstring> tokuns;
+			Util::WStrToTokenVector(tokuns, lineVec_1[i], L',');
+
+			for (size_t j = 0; j < lineVec_1.size(); j++) {
+
+				float Xpos = (float)((int)j - 1);
+				float Zpos = (float)(1 - (int)i);
+
+				//tokunsの値に何を配置するか
+				//床
+				//足場
+				if (tokuns[j] == L"1") {
+					AddGameObject<Rock>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
+					AddGameObject<CollisionBox>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
+				}
+				//坂
+				if (tokuns[j] == L"11") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
+				}
+				if (tokuns[j] == L"12") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
+				}
+				if (tokuns[j] == L"13") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
+				}
+				if (tokuns[j] == L"14") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
+				}
+			}
+		}
+		for (size_t i = 0; i < lineVec_2.size(); i++) {
+			vector<wstring> tokuns2;
+			Util::WStrToTokenVector(tokuns2, lineVec_2[i], L',');
+
+			for (size_t j = 0; j < lineVec_2.size(); j++) {
+
+				float Xpos = (float)((int)j - 1);
+				float Zpos = (float)(1 - (int)i);
+
+				//tokunsの値に何を配置するか
+				//床
+				//足場
+				if (tokuns2[j] == L"1") {
+					AddGameObject<Rock>(Vec3(Xpos, 0.3f, Zpos), Vec3(1.0f,0.65f,1.0f), Vec3(0));
+					AddGameObject<CollisionBox>(Vec3(Xpos, 0.35, Zpos), Vec3(1.0f, 0.5f, 1.0f), Vec3(0));
+				}
+				//坂
+				if (tokuns2[j] == L"11") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
+				}
+				if (tokuns2[j] == L"12") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
+				}
+				if (tokuns2[j] == L"13") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
+				}
+				if (tokuns2[j] == L"14") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
+				}
+			}
+		}
+
+	}
+	//スコアスプライト作成
+	void GameStage::CreateScoreSprite() {
+		AddGameObject<ScoreSprite>(4,
+			L"NUMBER_TX",
+			true,
+			Vec2(320.0f, 80.0f),
+			Vec3(0.0f, 0.0f, 0.0f));
+	}
+
+	//点滅するスプライト作成
+	void GameStage::CreatePushSprite() {
+		AddGameObject<PushSprite>(L"SKY_TX", true,
+			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
 	}
 
 	void GameStage::CreateObjectB_CSV() {
@@ -112,7 +193,9 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+
+			AddGameObject<RescurNomalTarget>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
 		for (auto& v : LineVec) {
@@ -125,20 +208,8 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0));
-		}
-		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");
-		for (auto& v : LineVec) {
-			//トークン（カラム）の配列
-			vector<wstring> torkns;
 
-			Util::WStrToTokenVector(torkns, v, L',');
-			Vec3 Pos(
-				(float)_wtof(torkns[1].c_str()),
-				(float)_wtof(torkns[2].c_str()),
-				(float)_wtof(torkns[3].c_str())
-			);
-			AddGameObject<ObjRock>(Vec3(Pos), Vec3(1), Vec3(0));
+			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 	}
 
@@ -169,7 +240,10 @@ namespace basecross {
 
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(Vec3(0,0.5f,-7));
+			AddGameObject<IncreaseObject>(Vec3(3,3,3));
+
+			CreateScoreSprite();
+			CreateWallSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
@@ -179,6 +253,19 @@ namespace basecross {
 			throw;
 		}
 	}
+
+
+	void GameStage::OnUpdate() {
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		m_TotalTime += elapsedTime;
+		if (m_TotalTime >= 10000.0f) {
+			m_TotalTime = 0.0f;
+		}
+		//スコアを更新する
+		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
+		ptrScor->SetScore(m_TotalTime);
+	}
+
 
 	void GameStage::UpdateStage() {
 		m_InputHandler.PushHandle(GetThis<GameStage>());
