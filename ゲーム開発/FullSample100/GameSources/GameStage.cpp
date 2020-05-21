@@ -106,6 +106,12 @@ namespace basecross {
 			Vec3(0.0f, 0.0f, 0.0f));
 	}
 
+	//点滅するスプライト作成
+	void GameStage::CreatePushSprite() {
+		AddGameObject<PushSprite>(L"SKY_TX", true,
+			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
+	}
+
 	void GameStage::CreateObjectB_CSV() {
 		//CSVの行単位の配列
 		vector<wstring> LineVec;
@@ -234,9 +240,10 @@ namespace basecross {
 
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(Vec3(0,0,0));
+			AddGameObject<IncreaseObject>(Vec3(3,3,3));
 
 			CreateScoreSprite();
+			CreateWallSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
