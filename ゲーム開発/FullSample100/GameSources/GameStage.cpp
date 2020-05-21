@@ -97,6 +97,13 @@ namespace basecross {
 		}
 
 	}
+
+	//点滅するスプライト作成
+	void GameStage::CreatePushSprite() {
+		AddGameObject<PushSprite>(L"SKY_TX", true,
+			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
+	}
+
 	//スコアスプライト作成
 	void GameStage::CreateScoreSprite() {
 		AddGameObject<ScoreSprite>(4,
@@ -106,11 +113,6 @@ namespace basecross {
 			Vec3(0.0f, 0.0f, 0.0f));
 	}
 
-	//点滅するスプライト作成
-	void GameStage::CreatePushSprite() {
-		AddGameObject<PushSprite>(L"SKY_TX", true,
-			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
-	}
 
 	void GameStage::CreateObjectB_CSV() {
 		//CSVの行単位の配列
