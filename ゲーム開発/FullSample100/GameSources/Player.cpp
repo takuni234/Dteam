@@ -246,15 +246,33 @@ namespace basecross {
 	}
 
 	void Player::PlayerShot() {
+		auto transPtr = GetComponent<Transform>();
+		auto posPtr = transPtr->GetPosition();
+		auto playerGunPos = Vec3(posPtr.x, posPtr.y + 0.2f, posPtr.z);
+		Vec3 createPos = Vec3(playerGunPos + transPtr->GetForword() * transPtr->GetScale().getX());
 		auto elapsedTime = App::GetApp()->GetElapsedTime();
 
 		m_IntervalTime += elapsedTime;
-		if (m_IntervalTime >= 0.05f) {
-			auto transPtr = GetComponent<Transform>();
-			auto posPtr = transPtr->GetPosition();
-			auto playerGunPos = Vec3(posPtr.x, posPtr.y + 0.2f, posPtr.z);
-			Vec3 createPos = Vec3(playerGunPos + transPtr->GetForword() * transPtr->GetScale().getX());
+		if (m_IntervalTime >= 0.1f) {
+			auto group = GetStage()->GetSharedObjectGroup(L"PlayerBullet");
+			auto& vec = group->GetGroupVector();
+			for (auto& v : vec) {
+				auto shObj = v.lock();
+				if (shObj) {
+					if (!shObj->IsUpdateActive()) {
+						auto shBullet = dynamic_pointer_cast<Bullet>(shObj);
+						if (shBullet) {
+							shBullet->Reset(transPtr->GetRotation(), createPos, transPtr->GetForword());
+							//時間をリセット
+							m_IntervalTime = 0.0f;
+							return;
+						}
+					}
+				}
+			}
+			//なかったら新たに弾を作る
 			GetStage()->AddGameObject<Bullet>(Vec3(0.1f, 0.1f, 0.1f), transPtr->GetRotation(), createPos, transPtr->GetForword(), 5.0f);
+			//時間をリセット
 			m_IntervalTime = 0.0f;
 		}
 	}

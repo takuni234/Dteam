@@ -104,5 +104,7 @@ namespace basecross {
 		auto Collision = AddComponent<CollisionObb>();
 		Collision->SetFixed(true);
 		Collision->SetDrawActive(true);
+
+		AddTag(L"StageObjColl");
 	}
 }

@@ -42,9 +42,6 @@ namespace basecross {
 
 	}
 	void GrabArea::OnCollisionExcute(shared_ptr<GameObject>& Other) {
-		auto transPtr = Other->GetComponent<Transform>();
-		m_GrabPos = transPtr->GetPosition();
-		auto posPtr = transPtr->GetPosition();
-		transPtr->SetPosition(Vec3(posPtr.x, m_GrabPos.y, posPtr.z));
+
 	}
 }

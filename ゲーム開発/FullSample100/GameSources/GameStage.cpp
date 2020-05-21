@@ -177,7 +177,7 @@ namespace basecross {
 
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(Vec3(0,0.5f,-7));
+			AddGameObject<IncreaseObject>(Vec3(6.5f,0.95f,-0.5f));
 			CreateScoreSprite();
 			
 			//BGM
