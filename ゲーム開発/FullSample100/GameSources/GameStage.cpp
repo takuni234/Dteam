@@ -1,6 +1,6 @@
-ï»¿/*!
+/*!
 @file GameStage.cpp
-@brief ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸å®Ÿä½“
+@brief ƒQ[ƒ€ƒXƒe[ƒWÀ‘Ì
 */
 
 #include "stdafx.h"
@@ -9,35 +9,118 @@
 namespace basecross {
 
 	//--------------------------------------------------------------------------------------
-	//	ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒ©ã‚¹å®Ÿä½“
+	//	ƒQ[ƒ€ƒXƒe[ƒWƒNƒ‰ƒXÀ‘Ì
 	//--------------------------------------------------------------------------------------
 	void GameStage::CreateViewLight() {
 		const Vec3 eye(0.0f, 10.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
-		//ãƒ“ãƒ¥ãƒ¼ã®ã‚«ãƒ¡ãƒ©ã®è¨­å®š
+		//ƒrƒ…[‚ÌƒJƒƒ‰‚Ìİ’è
 		auto PtrCamera = ObjectFactory::Create<PlayerCamera>();
 		PtrView->SetCamera(PtrCamera);
 		PtrCamera->SetEye(eye);
 		PtrCamera->SetAt(at);
-		//ãƒãƒ«ãƒãƒ©ã‚¤ãƒˆã®ä½œæˆ
+		//ƒ}ƒ‹ƒ`ƒ‰ƒCƒg‚Ìì¬
 		auto PtrMultiLight = CreateLight<MultiLight>();
-		//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°ã‚’æŒ‡å®š
+		//ƒfƒtƒHƒ‹ƒg‚Ìƒ‰ƒCƒeƒBƒ“ƒO‚ğw’è
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-	//CSVå‡ºåŠ›
+	//CSVo—Í
 	void GameStage::CreateObjectACSV() {
+		//ƒOƒ‹[ƒv‰»
+		auto group = CreateSharedObjectGroup(L"CSV_Obj_1");
+		auto& lineVec_1 = csvfile_1.GetCsvVec();
+		auto& lineVec_2 = csvfile_2.GetCsvVec();
+
+		for (size_t i = 0; i < lineVec_1.size(); i++) {
+			vector<wstring> tokuns;
+			Util::WStrToTokenVector(tokuns, lineVec_1[i], L',');
+
+			for (size_t j = 0; j < lineVec_1.size(); j++) {
+
+				float Xpos = (float)((int)j - 1);
+				float Zpos = (float)(1 - (int)i);
+
+				//tokuns‚Ì’l‚É‰½‚ğ”z’u‚·‚é‚©
+				//°
+				//‘«ê
+				if (tokuns[j] == L"1") {
+					AddGameObject<Rock>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
+					AddGameObject<CollisionBox>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
+				}
+				//â
+				if (tokuns[j] == L"11") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
+				}
+				if (tokuns[j] == L"12") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
+				}
+				if (tokuns[j] == L"13") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
+				}
+				if (tokuns[j] == L"14") {
+					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
+				}
+			}
+		}
+		for (size_t i = 0; i < lineVec_2.size(); i++) {
+			vector<wstring> tokuns2;
+			Util::WStrToTokenVector(tokuns2, lineVec_2[i], L',');
+
+			for (size_t j = 0; j < lineVec_2.size(); j++) {
+
+				float Xpos = (float)((int)j - 1);
+				float Zpos = (float)(1 - (int)i);
+
+				//tokuns‚Ì’l‚É‰½‚ğ”z’u‚·‚é‚©
+				//°
+				//‘«ê
+				if (tokuns2[j] == L"1") {
+					AddGameObject<Rock>(Vec3(Xpos, 0.3f, Zpos), Vec3(1.0f,0.65f,1.0f), Vec3(0));
+					AddGameObject<CollisionBox>(Vec3(Xpos, 0.35, Zpos), Vec3(1.0f, 0.5f, 1.0f), Vec3(0));
+				}
+				//â
+				if (tokuns2[j] == L"11") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
+				}
+				if (tokuns2[j] == L"12") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
+				}
+				if (tokuns2[j] == L"13") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
+				}
+				if (tokuns2[j] == L"14") {
+					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
+				}
+			}
+		}
 
 	}
 
+	//“_–Å‚·‚éƒXƒvƒ‰ƒCƒgì¬
+	void GameStage::CreatePushSprite() {
+		AddGameObject<PushSprite>(L"SKY_TX", true,
+			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
+	}
+
+	//ƒXƒRƒAƒXƒvƒ‰ƒCƒgì¬
+	void GameStage::CreateScoreSprite() {
+		AddGameObject<ScoreSprite>(4,
+			L"NUMBER_TX",
+			true,
+			Vec2(320.0f, 80.0f),
+			Vec3(0.0f, 0.0f, 0.0f));
+	}
+
+
 	void GameStage::CreateObjectB_CSV() {
-		//CSVã®è¡Œå˜ä½ã®é…åˆ—
+		//CSV‚Ìs’PˆÊ‚Ì”z—ñ
 		vector<wstring> LineVec;
-		//0ç•ªç›®ã®ã‚«ãƒ©ãƒ ãŒL"TilingFixedBox"ã§ã‚ã‚‹è¡Œã‚’æŠœãå‡ºã™
+		//0”Ô–Ú‚ÌƒJƒ‰ƒ€‚ªL"TilingFixedBox"‚Å‚ ‚és‚ğ”²‚«o‚·
 		ObjCsvfile.GetSelect(LineVec, 0, L"Tx_Box(Clone)");
 		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
+			//ƒg[ƒNƒ“iƒJƒ‰ƒ€j‚Ì”z—ñ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -53,7 +136,7 @@ namespace basecross {
 				(float)_wtof(torkns[6].c_str())
 			);
 			Vec3 Rot;
-			//å›è»¢ã¯XM_PIDIV2ã®æ–‡å­—åˆ—ã«ãªã£ã¦ã„ã‚‹å ´åˆãŒã‚ã‚‹
+			//‰ñ“]‚ÍXM_PIDIV2‚Ì•¶š—ñ‚É‚È‚Á‚Ä‚¢‚éê‡‚ª‚ ‚é
 			Rot.x = (torkns[7] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[7].c_str());
 			Rot.y = (torkns[8] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[8].c_str());
 			Rot.z = (torkns[9] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[9].c_str());
@@ -64,7 +147,7 @@ namespace basecross {
 
 		ObjCsvfile.GetSelect(LineVec, 0, L"Cube");
 		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
+			//ƒg[ƒNƒ“iƒJƒ‰ƒ€j‚Ì”z—ñ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -80,7 +163,7 @@ namespace basecross {
 				(float)_wtof(torkns[6].c_str())
 			);
 			Vec3 col_Rot;
-			//å›è»¢ã¯XM_PIDIV2ã®æ–‡å­—åˆ—ã«ãªã£ã¦ã„ã‚‹å ´åˆãŒã‚ã‚‹
+			//‰ñ“]‚ÍXM_PIDIV2‚Ì•¶š—ñ‚É‚È‚Á‚Ä‚¢‚éê‡‚ª‚ ‚é
 			col_Rot.x = (torkns[7] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[7].c_str());
 			col_Rot.y = (torkns[8] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[8].c_str());
 			col_Rot.z = (torkns[9] == L"XM_PIDIV2") ? XM_PIDIV2 : (float)_wtof(torkns[9].c_str());
@@ -91,7 +174,7 @@ namespace basecross {
 
 		ObjCsvfile.GetSelect(LineVec, 0, L"Player");
 		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
+			//ƒg[ƒNƒ“iƒJƒ‰ƒ€j‚Ì”z—ñ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -103,7 +186,7 @@ namespace basecross {
 
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_1");
 		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
+			//ƒg[ƒNƒ“iƒJƒ‰ƒ€j‚Ì”z—ñ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -112,11 +195,13 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+
+			AddGameObject<RescurNomalTarget>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
 		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
+			//ƒg[ƒNƒ“iƒJƒ‰ƒ€j‚Ì”z—ñ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -125,29 +210,9 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0));
-		}
-		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");
-		for (auto& v : LineVec) {
-			//ãƒˆãƒ¼ã‚¯ãƒ³ï¼ˆã‚«ãƒ©ãƒ ï¼‰ã®é…åˆ—
-			vector<wstring> torkns;
 
-			Util::WStrToTokenVector(torkns, v, L',');
-			Vec3 Pos(
-				(float)_wtof(torkns[1].c_str()),
-				(float)_wtof(torkns[2].c_str()),
-				(float)_wtof(torkns[3].c_str())
-			);
-			AddGameObject<ObjRock>(Vec3(Pos), Vec3(1), Vec3(0));
+			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
-	}
-
-	void GameStage::CreateScoreSprite() {
-		AddGameObject<ScoreSprite>(4,
-			L"NUMBER_TX",
-			true,
-			Vec2(320.0f, 80.0f),
-			Vec3(0.0f, 0.0f, 0.0f));
 	}
 
 	void GameStage::OnCreate() {
@@ -164,7 +229,7 @@ namespace basecross {
 			CreateObjectB_CSV();
 
 			//SetPhysicsActive(true);
-			//ãƒ“ãƒ¥ãƒ¼ã¨ãƒ©ã‚¤ãƒˆã®ä½œæˆ
+			//ƒrƒ…[‚Æƒ‰ƒCƒg‚Ìì¬
 			CreateViewLight();
 
 			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
@@ -177,7 +242,8 @@ namespace basecross {
 
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(Vec3(6.5f,0.95f,-0.5f));
+			AddGameObject<IncreaseObject>(Vec3(3,3,3));
+
 			CreateScoreSprite();
 			CreatePushSprite();
 			//BGM
@@ -190,15 +256,18 @@ namespace basecross {
 		}
 	}
 
+
 	void GameStage::OnUpdate() {
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		m_TotalTime += elapsedTime;
 		if (m_TotalTime >= 10000.0f) {
 			m_TotalTime = 0.0f;
 		}
+		//ƒXƒRƒA‚ğXV‚·‚é
 		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 		ptrScor->SetScore(m_TotalTime);
 	}
+
 
 	void GameStage::UpdateStage() {
 		m_InputHandler.PushHandle(GetThis<GameStage>());
@@ -208,7 +277,7 @@ namespace basecross {
 	}
 
 	void GameStage::OnDestroy() {
-		//BGMã®ã‚¹ãƒˆãƒƒãƒ—
+		//BGM‚ÌƒXƒgƒbƒv
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		XAPtr->Stop(m_BGM);
 	}
