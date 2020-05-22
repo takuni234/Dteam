@@ -67,7 +67,7 @@ namespace basecross {
 
 	}
 	//--------------------------------------------------------------------------------------
-///	壁模様のスプライト
+///	ボタンのスプライト
 //--------------------------------------------------------------------------------------
 	PushSprite::PushSprite(const shared_ptr<Stage>& StagePtr, const wstring& TextureKey, bool Trace,
 		const Vec2& StartScale, const Vec3& StartPos) :
