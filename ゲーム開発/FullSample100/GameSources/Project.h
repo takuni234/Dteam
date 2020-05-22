@@ -21,6 +21,8 @@
 #include "UISprite.h"
 #include "UI.h"
 
+//敵
+#include "Enemy.h"
 //ステージ上のオブジェクト
 #include "StageObject.h"
 #include "IncreaseBox.h"

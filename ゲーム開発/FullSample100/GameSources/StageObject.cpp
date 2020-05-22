@@ -13,6 +13,35 @@ namespace basecross {
 		Trans->SetScale(m_Scale);
 		Trans->SetRotation(m_Rotation);
 
+		/*vector<VertexPositionNormalTexture> vertices;
+		vector<uint16_t> indices;
+		MeshUtill::CreateCube(1.0f, vertices, indices);
+		float UCount = m_Scale.x / 1.0f;
+		float VCount = m_Scale.z / 1.0f;
+		for (size_t i = 0; i < vertices.size(); i++) {
+			if (vertices[i].textureCoordinate.x >= 1.0f) {
+				vertices[i].textureCoordinate.x = UCount;
+			}
+			if (vertices[i].textureCoordinate.y >= 1.0f) {
+				float FrontBetween = bsm::angleBetweenNormals(vertices[i].normal, Vec3(0, 1, 0));
+				float BackBetween = bsm::angleBetweenNormals(vertices[i].normal, Vec3(0, -1, 0));
+				if (FrontBetween < 0.01f || BackBetween < 0.01f) {
+					vertices[i].textureCoordinate.y = VCount;
+				}
+			}
+		}
+		//描画コンポーネントの追加
+		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		//描画コンポーネントに形状（メッシュ）を設定
+		PtrDraw->CreateOriginalMesh(vertices, indices);
+		PtrDraw->SetOriginalMeshUse(true);
+		PtrDraw->SetFogEnabled(true);
+		//自分に影が映りこむようにする
+		PtrDraw->SetOwnShadowActive(true);
+		//描画コンポーネントテクスチャの設定
+		PtrDraw->SetTextureResource(L"SKY_TX");
+		//タイリング設定
+		PtrDraw->SetSamplerState(SamplerState::LinearWrap);*/
 		//auto Collision = AddComponent<CollisionObb>();
 		//Collision->SetFixed(true);
 	}
