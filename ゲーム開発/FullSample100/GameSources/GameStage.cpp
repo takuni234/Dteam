@@ -100,8 +100,8 @@ namespace basecross {
 
 	//点滅するスプライト作成
 	void GameStage::CreatePushSprite() {
-		AddGameObject<PushSprite>(L"SKY_TX", true,
-			Vec2(320.0f, 320.0f), Vec3(50.0f, 0.0f, 0.1f));
+		AddGameObject<PushSprite>(L"MESSAGE_TX", true,
+			Vec2(320.0f, 160.0f), Vec3(0.0f,-240.0f, 0.0f));
 	}
 
 	//スコアスプライト作成
@@ -110,7 +110,7 @@ namespace basecross {
 			L"NUMBER_TX",
 			true,
 			Vec2(320.0f, 80.0f),
-			Vec3(0.0f, 0.0f, 0.0f));
+			Vec3(0.0f, 360.0f, 0.0f));
 	}
 
 

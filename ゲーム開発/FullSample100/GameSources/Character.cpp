@@ -366,11 +366,11 @@ namespace basecross{
 			);
 			//2
 			m_BackupVertices.push_back(
-				VertexPositionTexture(Vec3(vertex0, -helfSize, 0), Vec2(0.0f, 8.0f))
+				VertexPositionTexture(Vec3(vertex0, -helfSize, 0), Vec2(0.0f, 1.0f))
 			);
 			//3
 			m_BackupVertices.push_back(
-				VertexPositionTexture(Vec3(vertex1, -helfSize, 0), Vec2(0.1f, 8.0f))
+				VertexPositionTexture(Vec3(vertex1, -helfSize, 0), Vec2(0.1f, 1.0f))
 			);
 			indices.push_back(i * 4 + 0);
 			indices.push_back(i * 4 + 1);
