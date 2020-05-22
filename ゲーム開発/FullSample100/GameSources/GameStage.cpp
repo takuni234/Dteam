@@ -28,74 +28,6 @@ namespace basecross {
 
 	//CSV出力
 	void GameStage::CreateObjectACSV() {
-		//グループ化
-		auto group = CreateSharedObjectGroup(L"CSV_Obj_1");
-		auto& lineVec_1 = csvfile_1.GetCsvVec();
-		auto& lineVec_2 = csvfile_2.GetCsvVec();
-
-		for (size_t i = 0; i < lineVec_1.size(); i++) {
-			vector<wstring> tokuns;
-			Util::WStrToTokenVector(tokuns, lineVec_1[i], L',');
-
-			for (size_t j = 0; j < lineVec_1.size(); j++) {
-
-				float Xpos = (float)((int)j - 1);
-				float Zpos = (float)(1 - (int)i);
-
-				//tokunsの値に何を配置するか
-				//床
-				//足場
-				if (tokuns[j] == L"1") {
-					AddGameObject<Rock>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
-					AddGameObject<CollisionBox>(Vec3(Xpos, -0.5, Zpos), Vec3(1.0f), Vec3(0));
-				}
-				//坂
-				if (tokuns[j] == L"11") {
-					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
-				}
-				if (tokuns[j] == L"12") {
-					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
-				}
-				if (tokuns[j] == L"13") {
-					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
-				}
-				if (tokuns[j] == L"14") {
-					AddGameObject<Slope>(Vec3(Xpos, -0.75f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
-				}
-			}
-		}
-		for (size_t i = 0; i < lineVec_2.size(); i++) {
-			vector<wstring> tokuns2;
-			Util::WStrToTokenVector(tokuns2, lineVec_2[i], L',');
-
-			for (size_t j = 0; j < lineVec_2.size(); j++) {
-
-				float Xpos = (float)((int)j - 1);
-				float Zpos = (float)(1 - (int)i);
-
-				//tokunsの値に何を配置するか
-				//床
-				//足場
-				if (tokuns2[j] == L"1") {
-					AddGameObject<Rock>(Vec3(Xpos, 0.3f, Zpos), Vec3(1.0f,0.65f,1.0f), Vec3(0));
-					AddGameObject<CollisionBox>(Vec3(Xpos, 0.35, Zpos), Vec3(1.0f, 0.5f, 1.0f), Vec3(0));
-				}
-				//坂
-				if (tokuns2[j] == L"11") {
-					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 0, 90.0f));
-				}
-				if (tokuns2[j] == L"12") {
-					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 90, 90.0f));
-				}
-				if (tokuns2[j] == L"13") {
-					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 180, 90.0f));
-				}
-				if (tokuns2[j] == L"14") {
-					AddGameObject<Slope>(Vec3(Xpos, 0.15f, Zpos), Vec3(1.0f, 1.5f, 1), Vec3(0, 270, 90.0f));
-				}
-			}
-		}
-
 	}
 
 	//点滅するスプライト作成
@@ -196,7 +128,7 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			AddGameObject<RescurNomalTarget>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
@@ -211,7 +143,21 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+			AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"maguma");
+		for (auto& v : LineVec) {
+			//・ｽg・ｽ[・ｽN・ｽ・ｽ・ｽi・ｽJ・ｽ・ｽ・ｽ・ｽ・ｽj・ｽﾌ配・ｽ・ｽ
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+			magumapos = Pos;
+			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 	}
 
@@ -223,7 +169,7 @@ namespace basecross {
 			csvfile_1.ReadCsv();
 			csvfile_2.SetFileName(detadir + L"Stage_Csv_2.csv");// GameStageA.csv");
 			csvfile_2.ReadCsv();
-			ObjCsvfile.SetFileName(detadir + L"SaveData.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData8.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -234,15 +180,16 @@ namespace basecross {
 
 			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
 			ground->AddTag(L"Ground");
+			SetSharedGameObject(L"Stage", ground);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 
 
-
+			//AddGameObject<Enemy>(Vec3(4, 2, -7), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(Vec3(3,3,3));
+			AddGameObject<IncreaseObject>(magumapos);
 
 			CreateScoreSprite();
 			CreatePushSprite();

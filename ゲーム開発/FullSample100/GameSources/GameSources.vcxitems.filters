@@ -16,9 +16,6 @@
     <Filter Include="RescurTarget">
       <UniqueIdentifier>{b8c7083b-2ffe-4267-8498-458d290f3d6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PlayerEquipment">
-      <UniqueIdentifier>{5922e211-0664-447d-a591-9cfd997026c3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -72,18 +69,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)StageObject.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h">
-      <Filter>PlayerEquipment</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h">
-      <Filter>PlayerEquipment</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)GoalObject.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Enemy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)GoalObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -134,17 +124,10 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)StageObject.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp">
-      <Filter>PlayerEquipment</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp">
-      <Filter>PlayerEquipment</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)GoalObject.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Enemy.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)GoalObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp" />
   </ItemGroup>
 </Project>

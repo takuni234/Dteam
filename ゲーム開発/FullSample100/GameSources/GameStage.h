@@ -34,6 +34,7 @@ namespace basecross {
 		bool m_IsUpdate;
 
 		Vec3 PlayerPos;
+		Vec3 magumapos;
 
 		InputHandler<GameStage> m_InputHandler;
 	public:
