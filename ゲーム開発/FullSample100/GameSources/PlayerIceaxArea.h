@@ -7,6 +7,8 @@ namespace basecross {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
+		shared_ptr<SoundItem> m_SE;
+		bool m_SEflg;
 	public:
 		AttackArea(const shared_ptr<Stage>& Stage, const Vec3& scale, const Vec3& rotation, const Vec3& position);
 		virtual ~AttackArea() {}

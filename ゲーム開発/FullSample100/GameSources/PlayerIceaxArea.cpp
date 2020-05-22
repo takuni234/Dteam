@@ -5,7 +5,8 @@ namespace basecross {
 		:GameObject(Stage),
 		m_Scale(scale),
 		m_Rotation(rotation),
-		m_Position(position)
+		m_Position(position),
+		m_SEflg(false)
 	{}
 
 	void AttackArea::OnCreate() {
@@ -18,6 +19,7 @@ namespace basecross {
 
 		auto drawComp = AddComponent<BcPNTStaticDraw>();
 		drawComp->SetMeshResource(L"DEFAULT_CUBE");
+		drawComp->SetDrawActive(true);
 
 		auto collComp = AddComponent<CollisionObb>();
 		collComp->SetFixed(true);
@@ -28,7 +30,12 @@ namespace basecross {
 		auto collComp = GetComponent<CollisionObb>();
 		auto drawComp = GetComponent<BcPNTStaticDraw>();
 		if (collComp->IsUpdateActive()) {
-			drawComp->SetDrawActive(false);
+			drawComp->SetDrawActive(true);
+			if (!m_SEflg) {
+				auto ptrXA = App::GetApp()->GetXAudio2Manager();
+				ptrXA->Start(L"ICEAX_ATTACK_WAV", 0, 0.1f);
+				m_SEflg = true;
+			}
 		}
 		else {
 			drawComp->SetDrawActive(false);
