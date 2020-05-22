@@ -14,7 +14,11 @@ namespace basecross {
 		float m_Time;
 		//ビューの作成
 		void CreateViewLight();
+		//スプライト作成
+		void CreatePushSprite();
+
 		void CreateSprite();
+		shared_ptr<SoundItem> m_BGM;
 	public:
 		//構築と破棄
 		TitleStage() :Stage(), m_Time(0.0f) {}
@@ -22,6 +26,7 @@ namespace basecross {
 		//初期化
 		virtual void OnCreate()override;
 		virtual void OnUpdate() override;
+		virtual void OnDestroy() override;
 	};
 }
 //end basecross

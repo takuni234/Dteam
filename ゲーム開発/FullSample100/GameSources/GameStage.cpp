@@ -26,23 +26,13 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
-	//CSV出力
-	void GameStage::CreateObjectACSV() {
-	}
-
-	//点滅するスプライト作成
-	void GameStage::CreatePushSprite() {
-		AddGameObject<PushSprite>(L"MESSAGE_TX", true,
-			Vec2(320.0f, 160.0f), Vec3(0.0f,-240.0f, 0.0f));
-	}
-
 	//スコアスプライト作成
 	void GameStage::CreateScoreSprite() {
-		AddGameObject<ScoreSprite>(4,
+		AddGameObject<ScoreSprite>(3,
 			L"NUMBER_TX",
 			true,
-			Vec2(320.0f, 80.0f),
-			Vec3(0.0f, 360.0f, 0.0f));
+			Vec2(320.0f, 320.0f),
+			Vec3(0.0f, 200.0f, 0.0f));
 	}
 
 
@@ -182,6 +172,9 @@ namespace basecross {
 			ground->AddTag(L"Ground");
 			SetSharedGameObject(L"Stage", ground);
 
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(0.0f, 1.0f,0.0f));
+			SetSharedGameObject(L"Goal", goalObj);
+
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 
@@ -192,10 +185,9 @@ namespace basecross {
 			AddGameObject<IncreaseObject>(magumapos);
 
 			CreateScoreSprite();
-			CreatePushSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			//m_BGM = XAPtr->Start(L"", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"ERUPTION_WAV", XAUDIO2_LOOP_INFINITE, 0.1f);
 			CreateSharedObjectGroup(L"PlayerBullet");
 		}
 		catch (...) {

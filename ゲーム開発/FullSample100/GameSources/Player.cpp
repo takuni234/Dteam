@@ -13,7 +13,9 @@ namespace basecross {
 		m_Rotation(rot),
 		m_Position(pos),
 		m_Speed(2.0f),
-		m_IntervalTime(0.0f)
+		m_IntervalTime(0.0f),
+		m_BGMInterval(0.2f),// Å‰‚Ìˆê•à–Ú‚Ìƒ‚[ƒVƒ‡ƒ“‚É‡‚í‚¹‚éˆ×‚Ì’l(0.2f)
+		m_Stride(0.25f)
 	{}
 
 	Player::~Player() {}
@@ -241,8 +243,21 @@ namespace basecross {
 	void Player::PlayerSneak() {
 		m_InputHandler.PushHandle(GetThis<Player>());
 		float elapsedTime = App::GetApp()->GetElapsedTime();
+		float inputTimeLength = elapsedTime * GetMoveVector().length();
 		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
-		ptrDraw->UpdateAnimation(elapsedTime * GetMoveVector().length());
+		ptrDraw->UpdateAnimation(inputTimeLength);
+
+		m_BGMInterval += inputTimeLength;
+		if (m_BGMInterval >= m_Stride && !m_BGMflg) {
+			//‘«‰¹‚ğ–Â‚ç‚·
+			PlayerSound(true, L"WALK_LEFT_WAV");
+			m_BGMflg = true;
+		}
+		else if (m_BGMInterval >= m_Stride * 2.0f) {
+			PlayerSound(true, L"WALK_RIGHT_WAV");
+			m_BGMflg = false;
+			m_BGMInterval = 0.0f;
+		}
 	}
 
 	void Player::PlayerShot() {
@@ -298,6 +313,16 @@ namespace basecross {
 	void Player::PlayerGrab() {
 		auto coll = m_PlayerGrabArea->GetComponent<CollisionObb>();
 		coll->SetUpdateActive(true);
+	}
+
+	void Player::PlayerSound(bool active, const wstring& key) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			m_BGM = ptrXA->Start(key, 0, 0.2f);
+		}
+		else {
+			ptrXA->Stop(m_BGM);
+		}
 	}
 
 	void Player::OnPushA() {
@@ -374,6 +399,9 @@ namespace basecross {
 	}
 
 	void WalkState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSound(false, L"WALK_LEFT_WAV");
+		Obj->PlayerSound(false, L"WALK_RIGHT_WAV");
+		Obj->ResetBGMInterval();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -419,6 +447,9 @@ namespace basecross {
 	}
 
 	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSound(false, L"WALK_LEFT_WAV");
+		Obj->PlayerSound(false, L"WALK_RIGHT_WAV");
+		Obj->ResetBGMInterval();
 	}
 
 	//--------------------------------------------------------------------------------------

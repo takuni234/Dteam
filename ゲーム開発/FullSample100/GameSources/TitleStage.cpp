@@ -25,13 +25,23 @@ namespace basecross {
 		PtrMultiLight->SetDefaultLighting();
 	}
 
+	//点滅するスプライト作成
+	void TitleStage::CreatePushSprite() {
+		float textScale = 100.0f;
+		//比率
+		auto textRatio = Vec2(3.7f, 1.0f);
+		textRatio *= textScale;
+		AddGameObject<PushSprite>(L"MESSAGE_TX", true,
+			textRatio, Vec3(0.0f, -200.0f, 0.0f));
+	}
+
 	void TitleStage::CreateSprite() {
 		float logoScale = 300.0f;
 		//比率
 		auto logoRatio = Vec2(3.7f, 1.0f);
 		logoRatio *= logoScale;
 		//タイトル画像
-		AddGameObject<Sprite>(L"TITLELOGO_TX", true, logoRatio, Vec3(0.0f));
+		AddGameObject<Sprite>(L"TITLELOGO_TX", true, logoRatio, Vec3(0.0f, 120.0f, 0.0f));
 	}
 
 	void TitleStage::OnCreate() {
@@ -39,6 +49,9 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 			CreateSprite();
+			CreatePushSprite();
+			auto XAPtr = App::GetApp()->GetXAudio2Manager();
+			m_BGM = XAPtr->Start(L"Nanika", XAUDIO2_LOOP_INFINITE, 0.1f);
 		}
 		catch (...) {
 			throw;
@@ -57,6 +70,12 @@ namespace basecross {
 		if (start) {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Game);
 		}
+	}
+
+	void TitleStage::OnDestroy() {
+		//BGMのストップ
+		auto XAPtr = App::GetApp()->GetXAudio2Manager();
+		XAPtr->Stop(m_BGM);
 	}
 }
 //end basecross
