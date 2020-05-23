@@ -151,6 +151,21 @@ namespace basecross {
 		}
 	}
 
+	void GameStage::SetBackGroundColor(Col4 color) {
+		auto ptrScene = App::GetApp()->GetScene<Scene>();
+		ptrScene->SetClearColor(color);
+	}
+
+	void GameStage::SetBackGroundPlayerPosColor(Col4 posZeroCol, Col4 posMaxCol, float posSizeMax) {
+		auto ptrPlayer = GetSharedGameObject<Player>(L"Player");
+		auto ptrTrans = ptrPlayer->GetComponent<Transform>();
+		auto playerPosCol = ptrTrans->GetPosition().y / posSizeMax;
+		Col4 ZeroCol = posZeroCol - posZeroCol * playerPosCol;
+		Col4 MaxCol = posMaxCol * playerPosCol;
+		SetBackGroundColor(ZeroCol + MaxCol);
+	}
+
+
 	void GameStage::OnCreate() {
 		try {
 			wstring detadir;
@@ -205,6 +220,7 @@ namespace basecross {
 		//スコアを更新する
 		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 		ptrScor->SetScore(m_TotalTime);
+		SetBackGroundPlayerPosColor(m_Color, m_Color1, 2.24f);
 	}
 
 

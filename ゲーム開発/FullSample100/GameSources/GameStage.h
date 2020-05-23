@@ -32,6 +32,15 @@ namespace basecross {
 		Vec3 PlayerPos;
 		Vec3 magumapos;
 
+		//空色
+		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
+		//噴火時の空色
+		Col4 m_Color1 = Col4(87.0f/255.0f,56.0f/255.0f, 38.0f/255.0f, 1.0f);
+
+		//背景色を変更する
+		void SetBackGroundColor(Col4 color);
+		//設定した高度に合わせて背景色を変更する
+		void SetBackGroundPlayerPosColor(Col4 posZero, Col4 posMax, float posSizeMax);
 		InputHandler<GameStage> m_InputHandler;
 	public:
 

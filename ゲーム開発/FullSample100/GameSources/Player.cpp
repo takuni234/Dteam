@@ -152,20 +152,20 @@ namespace basecross {
 		ptrShadow->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
+		//í èÌ
 		auto ptrDraw = AddComponent<BcPNTBoneModelDraw>();
 		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
-
+	
 		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
 		ptrDraw->AddAnimation(L"Walk", 0, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Shoot", 240, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Grab", 280, 30, true, 60.0f);
-		ptrDraw->ChangeCurrentAnimation(L"Default");
+		ptrDraw->AddAnimation(L"Shoot", 0, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"MovingShooting", 40, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Break", 0, 30, true, 60.0f);
 
 		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
 		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
@@ -366,7 +366,9 @@ namespace basecross {
 		return instance;
 	}
 	void DefaultState::Enter(const shared_ptr<Player>& Obj) {
-		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		auto ptrDraw = Obj->AddComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Default");
 	}
 	void DefaultState::Execute(const shared_ptr<Player>& Obj) {
@@ -388,6 +390,8 @@ namespace basecross {
 	}
 	void WalkState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Walk");
 	}
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
@@ -413,6 +417,9 @@ namespace basecross {
 	}
 	void ShotState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		//èeéùÇø
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Shoot");
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
@@ -435,6 +442,9 @@ namespace basecross {
 	}
 	void MovingShootingState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		//èeéùÇø
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
 	}
 	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
@@ -461,6 +471,8 @@ namespace basecross {
 	}
 	void AttackState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERICEAX_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Break");
 		Obj->PlayerAttack();
 	}
@@ -504,6 +516,8 @@ namespace basecross {
 	}
 	void PushState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Push");
 		Obj->SetSpeed(1.0f);
 		Obj->PlayerGrab();
@@ -531,6 +545,8 @@ namespace basecross {
 	}
 	void PullState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Pull");
 		Obj->SetSpeed(1.0f);
 	}

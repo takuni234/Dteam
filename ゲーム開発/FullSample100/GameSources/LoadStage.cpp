@@ -55,6 +55,10 @@ namespace basecross {
 		App::GetApp()->RegisterResource(L"SURVIVOR_2", modelMesh);
 		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Rescuecharacter8.bmf");
 		App::GetApp()->RegisterResource(L"RESCUECHARACTER_MESH", modelMesh);
+		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"RescuecharacterGun.bmf");
+		App::GetApp()->RegisterResource(L"RESCUECHARACTERGUN_MESH", modelMesh);
+		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"RescuecharacterIceax.bmf");
+		App::GetApp()->RegisterResource(L"RESCUECHARACTERICEAX_MESH", modelMesh);
 		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"HotRock3.bmf");
 		App::GetApp()->RegisterResource(L"HOTROCK_MESH", modelMesh);
 
