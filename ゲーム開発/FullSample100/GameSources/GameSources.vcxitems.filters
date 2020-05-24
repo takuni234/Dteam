@@ -16,6 +16,9 @@
     <Filter Include="RescurTarget">
       <UniqueIdentifier>{b8c7083b-2ffe-4267-8498-458d290f3d6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PlayerWeapon">
+      <UniqueIdentifier>{016beca9-21e5-4382-bb63-c6b1403b5bc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h">
@@ -72,8 +75,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Enemy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GoalObject.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h">
+      <Filter>PlayerWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h">
+      <Filter>PlayerWeapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -127,7 +134,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Enemy.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GoalObject.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp">
+      <Filter>PlayerWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp">
+      <Filter>PlayerWeapon</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

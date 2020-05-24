@@ -120,4 +120,47 @@ namespace basecross {
 			m_GeneratableFlg[index] = flg;
 		}
 	};
+
+	//--------------------------------------------------------------------------------------
+	//	class IncreaseObject: public GameObject; マグマの配置用
+	//--------------------------------------------------------------------------------------
+	const int CellXZDIRECTION = 5; //中央も含めた四方
+	static int CellIncreaseObjectNum = 0;
+
+	class CellIncreaseObject : public GameObject {
+		float m_CellScale;
+		Vec3 m_Position;
+		int m_LimitRange;
+
+		void SetCellMapCost();
+	public:
+		CellIncreaseObject(const shared_ptr<Stage>& StagePtr, const float& CellScale, const Vec3& Position, const int& limitRange);
+		virtual ~CellIncreaseObject() {}
+		virtual void OnCreate() override;
+		virtual void OnUpdate() override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//　タイリングする固定のボックス
+	//--------------------------------------------------------------------------------------
+	class TilingFixedBox : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+		float m_UPic;
+		float m_VPic;
+	public:
+		//構築と破棄
+		TilingFixedBox(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position,
+			float UPic,
+			float VPic
+		);
+		virtual ~TilingFixedBox();
+		//初期化
+		virtual void OnCreate() override;
+		//操作
+	};
 }

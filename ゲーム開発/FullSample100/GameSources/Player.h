@@ -23,10 +23,20 @@ namespace basecross {
 		Vec2 GetInputState() const;
 
 		void DrawStrings();
+
 		//ステートマシーン
 		unique_ptr<StateMachine<Player>> m_StateMachine;
+
+		//判定用
 		shared_ptr<AttackArea> m_PlayerAttackArea;
+		float m_AttackInterval;
 		shared_ptr<GrabArea> m_PlayerGrabArea;
+
+		//音関係
+		shared_ptr<SoundItem> m_BGM;
+		float m_BGMInterval;
+		bool m_BGMflg; //足音用
+		float m_Stride;
 	public:
 		Player(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
 		virtual ~Player();
@@ -46,7 +56,19 @@ namespace basecross {
 		void PlayerWalk();
 		void PlayerAttack();
 		void PlayerGrab();
+		
+		//音
+		void PlayerSound(bool active, const wstring& key);
+		void PlayerSound(bool active, const wstring& key, float volume);
+		void ResetBGMInterval() {
+			m_BGMflg = false;
+			m_BGMInterval = 0.2f;
+		}
+
 		shared_ptr<GameObject> GetAttackArea() {
+			return m_PlayerAttackArea;
+		}
+		shared_ptr<AttackArea> GetAttackAreaObj() {
 			return m_PlayerAttackArea;
 		}
 		shared_ptr<GameObject> GetGrabArea() {

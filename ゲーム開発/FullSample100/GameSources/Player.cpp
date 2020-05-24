@@ -12,8 +12,10 @@ namespace basecross {
 		m_Scale(scale),
 		m_Rotation(rot),
 		m_Position(pos),
-		m_Speed(2.0f),
-		m_IntervalTime(0.0f)
+		m_Speed(2.0f), // ※スピードを変更する場合、足音の音量も変化してしまうので気を付けてください
+		m_IntervalTime(0.0f),
+		m_BGMInterval(0.2f),// 最初の一歩目のモーションに合わせる為の値(0.2f)
+		m_Stride(0.25f)
 	{}
 
 	Player::~Player() {}
@@ -118,7 +120,7 @@ namespace basecross {
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
-		ptrString->SetText(str);
+		//ptrString->SetText(str);
 	}
 
 	void Player::OnCreate() {
@@ -150,23 +152,22 @@ namespace basecross {
 		ptrShadow->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrShadow->SetMeshToTransformMatrix(spanMat);
 
+		//通常
 		auto ptrDraw = AddComponent<BcPNTBoneModelDraw>();
 		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
-
+	
 		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
 		ptrDraw->AddAnimation(L"Walk", 0, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Pull", 80, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"MovingShooting", 120, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Shoot", 240, 30, true, 60.0f);
-		ptrDraw->AddAnimation(L"Break", 160, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Grab", 280, 30, true, 60.0f);
-		ptrDraw->ChangeCurrentAnimation(L"Default");
+		ptrDraw->AddAnimation(L"Shoot", 0, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"MovingShooting", 40, 30, true, 60.0f);
+		ptrDraw->AddAnimation(L"Break", 0, 30, true, 60.0f);
 
-		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
-		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
+		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, m_Position +  ptrTrans->GetForword() * m_Scale.z * 2.0f);
 		m_PlayerGrabArea = GetStage()->AddGameObject<GrabArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z));
 		m_PlayerGrabArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
 
@@ -185,6 +186,11 @@ namespace basecross {
 	}
 
 	void Player::OnUpdate() {
+		auto ptrGameStage = dynamic_pointer_cast<GameStage>(GetStage());
+		if (ptrGameStage->GetCameraSelect() == CameraSelect::openingCamera) {
+			return;
+		}
+
 		m_StateMachine->Update();
 	}
 
@@ -241,8 +247,21 @@ namespace basecross {
 	void Player::PlayerSneak() {
 		m_InputHandler.PushHandle(GetThis<Player>());
 		float elapsedTime = App::GetApp()->GetElapsedTime();
+		float inputTimeLength = elapsedTime * GetMoveVector().length();
 		auto ptrDraw = GetComponent<BcPNTBoneModelDraw>();
-		ptrDraw->UpdateAnimation(elapsedTime * GetMoveVector().length());
+		ptrDraw->UpdateAnimation(inputTimeLength);
+
+		m_BGMInterval += inputTimeLength;
+		if (m_BGMInterval >= m_Stride && !m_BGMflg) {
+			//足音を鳴らす
+			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.1f * GetMoveVector().length());
+			m_BGMflg = true;
+		}
+		else if (m_BGMInterval >= m_Stride * 2.0f) {
+			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.1f * GetMoveVector().length());
+			m_BGMflg = false;
+			m_BGMInterval = 0.0f;
+		}
 	}
 
 	void Player::PlayerShot() {
@@ -291,13 +310,34 @@ namespace basecross {
 	}
 
 	void Player::PlayerAttack() {
-		auto coll = m_PlayerAttackArea->GetComponent<CollisionObb>();
+		m_PlayerAttackArea->ResetAttackFlg();
+		auto coll = m_PlayerAttackArea->GetComponent<CollisionSphere>();
 		coll->SetUpdateActive(true);
 	}
 
 	void Player::PlayerGrab() {
 		auto coll = m_PlayerGrabArea->GetComponent<CollisionObb>();
 		coll->SetUpdateActive(true);
+	}
+
+	void Player::PlayerSound(bool active, const wstring& key) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			m_BGM = ptrXA->Start(key, 0, m_Speed * 0.1f);
+		}
+		else {
+			ptrXA->Stop(m_BGM);
+		}
+	}
+
+	void Player::PlayerSound(bool active, const wstring& key, float volume) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			m_BGM = ptrXA->Start(key, 0, volume);
+		}
+		else {
+			ptrXA->Stop(m_BGM);
+		}
 	}
 
 	void Player::OnPushA() {
@@ -341,7 +381,9 @@ namespace basecross {
 		return instance;
 	}
 	void DefaultState::Enter(const shared_ptr<Player>& Obj) {
-		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		auto ptrDraw = Obj->AddComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Default");
 	}
 	void DefaultState::Execute(const shared_ptr<Player>& Obj) {
@@ -363,6 +405,8 @@ namespace basecross {
 	}
 	void WalkState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Walk");
 	}
 	void WalkState::Execute(const shared_ptr<Player>& Obj) {
@@ -374,6 +418,9 @@ namespace basecross {
 	}
 
 	void WalkState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSound(false, L"WALK_LEFT_WAV");
+		Obj->PlayerSound(false, L"WALK_RIGHT_WAV");
+		Obj->ResetBGMInterval();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -385,6 +432,9 @@ namespace basecross {
 	}
 	void ShotState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		//銃持ち
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Shoot");
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
@@ -407,6 +457,9 @@ namespace basecross {
 	}
 	void MovingShootingState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		//銃持ち
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
 	}
 	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
@@ -419,6 +472,9 @@ namespace basecross {
 	}
 
 	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->PlayerSound(false, L"WALK_LEFT_WAV");
+		Obj->PlayerSound(false, L"WALK_RIGHT_WAV");
+		Obj->ResetBGMInterval();
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -430,16 +486,23 @@ namespace basecross {
 	}
 	void AttackState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTERICEAX_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Break");
 		Obj->PlayerAttack();
 	}
 	void AttackState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
+		auto ptrPlayerTrans = Obj->GetComponent<Transform>();
+		auto ptrAtAreaObjTrans = Obj->GetAttackAreaObj()->GetComponent<Transform>();
+		ptrAtAreaObjTrans->SetPosition(ptrPlayerTrans->GetPosition() + ptrPlayerTrans->GetForword() * ptrPlayerTrans->GetScale().z * 2.0f);
 	}
 
 	void AttackState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->GetAttackAreaObj()->ResetAttackFlg();
+
 		//判定を非アクティブ化
-		auto coll = Obj->GetAttackArea()->GetComponent<CollisionObb>();
+		auto coll = Obj->GetAttackArea()->GetComponent<CollisionSphere>();
 		coll->SetUpdateActive(false);
 	}
 	
@@ -452,6 +515,8 @@ namespace basecross {
 	}
 	void GrabState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Grab");
 	}
 	void GrabState::Execute(const shared_ptr<Player>& Obj) {
@@ -473,6 +538,8 @@ namespace basecross {
 	}
 	void PushState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Push");
 		Obj->SetSpeed(1.0f);
 		Obj->PlayerGrab();
@@ -500,6 +567,8 @@ namespace basecross {
 	}
 	void PullState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Pull");
 		Obj->SetSpeed(1.0f);
 	}

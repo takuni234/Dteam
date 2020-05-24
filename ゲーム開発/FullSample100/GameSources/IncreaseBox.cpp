@@ -46,7 +46,7 @@ namespace basecross {
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
 		//OBB衝突j判定を付ける
-		auto ptrColl = AddComponent<CollisionObb>();
+		auto ptrColl = AddComponent<CollisionSphere>();
 		ptrColl->SetAfterCollision(AfterCollision::Auto);
 		ptrColl->SetSleepActive(true);
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
@@ -263,6 +263,119 @@ namespace basecross {
 		}
 	}
 
+	CellIncreaseObject::CellIncreaseObject(const shared_ptr<Stage>& StagePtr, const float& CellScale, const Vec3& Position, const int& limitRange)
+		:GameObject(StagePtr),
+		m_CellScale(CellScale),
+		m_Position(Position),
+		m_LimitRange(limitRange)
+	{}
+
+	//固定のボックスのコストをセルマップに反映
+	void CellIncreaseObject::SetCellMapCost() {
+		//セルマップ内にFixedBoxの情報をセット
+		auto PtrCellmap = GetStage()->GetSharedGameObject<StageCellMap>(L"StageCellMap");
+		auto BoxGroup = GetStage()->GetSharedObjectGroup(L"FixedBoxes");
+		//セルマップからセルの配列を取得
+		auto& CellVec = PtrCellmap->GetCellVec();
+		//ボックスグループからボックスの配列を取得
+		auto& BoxVec = BoxGroup->GetGroupVector();
+		vector<AABB> ObjectsAABBVec;
+		for (auto& v : BoxVec) {
+			auto FixedBoxPtr = dynamic_pointer_cast<TilingFixedBox>(v.lock());
+			if (FixedBoxPtr) {
+				auto ColPtr = FixedBoxPtr->GetComponent<CollisionObb>();
+				//ボックスの衝突判定かラッピングするAABBを取得して保存
+				ObjectsAABBVec.push_back(ColPtr->GetObb().GetWrappedAABB());
+			}
+		}
+		//セル配列からセルをスキャン
+		for (auto& v : CellVec) {
+			for (auto& v2 : v) {
+				for (auto& vObj : ObjectsAABBVec) {
+					if (HitTest::AABB_AABB_NOT_EQUAL(v2.m_PieceRange, vObj)) {
+						//ボックスのABBとNOT_EQUALで衝突判定
+						v2.m_Cost = -1;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void CellIncreaseObject::OnCreate() {
+		auto ptrTrans = GetComponent<Transform>();
+		ptrTrans->SetPosition(m_Position);
+		auto Ptr = GetStage()->AddGameObject<StageCellMap>(Vec3(ptrTrans->GetPosition().x + -m_LimitRange * 0.5f * m_CellScale, ptrTrans->GetPosition().y, ptrTrans->GetPosition().z + -m_LimitRange * 0.5f * m_CellScale), m_CellScale, m_LimitRange, m_LimitRange);
+		//セルマップの区画を表示する場合は以下の設定
+		Ptr->SetDrawActive(true);
+		//さらにセルのインデックスとコストを表示する場合は以下の設定
+		//Ptr->SetCellStringActive(true);
+		GetStage()->SetSharedGameObject(L"IncreaseBoxCellMap", Ptr);
+		//セルマップへのボックスのコスト設定
+		SetCellMapCost();
+	}
+
+	void CellIncreaseObject::OnUpdate() {
+
+	}
+
+	//--------------------------------------------------------------------------------------
+	//　タイリングする固定のボックス
+	//--------------------------------------------------------------------------------------
+	TilingFixedBox::TilingFixedBox(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale,
+		const Vec3& Rotation,
+		const Vec3& Position,
+		float UPic,
+		float VPic
+	) :
+		GameObject(StagePtr),
+		m_Scale(Scale),
+		m_Rotation(Rotation),
+		m_Position(Position),
+		m_UPic(UPic),
+		m_VPic(VPic)
+	{}
+	TilingFixedBox::~TilingFixedBox() {}
+	//初期化
+	void TilingFixedBox::OnCreate() {
+		auto PtrTrans = GetComponent<Transform>();
+		PtrTrans->SetScale(m_Scale);
+		PtrTrans->SetRotation(m_Rotation);
+		PtrTrans->SetPosition(m_Position);
+		auto Coll = AddComponent<CollisionObb>();
+		Coll->SetFixed(true);
+		vector<VertexPositionNormalTexture> vertices;
+		vector<uint16_t> indices;
+		MeshUtill::CreateCube(1.0f, vertices, indices);
+		float UCount = m_Scale.x / m_UPic;
+		float VCount = m_Scale.z / m_VPic;
+		for (size_t i = 0; i < vertices.size(); i++) {
+			if (vertices[i].textureCoordinate.x >= 1.0f) {
+				vertices[i].textureCoordinate.x = UCount;
+			}
+			if (vertices[i].textureCoordinate.y >= 1.0f) {
+				float FrontBetween = bsm::angleBetweenNormals(vertices[i].normal, Vec3(0, 1, 0));
+				float BackBetween = bsm::angleBetweenNormals(vertices[i].normal, Vec3(0, -1, 0));
+				if (FrontBetween < 0.01f || BackBetween < 0.01f) {
+					vertices[i].textureCoordinate.y = VCount;
+				}
+			}
+		}
+		//描画コンポーネントの追加
+		auto PtrDraw = AddComponent<BcPNTStaticDraw>();
+		//描画コンポーネントに形状（メッシュ）を設定
+		PtrDraw->CreateOriginalMesh(vertices, indices);
+		PtrDraw->SetOriginalMeshUse(true);
+		PtrDraw->SetFogEnabled(true);
+		//自分に影が映りこむようにする
+		PtrDraw->SetOwnShadowActive(true);
+		//描画コンポーネントテクスチャの設定
+		PtrDraw->SetTextureResource(L"SKY_TX");
+		//タイリング設定
+		PtrDraw->SetSamplerState(SamplerState::LinearWrap);
+	}
+
 	//--------------------------------------------------------------------------------------
 	//	class ColdBox : public GameObject;
 	//--------------------------------------------------------------------------------------
@@ -291,7 +404,7 @@ namespace basecross {
 		auto ptrColl = AddComponent<CollisionObb>();
 		ptrColl->SetFixed(true);
 		//タグをつける
-		AddTag(L"FixedBox");
+		AddTag(L"ColdBox");
 		//影をつける（シャドウマップを描画する）
 		auto shadowPtr = AddComponent<Shadowmap>();
 		//影の形（メッシュ）を設定

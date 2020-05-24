@@ -80,7 +80,7 @@ namespace basecross {
 		Collision->SetDrawActive(true);
 
 		AddComponent<Gravity>();
-
+		AddTag(L"ObjRock");
 	}
 	void ObjRock::OnUpdate() {
 		/*auto player = GetStage()->GetSharedGameObject<Player>(L"Player");

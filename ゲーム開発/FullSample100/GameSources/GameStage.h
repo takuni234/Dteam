@@ -7,6 +7,10 @@
 #include "stdafx.h"
 
 namespace basecross {
+	enum class CameraSelect {
+		openingCamera,
+		playerCamera
+	};
 
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
@@ -16,13 +20,9 @@ namespace basecross {
 		CsvFile csvfile_1;
 		CsvFile csvfile_2;
 		CsvFile ObjCsvfile;
-		void CreateObjectACSV();
 		void CreateObjectB_CSV();
 		//スコアスプライト作成
 		void CreateScoreSprite();
-		//壁模様のスプライト作成
-		void CreatePushSprite();
-
 		//トータル時間
 		float m_TotalTime;
 
@@ -36,6 +36,25 @@ namespace basecross {
 		Vec3 PlayerPos;
 		Vec3 magumapos;
 
+		//空色
+		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
+		//噴火時の空色
+		Col4 m_Color1 = Col4(87.0f/255.0f,56.0f/255.0f, 38.0f/255.0f, 1.0f);
+
+		//背景色を変更する
+		void SetBackGroundColor(Col4 color);
+		//設定した高度に合わせて背景色を変更する
+		void SetBackGroundPlayerPosColor(Col4 posZero, Col4 posMax, float posSizeMax);
+
+		//カメラ用
+		//OpeningCamera用のビュー
+		shared_ptr<SingleView> m_OpeningCameraView;
+		//PlayerCamera用のビュー
+		shared_ptr<SingleView> m_PlayerCameraView;
+		CameraSelect m_CameraSelect;
+		//カメラマンの作成
+		void CreateCameraman();
+
 		InputHandler<GameStage> m_InputHandler;
 	public:
 
@@ -48,6 +67,11 @@ namespace basecross {
 
 		virtual void UpdateStage() override;
 		virtual void OnDestroy() override;
+
+		void ToPlayerCamera();
+		CameraSelect GetCameraSelect() const {
+			return m_CameraSelect;
+		}
 
 		void OnPushStart();
 		void OnPushA(){}
