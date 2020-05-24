@@ -12,7 +12,7 @@ namespace basecross {
 		m_Scale(scale),
 		m_Rotation(rot),
 		m_Position(pos),
-		m_Speed(2.0f),
+		m_Speed(2.0f), // ※スピードを変更する場合、足音の音量も変化してしまうので気を付けてください
 		m_IntervalTime(0.0f),
 		m_BGMInterval(0.2f),// 最初の一歩目のモーションに合わせる為の値(0.2f)
 		m_Stride(0.25f)
@@ -120,7 +120,7 @@ namespace basecross {
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
-		ptrString->SetText(str);
+		//ptrString->SetText(str);
 	}
 
 	void Player::OnCreate() {
@@ -167,8 +167,7 @@ namespace basecross {
 		ptrDraw->AddAnimation(L"MovingShooting", 40, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Break", 0, 30, true, 60.0f);
 
-		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z + m_Scale.z * 2.0f));
-		m_PlayerAttackArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
+		m_PlayerAttackArea = GetStage()->AddGameObject<AttackArea>(m_Scale, m_Rotation, m_Position +  ptrTrans->GetForword() * m_Scale.z * 2.0f);
 		m_PlayerGrabArea = GetStage()->AddGameObject<GrabArea>(m_Scale, m_Rotation, Vec3(m_Position.x, m_Position.y, m_Position.z));
 		m_PlayerGrabArea->GetComponent<Transform>()->SetParent(GetThis<Player>());
 
@@ -187,6 +186,11 @@ namespace basecross {
 	}
 
 	void Player::OnUpdate() {
+		auto ptrGameStage = dynamic_pointer_cast<GameStage>(GetStage());
+		if (ptrGameStage->GetCameraSelect() == CameraSelect::openingCamera) {
+			return;
+		}
+
 		m_StateMachine->Update();
 	}
 
@@ -250,11 +254,11 @@ namespace basecross {
 		m_BGMInterval += inputTimeLength;
 		if (m_BGMInterval >= m_Stride && !m_BGMflg) {
 			//足音を鳴らす
-			PlayerSound(true, L"WALK_LEFT_WAV");
+			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.1f * GetMoveVector().length());
 			m_BGMflg = true;
 		}
 		else if (m_BGMInterval >= m_Stride * 2.0f) {
-			PlayerSound(true, L"WALK_RIGHT_WAV");
+			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.1f * GetMoveVector().length());
 			m_BGMflg = false;
 			m_BGMInterval = 0.0f;
 		}
@@ -306,7 +310,8 @@ namespace basecross {
 	}
 
 	void Player::PlayerAttack() {
-		auto coll = m_PlayerAttackArea->GetComponent<CollisionObb>();
+		m_PlayerAttackArea->ResetAttackFlg();
+		auto coll = m_PlayerAttackArea->GetComponent<CollisionSphere>();
 		coll->SetUpdateActive(true);
 	}
 
@@ -318,7 +323,17 @@ namespace basecross {
 	void Player::PlayerSound(bool active, const wstring& key) {
 		auto ptrXA = App::GetApp()->GetXAudio2Manager();
 		if (active) {
-			m_BGM = ptrXA->Start(key, 0, 0.2f);
+			m_BGM = ptrXA->Start(key, 0, m_Speed * 0.1f);
+		}
+		else {
+			ptrXA->Stop(m_BGM);
+		}
+	}
+
+	void Player::PlayerSound(bool active, const wstring& key, float volume) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			m_BGM = ptrXA->Start(key, 0, volume);
 		}
 		else {
 			ptrXA->Stop(m_BGM);
@@ -478,11 +493,16 @@ namespace basecross {
 	}
 	void AttackState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
+		auto ptrPlayerTrans = Obj->GetComponent<Transform>();
+		auto ptrAtAreaObjTrans = Obj->GetAttackAreaObj()->GetComponent<Transform>();
+		ptrAtAreaObjTrans->SetPosition(ptrPlayerTrans->GetPosition() + ptrPlayerTrans->GetForword() * ptrPlayerTrans->GetScale().z * 2.0f);
 	}
 
 	void AttackState::Exit(const shared_ptr<Player>& Obj) {
+		Obj->GetAttackAreaObj()->ResetAttackFlg();
+
 		//判定を非アクティブ化
-		auto coll = Obj->GetAttackArea()->GetComponent<CollisionObb>();
+		auto coll = Obj->GetAttackArea()->GetComponent<CollisionSphere>();
 		coll->SetUpdateActive(false);
 	}
 	
@@ -495,6 +515,8 @@ namespace basecross {
 	}
 	void GrabState::Enter(const shared_ptr<Player>& Obj) {
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->SetMeshResource(L"RESCUECHARACTER_MESH");
+		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Grab");
 	}
 	void GrabState::Execute(const shared_ptr<Player>& Obj) {

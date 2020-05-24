@@ -46,7 +46,7 @@ namespace basecross {
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
 		//OBB衝突j判定を付ける
-		auto ptrColl = AddComponent<CollisionObb>();
+		auto ptrColl = AddComponent<CollisionSphere>();
 		ptrColl->SetAfterCollision(AfterCollision::Auto);
 		ptrColl->SetSleepActive(true);
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
@@ -404,7 +404,7 @@ namespace basecross {
 		auto ptrColl = AddComponent<CollisionObb>();
 		ptrColl->SetFixed(true);
 		//タグをつける
-		AddTag(L"FixedBox");
+		AddTag(L"ColdBox");
 		//影をつける（シャドウマップを描画する）
 		auto shadowPtr = AddComponent<Shadowmap>();
 		//影の形（メッシュ）を設定

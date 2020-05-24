@@ -59,12 +59,16 @@ namespace basecross {
 		
 		//‰¹
 		void PlayerSound(bool active, const wstring& key);
+		void PlayerSound(bool active, const wstring& key, float volume);
 		void ResetBGMInterval() {
 			m_BGMflg = false;
 			m_BGMInterval = 0.2f;
 		}
 
 		shared_ptr<GameObject> GetAttackArea() {
+			return m_PlayerAttackArea;
+		}
+		shared_ptr<AttackArea> GetAttackAreaObj() {
 			return m_PlayerAttackArea;
 		}
 		shared_ptr<GameObject> GetGrabArea() {

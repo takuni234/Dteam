@@ -14,16 +14,24 @@ namespace basecross {
 	void GameStage::CreateViewLight() {
 		const Vec3 eye(0.0f, 10.0f, -5.0f);
 		const Vec3 at(0.0f);
-		auto PtrView = CreateView<SingleView>();
-		//ビューのカメラの設定
-		auto PtrCamera = ObjectFactory::Create<PlayerCamera>();
-		PtrView->SetCamera(PtrCamera);
-		PtrCamera->SetEye(eye);
-		PtrCamera->SetAt(at);
+		//OpeningCameraView用のビュー
+		m_OpeningCameraView = ObjectFactory::Create<SingleView>(GetThis<Stage>());
+		auto ptrOpeningCamera = ObjectFactory::Create<OpeningCamera>();
+		m_OpeningCameraView->SetCamera(ptrOpeningCamera);
+		//MyCamera用のビュー
+		m_PlayerCameraView = ObjectFactory::Create<SingleView>(GetThis<Stage>());
+		auto ptrMyCamera = ObjectFactory::Create<PlayerCamera>();
+		ptrMyCamera->SetEye(eye);
+		ptrMyCamera->SetAt(at);
+		m_PlayerCameraView->SetCamera(ptrMyCamera);
+		//初期状態ではm_OpeningCameraViewを使う
+		SetView(m_OpeningCameraView);
+		m_CameraSelect = CameraSelect::openingCamera;
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
 		//デフォルトのライティングを指定
 		PtrMultiLight->SetDefaultLighting();
+
 	}
 
 	//スコアスプライト作成
@@ -37,6 +45,7 @@ namespace basecross {
 
 
 	void GameStage::CreateObjectB_CSV() {
+		auto group = CreateSharedObjectGroup(L"RescurTargetGroup");
 		//CSVの行単位の配列
 		vector<wstring> LineVec;
 		//0番目のカラムがL"TilingFixedBox"である行を抜き出す
@@ -118,8 +127,7 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0));
-
+			group->IntoGroup(AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0)));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
 		for (auto& v : LineVec) {
@@ -133,7 +141,7 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+			group->IntoGroup(AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0)));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"maguma");
 		for (auto& v : LineVec) {
@@ -165,6 +173,20 @@ namespace basecross {
 		SetBackGroundColor(ZeroCol + MaxCol);
 	}
 
+	//カメラマンの作成
+	void GameStage::CreateCameraman() {
+		auto ptrOpeningCameraman = AddGameObject<OpeningCameraman>();
+		//シェア配列にOpeningCameramanを追加
+		SetSharedGameObject(L"OpeningCameraman", ptrOpeningCameraman);
+
+		auto ptrOpeningCamera = dynamic_pointer_cast<OpeningCamera>(m_OpeningCameraView->GetCamera());
+		if (ptrOpeningCamera) {
+			ptrOpeningCamera->SetCameraObject(ptrOpeningCameraman);
+			SetView(m_OpeningCameraView);
+			m_CameraSelect = CameraSelect::openingCamera;
+		}
+
+	}
 
 	void GameStage::OnCreate() {
 		try {
@@ -193,6 +215,8 @@ namespace basecross {
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 
+			//カメラマンの作成
+			CreateCameraman();
 
 			//AddGameObject<Enemy>(Vec3(4, 2, -7), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
@@ -212,6 +236,10 @@ namespace basecross {
 
 
 	void GameStage::OnUpdate() {
+		SetBackGroundPlayerPosColor(m_Color, m_Color1, 2.24f);
+		if (GetThis<GameStage>()->GetCameraSelect() == CameraSelect::openingCamera) {
+			return;
+		}
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		m_TotalTime += elapsedTime;
 		if (m_TotalTime >= 10000.0f) {
@@ -220,7 +248,6 @@ namespace basecross {
 		//スコアを更新する
 		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 		ptrScor->SetScore(m_TotalTime);
-		SetBackGroundPlayerPosColor(m_Color, m_Color1, 2.24f);
 	}
 
 
@@ -235,6 +262,18 @@ namespace basecross {
 		//BGMのストップ
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		XAPtr->Stop(m_BGM);
+	}
+
+	void GameStage::ToPlayerCamera() {
+		auto ptrPlayer = GetSharedGameObject<Player>(L"Player");
+		//MyCameraに変更
+		auto ptrMyCamera = dynamic_pointer_cast<PlayerCamera>(m_PlayerCameraView->GetCamera());
+		if (ptrMyCamera) {
+			ptrMyCamera->SetTargetObject(ptrPlayer);
+			//m_MyCameraViewを使う
+			SetView(m_PlayerCameraView);
+			m_CameraSelect = CameraSelect::playerCamera;
+		}
 	}
 
 	void GameStage::OnPushStart() {

@@ -7,6 +7,10 @@
 #include "stdafx.h"
 
 namespace basecross {
+	enum class CameraSelect {
+		openingCamera,
+		playerCamera
+	};
 
 	//--------------------------------------------------------------------------------------
 	//	ゲームステージクラス
@@ -41,6 +45,16 @@ namespace basecross {
 		void SetBackGroundColor(Col4 color);
 		//設定した高度に合わせて背景色を変更する
 		void SetBackGroundPlayerPosColor(Col4 posZero, Col4 posMax, float posSizeMax);
+
+		//カメラ用
+		//OpeningCamera用のビュー
+		shared_ptr<SingleView> m_OpeningCameraView;
+		//PlayerCamera用のビュー
+		shared_ptr<SingleView> m_PlayerCameraView;
+		CameraSelect m_CameraSelect;
+		//カメラマンの作成
+		void CreateCameraman();
+
 		InputHandler<GameStage> m_InputHandler;
 	public:
 
@@ -53,6 +67,11 @@ namespace basecross {
 
 		virtual void UpdateStage() override;
 		virtual void OnDestroy() override;
+
+		void ToPlayerCamera();
+		CameraSelect GetCameraSelect() const {
+			return m_CameraSelect;
+		}
 
 		void OnPushStart();
 		void OnPushA(){}
