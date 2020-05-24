@@ -145,7 +145,6 @@ namespace basecross {
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"maguma");
 		for (auto& v : LineVec) {
-			//・ｽg・ｽ[・ｽN・ｽ・ｽ・ｽi・ｽJ・ｽ・ｽ・ｽ・ｽ・ｽj・ｽﾌ配・ｽ・ｽ
 			vector<wstring> torkns;
 
 			Util::WStrToTokenVector(torkns, v, L',');
@@ -154,7 +153,38 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-			magumapos = Pos;
+
+			magumaPos = Pos;
+			//AddGameObject<IncreaseObject>(Pos);
+
+			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");
+		for (auto& v : LineVec) {
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+
+			AddGameObject<ObjRock>(Pos,Vec3(1),Vec3(0));
+
+			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"Goal");
+		for (auto& v : LineVec) {
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()-1),
+				(float)_wtof(torkns[3].c_str())
+			);
+			GoalPos = Pos;
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 	}
@@ -192,11 +222,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			csvfile_1.SetFileName(detadir + L"Stage_Csv.csv");// GameStageA.csv");
-			csvfile_1.ReadCsv();
-			csvfile_2.SetFileName(detadir + L"Stage_Csv_2.csv");// GameStageA.csv");
-			csvfile_2.ReadCsv();
-			ObjCsvfile.SetFileName(detadir + L"SaveData8.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData14.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -209,7 +235,7 @@ namespace basecross {
 			ground->AddTag(L"Ground");
 			SetSharedGameObject(L"Stage", ground);
 
-			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(0.0f, 1.0f,0.0f));
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(GoalPos));
 			SetSharedGameObject(L"Goal", goalObj);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
@@ -221,7 +247,7 @@ namespace basecross {
 			//AddGameObject<Enemy>(Vec3(4, 2, -7), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(magumapos);
+			AddGameObject<IncreaseObject>(magumaPos);
 
 			CreateScoreSprite();
 			//BGM

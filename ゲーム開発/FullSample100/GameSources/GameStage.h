@@ -34,7 +34,8 @@ namespace basecross {
 		bool m_IsUpdate;
 
 		Vec3 PlayerPos;
-		Vec3 magumapos;
+		Vec3 GoalPos;
+		Vec3 magumaPos;
 
 		//ãÛêF
 		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);

@@ -20,6 +20,13 @@ namespace basecross {
 
 	//初期化
 	void GoalObject::OnCreate() {
+		Mat4x4 spanMat; 
+		spanMat.affineTransformation(
+			Vec3(0.15f, 0.15f, 0.15f),
+			Vec3(0.0f, 0.0f, 0.0f),
+			Vec3(0.0f, XM_PI, 0.0f),
+			Vec3(0.0f, 0.0f, 0.0f)
+		);
 		auto ptrTransform = GetComponent<Transform>();
 		ptrTransform->SetScale(m_Scale);
 		ptrTransform->SetRotation(m_Rotation);
@@ -34,6 +41,7 @@ namespace basecross {
 		//影の形（メッシュ）を設定
 		shadowPtr->SetMeshResource(L"GOAL_MESH");
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
+		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetMeshResource(L"GOAL_MESH");
 		ptrDraw->SetTextureResource(L"GOAL_TX");
 		ptrDraw->SetFogEnabled(true);
