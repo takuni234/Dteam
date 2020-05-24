@@ -48,6 +48,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"RESCUECHARACTER_TX", strTexture);
 		strTexture = DataDir + L"Tx_rock2.png";
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
+		strTexture = DataDir + L"Tx_Ambulance3.png";
+		App::GetApp()->RegisterTexture(L"GOAL_TX", strTexture);
 		
 		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
@@ -61,13 +63,15 @@ namespace basecross {
 		App::GetApp()->RegisterResource(L"RESCUECHARACTERICEAX_MESH", modelMesh);
 		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"HotRock3.bmf");
 		App::GetApp()->RegisterResource(L"HOTROCK_MESH", modelMesh);
+		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"ambulance5.bmf");
+		App::GetApp()->RegisterResource(L"GOAL_MESH", modelMesh);
 
 		//ƒTƒEƒ“ƒh
 		wstring DataWav = DataDir + L"cursor.wav";
 		App::GetApp()->RegisterWav(L"cursor", DataWav);
 		DataWav = DataDir + L"air_shot.wav";
 		App::GetApp()->RegisterWav(L"ICEAX_ATTACK_WAV", DataWav);
-		DataWav = DataDir + L"ƒSƒSƒSƒS.wav";
+		DataWav = DataDir + L"Lava.wav";
 		App::GetApp()->RegisterWav(L"ERUPTION_WAV", DataWav);
 		DataWav = DataDir + L"Î‚ªÓ‚¯‚é.wav";
 		App::GetApp()->RegisterWav(L"ROCK_DESTORY_WAV", DataWav);
