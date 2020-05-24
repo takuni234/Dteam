@@ -259,7 +259,7 @@ namespace basecross {
 
 	void GameStage::OnUpdate() {
 		float elapsedTime = App::GetApp()->GetElapsedTime();
-		m_TotalTime += elapsedTime;
+		m_TotalTime -= elapsedTime;
 		if (m_TotalTime >= 10000.0f) {
 			m_TotalTime = 0.0f;
 		}
