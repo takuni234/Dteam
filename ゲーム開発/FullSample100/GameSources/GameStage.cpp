@@ -155,7 +155,7 @@ namespace basecross {
 			);
 
 			magumaPos = Pos;
-			//AddGameObject<IncreaseObject>(Pos);
+			AddGameObject<IncreaseObject>(Pos);
 
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
@@ -222,7 +222,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + L"SaveData14.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + /*L"TestStage.csv");*/ L"SaveData19.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -247,7 +247,7 @@ namespace basecross {
 			//AddGameObject<Enemy>(Vec3(4, 2, -7), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(magumaPos);
+			//AddGameObject<IncreaseObject>(magumaPos);
 
 			CreateScoreSprite();
 			//BGM

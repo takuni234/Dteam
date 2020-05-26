@@ -35,7 +35,7 @@ namespace basecross {
 		auto ptrColl = AddComponent<CollisionObb>();
 		ptrColl->SetFixed(true);
 		//タグをつける
-		AddTag(L"FixedBox");
+		AddTag(L"GoalObj");
 		//影をつける（シャドウマップを描画する）
 		auto shadowPtr = AddComponent<Shadowmap>();
 		//影の形（メッシュ）を設定
@@ -47,5 +47,25 @@ namespace basecross {
 		ptrDraw->SetFogEnabled(true);
 		ptrDraw->SetOwnShadowActive(true);
 
+	}
+	void GoalObject::OnUpdate() {
+		shared_ptr<RescurTarget_Base> target = nullptr;
+		auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+		for (auto obj : gameobjects) {
+			target = dynamic_pointer_cast<RescurTarget_Base>(obj);
+			if (target) {
+				
+				auto Tpos = target->GetComponent<Transform>()->GetPosition();
+				auto pos = GetComponent<Transform>()->GetPosition();
+				Vec3 length = Tpos - pos;
+				if (length.length() < 1 && target->GetFlg(L"1")==true || target->GetFlg(L"2") == true){					
+				}		
+
+			}
+		}
+		if (count == 2) {
+			App::GetApp()->GetScene<Scene>()->
+				ChangeScene(SceneKey::Title);
+		}
 	}
 }

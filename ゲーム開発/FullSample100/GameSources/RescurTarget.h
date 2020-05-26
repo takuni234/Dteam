@@ -14,17 +14,33 @@ namespace basecross {
 
 		void OnCreate() override;
 		void OnUpdate() override;
+		float INGOALLENGTH();
+		void INGOAL();
 		float INPLAYERLANGSE();
 		bool OUTPLAYER_CALL();
 		Vec3 PlayerPos();
+		Vec3 GoalPos();
 		void PLAYERCHASE();
 		bool MoveSwitch();
 		void HappyAction();
-		bool GetFlg() { return INFlg; }
-		bool INFlg, OUTFlg;
+		void ChangeScene() {
+			App::GetApp()->GetScene<Scene>()->
+				ChangeScene(SceneKey::Title);
+		}
+		
+		bool GetFlg(wstring flg) {
+			if (flg == L"1") {
+				return Goalflg1;
+			}
+			if (flg == L"2") {
+				return Goalflg2;
+			}
+		}
+		bool INFlg;
 		bool flg = true,SpliteFlg;
 		bool LightFlg = false;
-		int flgno = 0;
+		bool Goalflg1, Goalflg2;
+		int GoalInCount;
 		float time;
 
 	};
@@ -36,7 +52,7 @@ namespace basecross {
 		//HelpSplite help;
 		Vec3 m_Position, m_Scale, m_Rotation;
 		int moveChangeCost;
-		float time;
+		//float time;
 		//shared_ptr<HelpSplite> hs;
 	public:
 		RescurTarget_1(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
@@ -53,6 +69,7 @@ namespace basecross {
 
 	class RescurTarget_2 :public RescurTarget_Base {
 		Vec3 m_Position, m_Scale, m_Rotation;
+		float DethTime = 0;
 	public:
 		RescurTarget_2(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
 			:RescurTarget_Base(stage, pos, scale, rotate),
@@ -63,6 +80,8 @@ namespace basecross {
 
 		void OnCreate() override;
 		void OnUpdate() override;
+		void OnCollisionEnter(shared_ptr<GameObject>& obj);
+
 	};
 
 

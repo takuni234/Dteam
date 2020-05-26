@@ -74,6 +74,7 @@ namespace basecross {
 			return m_CameraSelect;
 		}
 
+
 		void OnPushStart();
 		void OnPushA(){}
 		void OnPushB(){}

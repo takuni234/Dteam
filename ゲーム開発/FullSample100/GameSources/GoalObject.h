@@ -11,6 +11,9 @@ namespace basecross {
 		Vec3 m_Scale;
 		Vec3 m_Rotation;
 		Vec3 m_Position;
+
+		bool flg;
+		int count;
 	public:
 		//\’z‚Æ”jŠü
 		GoalObject(const shared_ptr<Stage>& StagePtr,
@@ -22,5 +25,9 @@ namespace basecross {
 		//‰Šú‰»
 		virtual void OnCreate() override;
 		//‘€ì
+		virtual void OnUpdate() override;
+		void TargetCount() {
+			count++;
+		}
 	};
 }
