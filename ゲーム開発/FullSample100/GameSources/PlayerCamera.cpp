@@ -177,6 +177,8 @@ namespace basecross {
 		m_AtPos(m_AtStartPos),
 		m_TotalTime(0.0f),
 		m_ObjCount(0),
+		m_ObjPosVecBuff(Vec3(-20.0f, 10.0f, -20.0f)),
+		m_ObjAtVecBuff(Vec3(-10.0f, 0.0f, 0.0f)),
 		m_Once(false)
 	{}
 	OpeningCameraman::~OpeningCameraman() {}
@@ -227,6 +229,21 @@ namespace basecross {
 		m_AtEndPos = pos;
 		m_AtPos = m_AtStartPos;
 		m_TotalTime = 0.0f;
+	}
+
+	void OpeningCameraman::ToSurvivorRoundBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt) {
+		auto ptrTrans = obj->GetComponent<Transform>();
+		auto pos = ptrTrans->GetPosition();
+
+		m_StartPos = startPos;
+		m_EndPos = pos + Vec3(0.0f,1.5f,4.0f);
+		m_AtStartPos = startAt;
+		m_AtEndPos = pos;
+		m_AtPos = m_AtStartPos;
+		m_TotalTime = 0.0f;
+
+		SetObjPosVecBuff(m_EndPos);
+		SetObjAtVecBuff(m_AtEndPos);
 	}
 
 	void OpeningCameraman::ToRoundEnterBehavior() {
@@ -329,7 +346,7 @@ namespace basecross {
 		//‹~o‘ÎÛ‘Sˆõ•ª
 		if (i > 0) {
 			if (!Obj->GetOnce()) {
-				Obj->ToSurvivorEnterBehavior(vec[i - 1], Vec3(-20.0f, 10.0f, -20.0f));
+				Obj->ToSurvivorRoundBehavior(vec[i - 1], Obj->GetObjPosVecBuff(), Obj->GetObjAtVecBuff());
 				Obj->SetOnce(true);
 			}
 			if (Obj->ExcuteBehavior(3.0f)) {
