@@ -83,6 +83,8 @@ namespace basecross {
 		unique_ptr< StateMachine<OpeningCameraman> >  m_StateMachine;
 		//サバイバーカウント
 		int m_ObjCount;
+		Vec3 m_ObjPosVecBuff;
+		Vec3 m_ObjAtVecBuff;
 		vector<shared_ptr<GameObject>> m_Vec;
 		bool m_Once;
 	public:
@@ -104,6 +106,7 @@ namespace basecross {
 		void ToGoalEnterBehavior();
 		void ToStartEnterBehavior();
 		void ToSurvivorEnterBehavior(shared_ptr<GameObject>& obj, Vec3& startPos);
+		void ToSurvivorRoundBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt);
 		void ToRoundEnterBehavior();
 		bool ExcuteBehavior(float totaltime);
 		void EndStateEnterBehavior();
@@ -113,6 +116,18 @@ namespace basecross {
 		}
 		void SetObjCount(int count) {
 			m_ObjCount = count;
+		}		
+		Vec3 GetObjPosVecBuff() const {
+			return m_ObjPosVecBuff;
+		}
+		void SetObjPosVecBuff(Vec3& vec) {
+			m_ObjPosVecBuff = vec;
+		}
+		Vec3 GetObjAtVecBuff() const {
+			return m_ObjAtVecBuff;
+		}
+		void SetObjAtVecBuff(Vec3& vec) {
+			m_ObjAtVecBuff = vec;
 		}
 		vector<shared_ptr<GameObject>> GetObjVec() const {
 			return m_Vec;

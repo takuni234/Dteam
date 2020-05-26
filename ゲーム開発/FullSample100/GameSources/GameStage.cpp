@@ -221,7 +221,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + /*L"TestStage.csv");*/ L"SaveData19.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
