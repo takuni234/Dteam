@@ -220,7 +220,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + L"SaveData20.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData21.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -229,9 +229,9 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 
-			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
-			ground->AddTag(L"Ground");
-			SetSharedGameObject(L"Stage", ground);
+			//auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
+			//ground->AddTag(L"Ground");
+			//SetSharedGameObject(L"Stage", ground);
 
 			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(GoalPos));
 			SetSharedGameObject(L"Goal", goalObj);

@@ -53,6 +53,22 @@ namespace basecross {
 		const Vec3& Scale,
 		const Vec3& Rotation,
 		const Vec3& Position,
+		bool& Generate
+	) :
+		GameObject(StagePtr),
+		m_Scale(Scale),
+		m_Rotation(Rotation),
+		m_Position(Position),
+		m_SaveIncreaseBoxNum(-1),
+		m_SaveDirFlgNum(-1),
+		m_Generateflg(false)
+	{
+	}
+
+	IncreaseBox2Collision::IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale,
+		const Vec3& Rotation,
+		const Vec3& Position,
 		const int& num,
 		const int& dirNum
 	) :
@@ -63,6 +79,24 @@ namespace basecross {
 		m_SaveIncreaseBoxNum(num),
 		m_SaveDirFlgNum(dirNum),
 		m_Generateflg(true)
+	{
+	}	
+	
+	IncreaseBox2Collision::IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale,
+		const Vec3& Rotation,
+		const Vec3& Position,
+		const int& num,
+		const int& dirNum,
+		bool &Generate
+	) :
+		GameObject(StagePtr),
+		m_Scale(Scale),
+		m_Rotation(Rotation),
+		m_Position(Position),
+		m_SaveIncreaseBoxNum(num),
+		m_SaveDirFlgNum(dirNum),
+		m_Generateflg(Generate)
 	{
 	}
 
@@ -103,8 +137,7 @@ namespace basecross {
 			SetUpdateActive(false);
 			m_DrawObj->SetDrawActive(false);
 			m_DrawObj->SetUpdateActive(false);
-			GetStage()->AddGameObject<ColdBox>(m_Scale, m_Rotation, m_Position);
-			GetStage()->AddGameObject<ColdBoxCollision>(m_Scale * 0.99f, m_Rotation, m_Position);
+			GetStage()->AddGameObject<ColdBox>(m_Scale * 0.999f, m_Rotation, m_Position);
 		}
 	}
 
@@ -158,7 +191,15 @@ namespace basecross {
 	//	class IncreaseObject2: public GameObject;
 	//--------------------------------------------------------------------------------------
 	IncreaseObject2::IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position)
-		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(3), m_SaveIncreaseObjectNum(IncreaseObjectNum)
+		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(3), m_SaveIncreaseObjectNum(IncreaseObjectNum), m_GenerateFlg(true)
+	{
+		for (int i = 0; i < XZDIRECTION; i++) {
+			m_GeneratableFlg[i] = true;
+		}
+	}
+
+	IncreaseObject2::IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, bool& generate)
+		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(3), m_SaveIncreaseObjectNum(IncreaseObjectNum), m_GenerateFlg(generate)
 	{
 		for (int i = 0; i < XZDIRECTION; i++) {
 			m_GeneratableFlg[i] = true;
@@ -166,7 +207,7 @@ namespace basecross {
 	}
 
 	IncreaseObject2::IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useDir)
-		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(limitRange), m_UseStartDir(useDir), m_UseEndDir(useDir)
+		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(limitRange), m_UseStartDir(useDir), m_UseEndDir(useDir), m_GenerateFlg(true)
 	{
 		for (int i = 0; i < XZDIRECTION; i++) {
 			if (i == m_UseStartDir) {
@@ -179,7 +220,20 @@ namespace basecross {
 	}
 
 	IncreaseObject2::IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useStartDir, const int& useEndDir)
-		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(limitRange), m_UseStartDir(useStartDir), m_UseEndDir(useEndDir)
+		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(limitRange), m_UseStartDir(useStartDir), m_UseEndDir(useEndDir), m_GenerateFlg(true)
+	{
+		for (int i = 0; i < XZDIRECTION; i++) {
+			if (i == m_UseStartDir || i == m_UseEndDir) {
+				m_GeneratableFlg[i] = true;
+			}
+			else {
+				m_GeneratableFlg[i] = false;
+			}
+		}
+	}
+
+	IncreaseObject2::IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useStartDir, const int& useEndDir, bool& generate)
+		:GameObject(StagePtr), m_Position(Position), m_Time(0.0f), m_Interval(5.0f), m_Count(0), m_Range(0), m_LimitRange(limitRange), m_UseStartDir(useStartDir), m_UseEndDir(useEndDir), m_GenerateFlg(generate)
 	{
 		for (int i = 0; i < XZDIRECTION; i++) {
 			if (i == m_UseStartDir || i == m_UseEndDir) {
@@ -215,23 +269,23 @@ namespace basecross {
 						{
 							//中央マス
 						case 0:
-							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i);
+							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i, m_GenerateFlg);
 							break;
 							//Z軸のプラス方向
 						case 1:
-							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z + float(m_Count * increaseBoxScale.z)), m_SaveIncreaseObjectNum, i);
+							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z + float(m_Count * increaseBoxScale.z)), m_SaveIncreaseObjectNum, i, m_GenerateFlg);
 							break;
 							//X軸のプラス方向
 						case 2:
-							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i);
+							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i, m_GenerateFlg);
 							break;
 							//Z軸のマイナス方向
 						case 3:
-							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_SaveIncreaseObjectNum, i);
+							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x, transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_SaveIncreaseObjectNum, i, m_GenerateFlg);
 							break;
 							//X軸のマイナス方向
 						case 4:
-							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i);
+							incObjPtr = GetStage()->AddGameObject<IncreaseBox2Collision>(AdjustmentScale, Vec3(0.0f), Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y + increaseBoxScale.y * 0.5f, transPtr->GetPosition().z), m_SaveIncreaseObjectNum, i, m_GenerateFlg);
 							break;
 						default:
 							//エラー
@@ -250,19 +304,19 @@ namespace basecross {
 							{
 								//X+Z-
 							case 1:
-								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum);
+								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum, m_GenerateFlg);
 								break;
 								//X-Z-
 							case 2:
-								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum);
+								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(-m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum, m_GenerateFlg);
 								break;
 								//X-Z+
 							case 3:
-								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(+m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum);
+								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(-m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(+m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum, m_GenerateFlg);
 								break;
 								//X+Z+
 							case 4:
-								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(+m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum);
+								GetStage()->AddGameObject<IncreaseObject2>(Vec3(transPtr->GetPosition().x + float(m_Count * increaseBoxScale.x), transPtr->GetPosition().y, transPtr->GetPosition().z + float(+m_Count * increaseBoxScale.z)), m_LimitRange - 1, UseStartNum, UseEndNum, m_GenerateFlg);
 								break;
 							default:
 								//エラー

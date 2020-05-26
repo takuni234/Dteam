@@ -400,6 +400,9 @@ namespace basecross {
 		ptrTransform->SetScale(m_Scale);
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
+		auto ptrColl = AddComponent<CollisionObb>();
+		ptrColl->SetFixed(true);
+		AddTag(L"ColdBox");
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"DEFAULT_CUBE");
 		ptrDraw->SetFogEnabled(true);
@@ -430,9 +433,5 @@ namespace basecross {
 		ptrTransform->SetScale(m_Scale);
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
-
-		auto ptrColl = AddComponent<CollisionObb>();
-		ptrColl->SetFixed(true);
-		AddTag(L"ColdBox");
 	}
 }

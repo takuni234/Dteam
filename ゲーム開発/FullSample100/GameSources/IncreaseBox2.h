@@ -36,7 +36,9 @@ namespace basecross {
 	public:
 		//ç\ízÇ∆îjä¸
 		IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr, const Vec3& Scale, const Vec3& Rotation, const Vec3& Position);
+		IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr, const Vec3& Scale, const Vec3& Rotation, const Vec3& Position, bool& Generate);
 		IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr, const Vec3& Scale, const Vec3& Rotation, const Vec3& Position, const int& num, const int& dirNum);
+		IncreaseBox2Collision(const shared_ptr<Stage>& StagePtr, const Vec3& Scale, const Vec3& Rotation, const Vec3& Position, const int& num, const int& dirNum, bool& Generate);
 		virtual ~IncreaseBox2Collision();
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other) override;
 		//èâä˙âª
@@ -93,10 +95,13 @@ namespace basecross {
 		//ó¨Ç∑ï˚å¸
 		int m_UseStartDir;
 		int m_UseEndDir;
+		bool m_GenerateFlg;
 	public:
 		IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position);
+		IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, bool& generate);
 		IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useDir);
 		IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useStartDir, const int& useEndDir);
+		IncreaseObject2(const shared_ptr<Stage>& StagePtr, const Vec3& Position, const int& limitRange, const int& useStartDir, const int& useEndDir, bool& generate);
 		virtual ~IncreaseObject2() {}
 		virtual void OnCreate() override;
 		virtual void OnUpdate() override;
