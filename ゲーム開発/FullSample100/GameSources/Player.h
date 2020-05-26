@@ -78,6 +78,7 @@ namespace basecross {
 		//“ü—ÍƒCƒxƒ“ƒg
 		void OnPushStart() {}
 		void OnPushA();
+		void OnUpA();
 		void OnPushB();
 		void OnUpB();
 		void OnPushX();

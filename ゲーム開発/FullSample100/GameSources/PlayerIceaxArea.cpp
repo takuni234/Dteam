@@ -34,7 +34,7 @@ namespace basecross {
 			auto elapsedTime = App::GetApp()->GetElapsedTime();
 			m_Time += elapsedTime;
 			auto ptrXA = App::GetApp()->GetXAudio2Manager();
-			if (m_Time >= 0.15f && m_Time < 0.5f) { // ピッケルの振り下ろしモーション開始時間9f
+			if (m_Time >= 0.2f && m_Time < 0.5f) { // ピッケルの振り下ろしモーション開始時間12f
 				if (!m_Once) {
 					if (!m_SEflg) {
 						//drawComp->SetDrawActive(true);

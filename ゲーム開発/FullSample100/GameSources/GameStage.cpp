@@ -30,8 +30,7 @@ namespace basecross {
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
 		//デフォルトのライティングを指定
-		PtrMultiLight->SetDefaultLighting();
-
+		PtrMultiLight->SetMyLighting();
 	}
 
 	//スコアスプライト作成
@@ -39,8 +38,8 @@ namespace basecross {
 		AddGameObject<ScoreSprite>(3,
 			L"NUMBER_TX",
 			true,
-			Vec2(320.0f, 320.0f),
-			Vec3(0.0f, 200.0f, 0.0f));
+			Vec2(250.0f, 100.0f),
+			Vec3(0.0f, 300.0f, 0.0f));
 	}
 
 
@@ -103,6 +102,7 @@ namespace basecross {
 			AddGameObject<CollisionBox>(Vec3(col_Pos.x, col_Pos.y - 0.5f, col_Pos.z), col_Scale,  col_Rot); //-1 * (* 13.74f )
 		}
 
+
 		ObjCsvfile.GetSelect(LineVec, 0, L"Player");
 		for (auto& v : LineVec) {
 			//トークン（カラム）の配列
@@ -156,7 +156,6 @@ namespace basecross {
 
 			magumaPos = Pos;
 			AddGameObject<IncreaseObject>(Pos);
-
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");

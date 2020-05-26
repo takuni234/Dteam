@@ -125,7 +125,7 @@ namespace basecross {
 
 	void ObjectForFlowDecision::OnCollisionEnter(shared_ptr<GameObject>& Other) {
 		//衝突していたら消滅する
-		if (Other->FindTag(L"StageObjColl") || Other->FindTag(L"Ground") || Other->FindTag(L"IncBox")) {
+		if (Other->FindTag(L"StageObjColl") || Other->FindTag(L"Ground") || Other->FindTag(L"IncBox") || Other->FindTag(L"FixedBox")) {
 			m_ParentObj->SetGenerateflg(false);
 			SetDrawActive(false);
 			SetUpdateActive(false);
@@ -183,14 +183,14 @@ namespace basecross {
 	}
 
 	void IncreaseObject::OnUpdate() {
-		auto transPtr = this->GetComponent<Transform>();
 		//生成するマグマのサイズ
-		auto increaseBoxScale = Vec3(0.5f, 0.5f,0.5f);
-		auto AdjustmentScale = Vec3(increaseBoxScale.x - 0.0001f, increaseBoxScale.y - 0.0001f, increaseBoxScale.z - 0.0001f);
-		auto elapsedTime = App::GetApp()->GetElapsedTime();
-		m_Time += elapsedTime;
-		if (m_Time > m_Interval) {
-			if (m_LimitRange > m_Range) {
+		if (m_LimitRange > m_Range) {
+			auto transPtr = this->GetComponent<Transform>();
+			auto increaseBoxScale = Vec3(0.5f, 0.5f,0.5f);
+			auto AdjustmentScale = Vec3(increaseBoxScale.x - 0.0001f, increaseBoxScale.y - 0.0001f, increaseBoxScale.z - 0.0001f);
+			auto elapsedTime = App::GetApp()->GetElapsedTime();
+			m_Time += elapsedTime;
+			if (m_Time > m_Interval) {
 				shared_ptr<IncreaseBox> incObjPtr;
 				//四方マスの状態を見る
 				for (int i = 0; i < XZDIRECTION; i++) {
@@ -400,23 +400,38 @@ namespace basecross {
 		ptrTransform->SetScale(m_Scale);
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
-		//OBB衝突j判定を付ける
 		auto ptrColl = AddComponent<CollisionObb>();
 		ptrColl->SetFixed(true);
-		//タグをつける
 		AddTag(L"ColdBox");
-		//影をつける（シャドウマップを描画する）
-		auto shadowPtr = AddComponent<Shadowmap>();
-		//影の形（メッシュ）を設定
-		shadowPtr->SetMeshResource(L"DEFAULT_CUBE");
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"DEFAULT_CUBE");
-		//ptrDraw->SetTextureResource(L"SKY_TX");
 		ptrDraw->SetFogEnabled(true);
 		ptrDraw->SetOwnShadowActive(true);
 		ptrDraw->SetDiffuse(Col4(0.5, 0.5, 0.5, 1));
+	}
+	//--------------------------------------------------------------------------------------
+	//	class ColdBoxCollision : public GameObject;
+	//--------------------------------------------------------------------------------------
+	//構築と破棄
+	ColdBoxCollision::ColdBoxCollision(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale,
+		const Vec3& Rotation,
+		const Vec3& Position
+	) :
+		GameObject(StagePtr),
+		m_Scale(Scale),
+		m_Rotation(Rotation),
+		m_Position(Position)
+	{
+	}
 
+	ColdBoxCollision::~ColdBoxCollision() {}
 
-
+	//初期化
+	void ColdBoxCollision::OnCreate() {
+		auto ptrTransform = GetComponent<Transform>();
+		ptrTransform->SetScale(m_Scale);
+		ptrTransform->SetRotation(m_Rotation);
+		ptrTransform->SetPosition(m_Position);
 	}
 }

@@ -16,7 +16,7 @@ namespace basecross {
 				return;
 			}
 			if (keyState.m_bUpKeyTbl['B']) {
-				Obj->OnPushA();
+				Obj->OnUpA();
 				return;
 			}
 			if (keyState.m_bPressedKeyTbl['M']) {
@@ -24,7 +24,7 @@ namespace basecross {
 				return;
 			}			
 			if (keyState.m_bUpKeyTbl['M']) {
-				Obj->OnPushB();
+				Obj->OnUpB();
 				return;
 			}
 			if (keyState.m_bPressedKeyTbl[VK_SPACE]) {

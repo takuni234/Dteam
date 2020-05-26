@@ -40,6 +40,7 @@ namespace basecross {
 		auto shadowPtr = AddComponent<Shadowmap>();
 		//影の形（メッシュ）を設定
 		shadowPtr->SetMeshResource(L"GOAL_MESH");
+		shadowPtr->SetMeshToTransformMatrix(spanMat);
 		auto ptrDraw = AddComponent<BcPNTStaticDraw>();
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetMeshResource(L"GOAL_MESH");
