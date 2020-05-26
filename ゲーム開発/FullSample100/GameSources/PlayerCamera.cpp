@@ -176,7 +176,7 @@ namespace basecross {
 		m_AtEndPos(18.0f, 0.0f, 18.0f),
 		m_AtPos(m_AtStartPos),
 		m_TotalTime(0.0f),
-		m_SurvivorCount(0),
+		m_ObjCount(0),
 		m_Once(false)
 	{}
 	OpeningCameraman::~OpeningCameraman() {}
@@ -227,6 +227,10 @@ namespace basecross {
 		m_AtEndPos = pos;
 		m_AtPos = m_AtStartPos;
 		m_TotalTime = 0.0f;
+	}
+
+	void OpeningCameraman::ToRoundEnterBehavior() {
+
 	}
 
 	bool OpeningCameraman::ExcuteBehavior(float totaltime) {
@@ -317,10 +321,10 @@ namespace basecross {
 			}
 		}
 		//サバイバーの人数の初期化
-		Obj->SetSurvivorCount(int(vec.size()));
+		Obj->SetObjCount(int(vec.size()));
 	}
 	void OpeningCameramanToSurvivorState::Execute(const shared_ptr<OpeningCameraman>& Obj) {
-		int i = Obj->GetSurvivorCount();
+		int i = Obj->GetObjCount();
 		auto vec = Obj->GetObjVec();
 		//救出対象全員分
 		if (i > 0) {
@@ -330,7 +334,7 @@ namespace basecross {
 			}
 			if (Obj->ExcuteBehavior(3.0f)) {
 				Obj->SetOnce(false);
-				Obj->SetSurvivorCount(--i);
+				Obj->SetObjCount(--i);
 			}
 		}
 		else {
@@ -340,4 +344,36 @@ namespace basecross {
 	void OpeningCameramanToSurvivorState::Exit(const shared_ptr<OpeningCameraman>& Obj) {
 		Obj->ResetObj();
 	}
+
+	//--------------------------------------------------------------------------------------
+	//	class OpeningCameramanToRoundState : public ObjState<OpeningCameraman>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<OpeningCameramanToRoundState> OpeningCameramanToRoundState::Instance() {
+		static shared_ptr<OpeningCameramanToRoundState> instance(new OpeningCameramanToRoundState);
+		return instance;
+	}
+	void OpeningCameramanToRoundState::Enter(const shared_ptr<OpeningCameraman>& Obj) {
+		Vec3 MaximumValuePosBuff[4]; // ステージの端のPositionを一時保持する
+		//ステージ内にあるすべてのオブジェクトを取得
+		shared_ptr<GameObject> shResObj = nullptr;
+		auto vec = Obj->GetStage()->GetGameObjectVec();
+		for (auto& v : vec) {
+			auto shObj = v;
+			if (shObj) {
+				shResObj = dynamic_pointer_cast<GameObject>(shObj);
+				Obj->AddObj(shResObj);
+			}
+		}
+		//初期化
+		Obj->SetObjCount(int(vec.size()));
+	}
+	void OpeningCameramanToRoundState::Execute(const shared_ptr<OpeningCameraman>& Obj) {
+		if (Obj->ExcuteBehavior(5.0f)) {
+		}
+		//一周したら
+		Obj->GetStateMachine()->ChangeState(OpeningCameramanEndState::Instance());
+	}
+	void OpeningCameramanToRoundState::Exit(const shared_ptr<OpeningCameraman>& Obj) {
+	}
+
 }

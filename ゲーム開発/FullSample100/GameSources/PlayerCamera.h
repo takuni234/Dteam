@@ -82,7 +82,7 @@ namespace basecross {
 		//ステートマシーン
 		unique_ptr< StateMachine<OpeningCameraman> >  m_StateMachine;
 		//サバイバーカウント
-		int m_SurvivorCount;
+		int m_ObjCount;
 		vector<shared_ptr<GameObject>> m_Vec;
 		bool m_Once;
 	public:
@@ -104,14 +104,15 @@ namespace basecross {
 		void ToGoalEnterBehavior();
 		void ToStartEnterBehavior();
 		void ToSurvivorEnterBehavior(shared_ptr<GameObject>& obj, Vec3& startPos);
+		void ToRoundEnterBehavior();
 		bool ExcuteBehavior(float totaltime);
 		void EndStateEnterBehavior();
 
-		int GetSurvivorCount() const {
-			return m_SurvivorCount;
+		int GetObjCount() const {
+			return m_ObjCount;
 		}
-		void SetSurvivorCount(int count) {
-			m_SurvivorCount = count;
+		void SetObjCount(int count) {
+			m_ObjCount = count;
 		}
 		vector<shared_ptr<GameObject>> GetObjVec() const {
 			return m_Vec;
@@ -178,6 +179,19 @@ namespace basecross {
 		OpeningCameramanToSurvivorState() {}
 	public:
 		static shared_ptr<OpeningCameramanToSurvivorState> Instance();
+		virtual void Enter(const shared_ptr<OpeningCameraman>& Obj)override;
+		virtual void Execute(const shared_ptr<OpeningCameraman>& Obj)override;
+		virtual void Exit(const shared_ptr<OpeningCameraman>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class OpeningCameramanToRoundState : public ObjState<OpeningCameraman>;
+	//--------------------------------------------------------------------------------------
+	class OpeningCameramanToRoundState : public ObjState<OpeningCameraman>
+	{
+		OpeningCameramanToRoundState() {}
+	public:
+		static shared_ptr<OpeningCameramanToRoundState> Instance();
 		virtual void Enter(const shared_ptr<OpeningCameraman>& Obj)override;
 		virtual void Execute(const shared_ptr<OpeningCameraman>& Obj)override;
 		virtual void Exit(const shared_ptr<OpeningCameraman>& Obj)override;

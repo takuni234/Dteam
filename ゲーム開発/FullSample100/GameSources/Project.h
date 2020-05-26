@@ -26,6 +26,7 @@
 //ステージ上のオブジェクト
 #include "StageObject.h"
 #include "IncreaseBox.h"
+#include "IncreaseBox2.h"
 //救出対象
 #include "RescurTarget.h"
 #include "Bullet.h"

@@ -30,8 +30,7 @@ namespace basecross {
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
 		//デフォルトのライティングを指定
-		PtrMultiLight->SetDefaultLighting();
-
+		PtrMultiLight->SetMyLighting();
 	}
 
 	//スコアスプライト作成
@@ -39,8 +38,8 @@ namespace basecross {
 		AddGameObject<ScoreSprite>(3,
 			L"NUMBER_TX",
 			true,
-			Vec2(320.0f, 320.0f),
-			Vec3(0.0f, 200.0f, 0.0f));
+			Vec2(250.0f, 100.0f),
+			Vec3(0.0f, 300.0f, 0.0f));
 	}
 
 
@@ -154,8 +153,7 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			magumaPos = Pos;
-			//AddGameObject<IncreaseObject>(Pos);
+			AddGameObject<IncreaseObject2>(Pos);
 
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
@@ -222,7 +220,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + L"SaveData14.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"SaveData20.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -247,7 +245,6 @@ namespace basecross {
 			//AddGameObject<Enemy>(Vec3(4, 2, -7), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurNomalTarget>(Vec3(3.7f, 5, 4.4f), Vec3(0.25f), Vec3(0));
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
-			AddGameObject<IncreaseObject>(magumaPos);
 
 			CreateScoreSprite();
 			//BGM

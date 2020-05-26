@@ -74,12 +74,17 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Enemy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GoalObject.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.h">
       <Filter>PlayerWeapon</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)PlayerGrabArea.h">
       <Filter>PlayerWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox2.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -133,12 +138,17 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Enemy.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GoalObject.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)PlayerGrabArea.cpp">
       <Filter>PlayerWeapon</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)PlayerIceaxArea.cpp">
       <Filter>PlayerWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox2.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
