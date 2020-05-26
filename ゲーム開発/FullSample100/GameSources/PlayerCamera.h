@@ -13,6 +13,8 @@ namespace basecross {
 		float m_Rad;
 		//プレイヤーまでの距離
 		float m_ArmLen;
+
+		Vec3 m_Eye;
 	public:
 		PlayerCamera();
 		~PlayerCamera();
@@ -83,8 +85,10 @@ namespace basecross {
 		unique_ptr< StateMachine<OpeningCameraman> >  m_StateMachine;
 		//サバイバーカウント
 		int m_ObjCount;
-		Vec3 m_ObjPosVecBuff;
+		Vec3 m_ObjSPosVecBuff;
+		Vec3 m_ObjEPosVecBuff;
 		Vec3 m_ObjAtVecBuff;
+		Vec3 m_ObjEAtVecBuff;
 		vector<shared_ptr<GameObject>> m_Vec;
 		bool m_Once;
 	public:
@@ -107,7 +111,8 @@ namespace basecross {
 		void ToStartEnterBehavior();
 		void ToSurvivorEnterBehavior(shared_ptr<GameObject>& obj, Vec3& startPos);
 		void ToSurvivorRoundBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt);
-		void ToRoundEnterBehavior();
+		//void ToRoundEnterBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt);
+		void ToRoundEnterBehavior(Vec3& startPos, Vec3& endPos, Vec3& startAt, Vec3& endAt);
 		bool ExcuteBehavior(float totaltime);
 		void EndStateEnterBehavior();
 
@@ -117,17 +122,29 @@ namespace basecross {
 		void SetObjCount(int count) {
 			m_ObjCount = count;
 		}		
-		Vec3 GetObjPosVecBuff() const {
-			return m_ObjPosVecBuff;
+		Vec3 GetObjSPosVecBuff() const {
+			return m_ObjSPosVecBuff;
 		}
-		void SetObjPosVecBuff(Vec3& vec) {
-			m_ObjPosVecBuff = vec;
+		void SetObjSPosVecBuff(Vec3& vec) {
+			m_ObjSPosVecBuff = vec;
+		}
+		Vec3 GetObjEPosVecBuff() const {
+			return m_ObjEPosVecBuff;
+		}
+		void SetObjEPosVecBuff(Vec3& vec) {
+			m_ObjEPosVecBuff = vec;
 		}
 		Vec3 GetObjAtVecBuff() const {
 			return m_ObjAtVecBuff;
 		}
 		void SetObjAtVecBuff(Vec3& vec) {
 			m_ObjAtVecBuff = vec;
+		}
+		Vec3 GetObjEAtVecBuff() const {
+			return m_ObjEAtVecBuff;
+		}
+		void SetObjEAtVecBuff(Vec3& vec) {
+			m_ObjEAtVecBuff = vec;
 		}
 		vector<shared_ptr<GameObject>> GetObjVec() const {
 			return m_Vec;
@@ -204,11 +221,20 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	class OpeningCameramanToRoundState : public ObjState<OpeningCameraman>
 	{
-		OpeningCameramanToRoundState() {}
+		float m_CameraLength;
+		float m_CameraHeight;
+		OpeningCameramanToRoundState() :m_CameraLength(20.0f), m_CameraHeight(5.0f){}
 	public:
 		static shared_ptr<OpeningCameramanToRoundState> Instance();
 		virtual void Enter(const shared_ptr<OpeningCameraman>& Obj)override;
 		virtual void Execute(const shared_ptr<OpeningCameraman>& Obj)override;
 		virtual void Exit(const shared_ptr<OpeningCameraman>& Obj)override;
+		
+		void SetCameraLength(float len) {
+			m_CameraLength = len;
+		}
+		void SetCameraHeight(float height) {
+			m_CameraHeight = height;
+		}
 	};
 }
