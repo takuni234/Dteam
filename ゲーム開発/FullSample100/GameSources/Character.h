@@ -29,6 +29,8 @@ namespace basecross{
 		//ëÄçÏ
 	};
 
+
+
 	//--------------------------------------------------------------------------------------
 //	class IncreaseBox : public GameObject;
 //--------------------------------------------------------------------------------------
@@ -206,5 +208,25 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnUpdate()override;
 	};
+	//--------------------------------------------------------------------------------------
+//	class TransparentBox : public GameObject;
+//--------------------------------------------------------------------------------------
+	class TransparentBox : public GameObject {
+		Vec3 m_Scale;
+		Vec3 m_Rotation;
+		Vec3 m_Position;
+	public:
+		//ç\ízÇ∆îjä¸
+		TransparentBox(const shared_ptr<Stage>& StagePtr,
+			const Vec3& Scale,
+			const Vec3& Rotation,
+			const Vec3& Position
+		);
+		virtual ~TransparentBox();
+		//èâä˙âª
+		virtual void OnCreate() override;
+		//ëÄçÏ
+	};
+
 }
 //end basecross

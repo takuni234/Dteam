@@ -244,6 +244,7 @@ namespace basecross {
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
 			AddGameObject<IncreaseObject>(Vec3(3,3,3));
 
+			AddGameObject<TransparentBox>(Vec3(10.0f, 80.0f, 10.0f), Vec3(0.0f), Vec3(0.0f, 0.0f, 0.0f));
 			CreateScoreSprite();
 			CreatePushSprite();
 			//BGM
