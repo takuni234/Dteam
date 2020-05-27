@@ -61,8 +61,8 @@ namespace basecross {
 
 		Vec3 toEye = newAt + armVec;
 		newEye = Lerp::CalculateLerp(GetEye(), toEye, 0.0f, 1.0f, 1.0f, Lerp::Linear);
-
-		SetEye(newEye.x, newEye.y + 0.2f, newEye.z);
+		m_Eye = Vec3(newEye.x, newEye.y + 0.2f, newEye.z);
+		SetEye(m_Eye);
 		SetAt(newAt);
 		Camera::OnUpdate();
 	}
@@ -176,7 +176,10 @@ namespace basecross {
 		m_AtEndPos(18.0f, 0.0f, 18.0f),
 		m_AtPos(m_AtStartPos),
 		m_TotalTime(0.0f),
-		m_SurvivorCount(0),
+		m_ObjCount(0),
+		m_ObjSPosVecBuff(Vec3(-20.0f, 10.0f, -20.0f)),
+		m_ObjEPosVecBuff(Vec3(-20.0f, 10.0f, -20.0f)),
+		m_ObjAtVecBuff(Vec3(-10.0f, 0.0f, 0.0f)),
 		m_Once(false)
 	{}
 	OpeningCameraman::~OpeningCameraman() {}
@@ -190,7 +193,7 @@ namespace basecross {
 		//ステートマシンの構築
 		m_StateMachine.reset(new StateMachine<OpeningCameraman>(GetThis<OpeningCameraman>()));
 		//最初のステートをOpeningCameramanToGoalStateに設定
-		m_StateMachine->ChangeState(OpeningCameramanToSurvivorState::Instance());
+		m_StateMachine->ChangeState(OpeningCameramanToRoundState::Instance());
 	}
 	//操作
 	void OpeningCameraman::OnUpdate() {
@@ -227,6 +230,48 @@ namespace basecross {
 		m_AtEndPos = pos;
 		m_AtPos = m_AtStartPos;
 		m_TotalTime = 0.0f;
+	}
+
+	void OpeningCameraman::ToSurvivorRoundBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt) {
+		auto ptrTrans = obj->GetComponent<Transform>();
+		auto pos = ptrTrans->GetPosition();
+
+		m_StartPos = startPos;
+		m_EndPos = pos + Vec3(0.0f,1.5f,4.0f);
+		m_AtStartPos = startAt;
+		m_AtEndPos = pos;
+		m_AtPos = m_AtStartPos;
+		m_TotalTime = 0.0f;
+
+		SetObjSPosVecBuff(m_EndPos);
+		SetObjAtVecBuff(m_AtEndPos);
+	}
+
+	//void OpeningCameraman::ToRoundEnterBehavior(shared_ptr<GameObject>& obj, Vec3& startPos, Vec3& startAt) {
+	//	auto ptrTrans = obj->GetComponent<Transform>();
+	//	auto pos = ptrTrans->GetPosition();
+
+	//	m_StartPos = startPos;
+	//	m_EndPos = pos + Vec3(0.0f, 1.5f, 4.0f);
+	//	m_AtStartPos = startAt;
+	//	m_AtEndPos = Vec3(0.0f,0.0f,0.0f);
+	//	m_AtPos = m_AtStartPos;
+	//	m_TotalTime = 0.0f;
+
+	//	SetObjPosVecBuff(m_EndPos);
+	//	SetObjAtVecBuff(m_AtEndPos);
+	//}
+
+	void OpeningCameraman::ToRoundEnterBehavior(Vec3& startPos, Vec3& endPos, Vec3& startAt, Vec3& endAt) {
+		m_StartPos = startPos;
+		m_EndPos = endPos;
+		m_AtStartPos = startAt;
+		m_AtEndPos = endAt;
+		m_AtPos = m_AtStartPos;
+		m_TotalTime = 0.0f;
+
+		SetObjSPosVecBuff(m_EndPos);
+		SetObjAtVecBuff(m_AtEndPos);
 	}
 
 	bool OpeningCameraman::ExcuteBehavior(float totaltime) {
@@ -317,20 +362,20 @@ namespace basecross {
 			}
 		}
 		//サバイバーの人数の初期化
-		Obj->SetSurvivorCount(int(vec.size()));
+		Obj->SetObjCount(int(vec.size()));
 	}
 	void OpeningCameramanToSurvivorState::Execute(const shared_ptr<OpeningCameraman>& Obj) {
-		int i = Obj->GetSurvivorCount();
+		int i = Obj->GetObjCount();
 		auto vec = Obj->GetObjVec();
 		//救出対象全員分
 		if (i > 0) {
 			if (!Obj->GetOnce()) {
-				Obj->ToSurvivorEnterBehavior(vec[i - 1], Vec3(-20.0f, 10.0f, -20.0f));
+				Obj->ToSurvivorRoundBehavior(vec[i - 1], Obj->GetObjSPosVecBuff(), Obj->GetObjAtVecBuff());
 				Obj->SetOnce(true);
 			}
 			if (Obj->ExcuteBehavior(3.0f)) {
 				Obj->SetOnce(false);
-				Obj->SetSurvivorCount(--i);
+				Obj->SetObjCount(--i);
 			}
 		}
 		else {
@@ -340,4 +385,111 @@ namespace basecross {
 	void OpeningCameramanToSurvivorState::Exit(const shared_ptr<OpeningCameraman>& Obj) {
 		Obj->ResetObj();
 	}
+
+	//--------------------------------------------------------------------------------------
+	//	class OpeningCameramanToRoundState : public ObjState<OpeningCameraman>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<OpeningCameramanToRoundState> OpeningCameramanToRoundState::Instance() {
+		static shared_ptr<OpeningCameramanToRoundState> instance(new OpeningCameramanToRoundState);
+		return instance;
+	}
+	void OpeningCameramanToRoundState::Enter(const shared_ptr<OpeningCameraman>& Obj) {
+		//shared_ptr<GameObject> minimumXBuff = nullptr; // ステージの端のPositionを一時保持する
+		//shared_ptr<GameObject> maximumXBuff = nullptr;
+		//shared_ptr<GameObject> minimumZBuff = nullptr;
+		//shared_ptr<GameObject> maximumZBuff = nullptr;
+		////ステージ内にあるすべてのオブジェクトを取得
+		//shared_ptr<GameObject> shResObj = nullptr;
+		//auto vec = Obj->GetStage()->GetGameObjectVec();
+		//for (auto& v : vec) {
+		//	if (v) {
+		//		shResObj = dynamic_pointer_cast<GameObject>(v);
+		//		if (shResObj) {
+		//			if (minimumXBuff == nullptr || maximumXBuff == nullptr || minimumZBuff == nullptr || maximumZBuff == nullptr) {
+		//				minimumXBuff = shResObj;
+		//				maximumXBuff = shResObj;
+		//				minimumZBuff = shResObj;
+		//				maximumZBuff = shResObj;
+		//			}
+		//			auto ptrPosVec = shResObj->GetComponent<Transform>()->GetPosition();
+		//			if (minimumXBuff->GetComponent<Transform>()->GetPosition().x > ptrPosVec.x) {
+		//				minimumXBuff = shResObj;
+		//			}
+		//			if (maximumZBuff->GetComponent<Transform>()->GetPosition().z < ptrPosVec.z) {
+		//				maximumZBuff = shResObj;
+		//			}
+		//			if (maximumXBuff->GetComponent<Transform>()->GetPosition().x < ptrPosVec.x) {
+		//				maximumXBuff = shResObj;
+		//			}
+		//			if (minimumZBuff->GetComponent<Transform>()->GetPosition().z > ptrPosVec.z) {
+		//				minimumZBuff = shResObj;
+		//			}
+		//		}
+		//	}
+		//}
+		//Obj->AddObj(minimumXBuff);
+		//Obj->AddObj(maximumZBuff);
+		//Obj->AddObj(maximumXBuff);
+		//Obj->AddObj(minimumZBuff);
+		////初期化
+		//Obj->SetObjCount(4);
+		Obj->SetObjCount(4);
+	}
+	void OpeningCameramanToRoundState::Execute(const shared_ptr<OpeningCameraman>& Obj) {
+		int i = Obj->GetObjCount();
+		//救出対象全員分
+		if (i > 0) {
+			if (!Obj->GetOnce()) {
+				auto player = Obj->GetStage()->GetSharedGameObject<Player>(L"Player");
+				auto ptrTrans = player->GetComponent<Transform>();
+				auto ptrCamera = dynamic_pointer_cast<PlayerCamera>(Obj->OnGetDrawCamera());
+				Vec3 pos;
+				Vec3 newPos;
+				if (ptrCamera) {
+					pos = ptrCamera->GetEye();
+					newPos = ptrCamera->GetAt();
+				}
+				else {
+					pos = ptrTrans->GetPosition() + Vec3(0.0f,0.6f,-2.0f);
+					newPos = pos + Vec3(0.0f,0.0f,1.0f);
+				}
+				switch (i - 1)
+				{
+				case 0:
+					Obj->SetObjSPosVecBuff(Vec3(-m_CameraLength, m_CameraHeight, 0.0f));
+					Obj->SetObjEPosVecBuff(pos);
+					Obj->SetObjEAtVecBuff(newPos);
+					break;
+				case 1:
+					Obj->SetObjSPosVecBuff(Vec3(0.0f, m_CameraHeight, m_CameraLength));
+					Obj->SetObjEPosVecBuff(Vec3(-m_CameraLength, m_CameraHeight, 0.0f));
+					break;
+				case 2:
+					Obj->SetObjSPosVecBuff(Vec3(m_CameraLength, m_CameraHeight, 0.0f));
+					Obj->SetObjEPosVecBuff(Vec3(0.0f, m_CameraHeight, m_CameraLength));
+					break;
+				case 3:
+					Obj->SetObjSPosVecBuff(Vec3(0.0f, m_CameraHeight, -m_CameraLength));
+					Obj->SetObjEPosVecBuff(Vec3(m_CameraLength, m_CameraHeight, 0.0f));
+					Obj->SetObjAtVecBuff(Vec3(0.0f));
+					Obj->SetObjEAtVecBuff(Vec3(0.0f));
+					break;
+				default:
+					break;
+				}
+				Obj->ToRoundEnterBehavior(Obj->GetObjSPosVecBuff(), Obj->GetObjEPosVecBuff(), Obj->GetObjAtVecBuff(), Obj->GetObjEAtVecBuff());
+				Obj->SetOnce(true);
+			}
+			if (Obj->ExcuteBehavior(2.5f)) {
+				Obj->SetOnce(false);
+				Obj->SetObjCount(--i);
+			}
+		}
+		else {
+			Obj->GetStateMachine()->ChangeState(OpeningCameramanEndState::Instance());
+		}
+	}
+	void OpeningCameramanToRoundState::Exit(const shared_ptr<OpeningCameraman>& Obj) {
+	}
+
 }

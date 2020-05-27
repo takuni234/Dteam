@@ -246,7 +246,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	int iClientHeight = 800;
 	// フルスクリーンにするかどうかの判定
 	// コマンドラインに/fが設定されていたらフルスクリーンにする
-	bool isGamePlay = false;
+	bool isGamePlay = true;
 	bool isFullScreen = isGamePlay;
 	wstring wstrcmd = lpCmdLine;
 	if (wstrcmd == L"/f" || wstrcmd == L"/F") {

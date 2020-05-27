@@ -16,6 +16,7 @@ namespace basecross {
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
+		bool GameEndFlg = false;
 		//CSV
 		CsvFile csvfile_1;
 		CsvFile csvfile_2;
@@ -34,7 +35,8 @@ namespace basecross {
 		bool m_IsUpdate;
 
 		Vec3 PlayerPos;
-		Vec3 magumapos;
+		Vec3 GoalPos;
+		Vec3 magumaPos;
 
 		//空色
 		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
@@ -72,9 +74,11 @@ namespace basecross {
 		CameraSelect GetCameraSelect() const {
 			return m_CameraSelect;
 		}
+		void StageChange();
 
 		void OnPushStart();
 		void OnPushA(){}
+		void OnUpA(){}
 		void OnPushB(){}
 		void OnUpB(){}
 		void OnPushX(){}

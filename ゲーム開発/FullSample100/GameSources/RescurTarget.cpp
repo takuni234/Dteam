@@ -10,11 +10,21 @@ namespace basecross {
 	void RescurTarget_Base::OnCreate() {
 		//ナンバースクエアを作成して関連させる		
 		GetStage()->AddGameObject<HelpSplite>(m_Position,Vec3(0),Vec3(0));
-
+		Goalflg1 = false;
+		Goalflg2 = false;
 	}
 	void RescurTarget_Base::OnUpdate() {
 		PLAYERCHASE();
 
+	}
+	float RescurTarget_Base::INGOALLENGTH() {
+		auto Goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+		auto goalTrans = Goal->GetComponent<Transform>();
+		auto goalPos = goalTrans->GetPosition();
+		auto Trans = GetComponent<Transform>();
+		auto Pos = Trans->GetPosition();
+		Vec3 lengthPos = Pos - goalPos;
+		return lengthPos.length();
 	}
 	float RescurTarget_Base::INPLAYERLANGSE() {
 		auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
@@ -28,6 +38,10 @@ namespace basecross {
 	}
 	Vec3 RescurTarget_Base::PlayerPos() {
 		return GetStage()->GetSharedGameObject<Player>(L"Player")->
+			GetComponent<Transform>()->GetPosition();
+	}
+	Vec3 RescurTarget_Base::GoalPos() {
+		return GetStage()->GetSharedGameObject<GoalObject>(L"Goal")->
 			GetComponent<Transform>()->GetPosition();
 	}
 	void RescurTarget_Base::PLAYERCHASE() {
@@ -46,12 +60,29 @@ namespace basecross {
 		else {		
 			if (SpliteFlg==false&&LightFlg) {
 				GetStage()->AddGameObject<HelpSplite>(m_Position, Vec3(0), Vec3(0));
-			
 				LightFlg = false;
-
 			}
 			SpliteFlg = true;
 			INFlg = false;
+			plyPos = Vec3(0);
+		}
+		m_Position += plyPos * deltatime*0.5f;
+		Trans->SetPosition(m_Position);
+
+		auto UB = GetBehavior<UtilBehavior>();
+		UB->RotToHead(1.0f);
+	}
+	void RescurTarget_Base::INGOAL() {
+		auto Trans = GetComponent<Transform>();
+		m_Position = Trans->GetPosition();
+		auto deltatime = App::GetApp()->GetElapsedTime();
+		Vec3 plyPos = GoalPos();
+		Vec3 movePos = Vec3(0);
+		float length = INGOALLENGTH();
+		if (length < 2) {
+			plyPos = plyPos - Trans->GetPosition();
+		}
+		else {
 			plyPos = Vec3(0);
 		}
 		m_Position += plyPos * deltatime*0.5f;
@@ -138,7 +169,6 @@ namespace basecross {
 		//GetStage()->AddGameObject<HelpSplite>(m_Position);
 		INFlg = false;
 		flg = false;
-		//help = dynamic_pointer_cast<HelpSplite>(hs);
 	}
 
 	void RescurTarget_1::OnUpdate() {
@@ -147,29 +177,49 @@ namespace basecross {
 		auto draw2 = GetComponent<BcPNTBoneModelDraw>();
 		draw2->SetTextureResource(L"SURVIVOR_TX");
 		draw2->SetFogEnabled(true);
-
-		PLAYERCHASE();
-
-		if (INFlg==false&&draw2->GetCurrentAnimation()!=L"jump") {		
-			draw2->ChangeCurrentAnimation(L"jump");
-			flg = true;
-			//GetStage()->AddGameObject<HelpSplite>(Pos,Vec3(0),Vec3(0));
+		if (INGOALLENGTH() < 2) {
+			//HappyAction();
+			Goalflg1 = true;
+			INGOAL();
+			if (draw2->GetCurrentAnimation() != L"Walk") {
+				draw2->ChangeCurrentAnimation(L"Walk");
+			}
+			draw2->UpdateAnimation(time);
 
 		}
+		else {
+			PLAYERCHASE();
 
-		if (INFlg && draw2->GetCurrentAnimation() != L"Walk") {
-			draw2->ChangeCurrentAnimation(L"Walk");
-			flg = false;
-		}
-		if (flg) {
-			HappyAction();
-		}
-		draw2->UpdateAnimation(time);
+			if (INFlg == false && draw2->GetCurrentAnimation() != L"jump") {
+				draw2->ChangeCurrentAnimation(L"jump");
+				flg = true;
+				//GetStage()->AddGameObject<HelpSplite>(Pos,Vec3(0),Vec3(0));
+			}
 
+			if (INFlg && draw2->GetCurrentAnimation() != L"Walk") {
+				draw2->ChangeCurrentAnimation(L"Walk");
+				flg = false;
+			}
+			if (flg) {
+				HappyAction();
+			}
+			draw2->UpdateAnimation(time);
+		}
 	}
 	void RescurTarget_1::OnCollisionEnter(shared_ptr<GameObject>& obj) {
-		if (obj->FindTag(L"Player")) {
+		if (obj->FindTag(L"GoalObj")) {
 			HappyAction();
+			time += App::GetApp()->GetElapsedTime();
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					target->TargetCount();
+				}
+			}
+			//if()
+			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
 		}
 	}
 
@@ -220,24 +270,54 @@ namespace basecross {
 		draw2->SetTextureResource(L"SURVIVOR_TX");
 		draw2->SetFogEnabled(true);
 
-		PLAYERCHASE();
+		if (INGOALLENGTH() < 2) {
+			INGOAL();
+			if (draw2->GetCurrentAnimation() != L"Walk") {
+				draw2->ChangeCurrentAnimation(L"Walk");
+			}
+			draw2->UpdateAnimation(time);
+			Goalflg2 = true;
 
-		if (INFlg == false && draw2->GetCurrentAnimation() != L"jump") {
-			draw2->ChangeCurrentAnimation(L"jump");
-			flg = true;
-			//GetStage()->AddGameObject<HelpSplite>(Pos,Vec3(0),Vec3(0));
+		}
+		else {
+			PLAYERCHASE();
+			if (INFlg == false && draw2->GetCurrentAnimation() != L"jump") {
+				draw2->ChangeCurrentAnimation(L"jump");
+				flg = true;
+				//GetStage()->AddGameObject<HelpSplite>(Pos,Vec3(0),Vec3(0));
+			}
+			if (INFlg && draw2->GetCurrentAnimation() != L"Walk") {
+				draw2->ChangeCurrentAnimation(L"Walk");
+				flg = false;
+			}
+			if (flg) {
+				HappyAction();
+			}
+			draw2->UpdateAnimation(time);
 		}
 
-		if (INFlg && draw2->GetCurrentAnimation() != L"Walk") {
-			draw2->ChangeCurrentAnimation(L"Walk");
-			flg = false;
-		}
-		if (flg) {
+	}
+
+	void RescurTarget_2::OnCollisionEnter(shared_ptr<GameObject>& obj) {
+		time = App::GetApp()->GetElapsedTime();
+		auto draw2 = GetComponent<BcPNTBoneModelDraw>();
+		draw2->SetTextureResource(L"SURVIVOR_TX");
+		draw2->SetFogEnabled(true);
+
+		if (obj->FindTag(L"GoalObj")) {
 			HappyAction();
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					target->TargetCount();
+				}
+			}
+
+			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+			
 		}
-		draw2->UpdateAnimation(time);
-
-
 	}
 
 	void box::OnCreate() {
@@ -250,7 +330,6 @@ namespace basecross {
 		Trans->SetPosition(m_Position);
 		Trans->SetScale(m_Scale);
 		Trans->SetRotation(m_Rotation);
-
 	}
 
 	HelpSplite::HelpSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
@@ -295,7 +374,6 @@ namespace basecross {
 			DrawComp->SetTextureResource(L"HELPTEXT_TX");
 			SetAlphaActive(true);
 			SetDrawLayer(1);
-
 	}
 	void HelpSplite::OnUpdate() {
 		auto PtrCamera = GetStage()->GetView()->GetTargetCamera();
@@ -310,6 +388,53 @@ namespace basecross {
 		time += App::GetApp()->GetElapsedTime();
 		if (INPLAYERLANGSE()<2) {
 			GetStage()->RemoveGameObject<HelpSplite>(GetThis<HelpSplite>());
+		}
+	}
+
+
+	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
+		:GameObject(stage), Pos(pos), m_Position(Pos){
+
+	}
+
+	void GameEndSplite::OnCreate() {
+		float helfSize = 100.5f;
+		//頂点配列(縦横5個ずつ表示)
+		vector<VertexPositionColorTexture> vertices = {
+			{ VertexPositionColorTexture(Vec3(-helfSize, helfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(0.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(helfSize, helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(1.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(-helfSize, -helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(0.0f, 1.0f)) },
+			{ VertexPositionColorTexture(Vec3(helfSize, -helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(1.0f, 1.0f)) },
+		};
+		//インデックス配列
+		vector<uint16_t> indices = { 0, 1, 2, 2,1,3 };
+		SetAlphaActive(true);
+		auto ptrTrans = GetComponent<Transform>();
+		ptrTrans->SetScale(1.0f, 1.0f, 1.0f);
+		ptrTrans->SetRotation(0, 0, 0);
+		ptrTrans->SetPosition(Pos);
+		//頂点とインデックスを指定してスプライト作成
+		auto ptrDraw = AddComponent<PCTSpriteDraw>(vertices, indices);
+		ptrDraw->SetSamplerState(SamplerState::LinearWrap);
+		ptrDraw->SetTextureResource(L"HELPTEXT_TX");
+	}
+	void GameEndSplite::OnUpdate() {
+		Vec3 movePos;
+		auto Trans = GetComponent<Transform>();
+		auto transPos = Trans->GetPosition();
+		m_Position = transPos;
+		movePos = Vec3(1, 0, 0);
+		m_Position += movePos * App::GetApp()->GetElapsedTime()*300.0f;
+
+		if (m_Position.x < 0) {
+			Trans->SetPosition(m_Position);
+		}
+		else {
+			SceneChangeTime += App::GetApp()->GetElapsedTime();
+		}
+
+		if (SceneChangeTime > 5) {
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
 		}
 	}
 }

@@ -46,6 +46,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"SURVIVOR_TX", strTexture);
 		strTexture = DataDir + L"Tx_rescuecharacter2.png";
 		App::GetApp()->RegisterTexture(L"RESCUECHARACTER_TX", strTexture);
+		strTexture = DataDir + L"Tx_rock.png";
+		App::GetApp()->RegisterTexture(L"ROCK_TX", strTexture);
 		strTexture = DataDir + L"Tx_rock2.png";
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
 		strTexture = DataDir + L"Tx_Ambulance3.png";
@@ -61,7 +63,7 @@ namespace basecross {
 		App::GetApp()->RegisterResource(L"RESCUECHARACTERGUN_MESH", modelMesh);
 		modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"RescuecharacterIceax.bmf");
 		App::GetApp()->RegisterResource(L"RESCUECHARACTERICEAX_MESH", modelMesh);
-		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"HotRock3.bmf");
+		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"Rock6.bmf");
 		App::GetApp()->RegisterResource(L"HOTROCK_MESH", modelMesh);
 		modelMesh = MeshResource::CreateStaticModelMesh(DataDir, L"ambulance5.bmf");
 		App::GetApp()->RegisterResource(L"GOAL_MESH", modelMesh);

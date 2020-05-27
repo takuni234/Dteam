@@ -120,7 +120,7 @@ namespace basecross {
 
 		//文字列コンポーネントの取得
 		auto ptrString = GetComponent<StringSprite>();
-		//ptrString->SetText(str);
+		ptrString->SetText(str);
 	}
 
 	void Player::OnCreate() {
@@ -341,6 +341,10 @@ namespace basecross {
 	}
 
 	void Player::OnPushA() {
+
+	}
+
+	void Player::OnUpA() {
 
 	}
 
