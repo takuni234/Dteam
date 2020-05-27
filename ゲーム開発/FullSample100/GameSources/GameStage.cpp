@@ -221,7 +221,7 @@ namespace basecross {
 		try {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + L"SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + L"TestStage.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -234,7 +234,7 @@ namespace basecross {
 			ground->AddTag(L"Ground");
 			SetSharedGameObject(L"Stage", ground);
 
-			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(GoalPos));
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(GoalPos),2);
 			SetSharedGameObject(L"Goal", goalObj);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
@@ -260,7 +260,9 @@ namespace basecross {
 	}
 
 
-	void GameStage::OnUpdate() {
+	void GameStage::OnUpdate() {		
+		auto goal = GetSharedGameObject<GoalObject>(L"Goal");
+
 		SetBackGroundPlayerPosColor(m_Color, m_Color1, 2.24f);
 		if (GetThis<GameStage>()->GetCameraSelect() == CameraSelect::openingCamera) {
 			return;
@@ -271,12 +273,32 @@ namespace basecross {
 			m_TotalTime = 0.0f;
 		}
 		//スコアを更新する
-		auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
-		ptrScor->SetScore(m_TotalTime);
+		if (goal->Getflg()==false) {
+			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
+			ptrScor->SetScore(m_TotalTime);
+			GameEndFlg = true;
+		}
+		if(goal->Getflg()&&GameEndFlg){
+			AddGameObject<GameEndSplite>(Vec3(-740,0,0), Vec3(0), Vec3(0));
+			GameEndFlg = false;
+		}
+		auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&goal->Getflg()) {
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
+		}
+
+	}
+	void GameStage::StageChange() {
+		auto goal = GetSharedGameObject<GoalObject>(L"Goal");
+		auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&goal->Getflg()) {
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
+		}
+
 	}
 
-
 	void GameStage::UpdateStage() {
+		auto goal = GetSharedGameObject<GoalObject>(L"Goal");
 		m_InputHandler.PushHandle(GetThis<GameStage>());
 		if (m_IsUpdate) {
 			Stage::UpdateStage();

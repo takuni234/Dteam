@@ -306,24 +306,17 @@ namespace basecross {
 
 		if (obj->FindTag(L"GoalObj")) {
 			HappyAction();
-			if (draw2->GetCurrentAnimation() != L"Walk") {
-				draw2->ChangeCurrentAnimation(L"Walk");
-			}
-			draw2->UpdateAnimation(time);
-
-			DethTime += App::GetApp()->GetElapsedTime();
-			if (DethTime > 5) {
-				shared_ptr<GoalObject> target = nullptr;
-				auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-				for (auto obj : gameobjects) {
-					target = dynamic_pointer_cast<GoalObject>(obj);
-					if (target) {
-						target->TargetCount();
-					}
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					target->TargetCount();
 				}
-
-				GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
 			}
+
+			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+			
 		}
 	}
 
@@ -395,6 +388,53 @@ namespace basecross {
 		time += App::GetApp()->GetElapsedTime();
 		if (INPLAYERLANGSE()<2) {
 			GetStage()->RemoveGameObject<HelpSplite>(GetThis<HelpSplite>());
+		}
+	}
+
+
+	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
+		:GameObject(stage), Pos(pos), m_Position(Pos){
+
+	}
+
+	void GameEndSplite::OnCreate() {
+		float helfSize = 100.5f;
+		//頂点配列(縦横5個ずつ表示)
+		vector<VertexPositionColorTexture> vertices = {
+			{ VertexPositionColorTexture(Vec3(-helfSize, helfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(0.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(helfSize, helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(1.0f, 0.0f)) },
+			{ VertexPositionColorTexture(Vec3(-helfSize, -helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(0.0f, 1.0f)) },
+			{ VertexPositionColorTexture(Vec3(helfSize, -helfSize, 0), Col4(1.0f, 1.0f, 1.0f, 1.0f), Vec2(1.0f, 1.0f)) },
+		};
+		//インデックス配列
+		vector<uint16_t> indices = { 0, 1, 2, 2,1,3 };
+		SetAlphaActive(true);
+		auto ptrTrans = GetComponent<Transform>();
+		ptrTrans->SetScale(1.0f, 1.0f, 1.0f);
+		ptrTrans->SetRotation(0, 0, 0);
+		ptrTrans->SetPosition(Pos);
+		//頂点とインデックスを指定してスプライト作成
+		auto ptrDraw = AddComponent<PCTSpriteDraw>(vertices, indices);
+		ptrDraw->SetSamplerState(SamplerState::LinearWrap);
+		ptrDraw->SetTextureResource(L"HELPTEXT_TX");
+	}
+	void GameEndSplite::OnUpdate() {
+		Vec3 movePos;
+		auto Trans = GetComponent<Transform>();
+		auto transPos = Trans->GetPosition();
+		m_Position = transPos;
+		movePos = Vec3(1, 0, 0);
+		m_Position += movePos * App::GetApp()->GetElapsedTime()*300.0f;
+
+		if (m_Position.x < 0) {
+			Trans->SetPosition(m_Position);
+		}
+		else {
+			SceneChangeTime += App::GetApp()->GetElapsedTime();
+		}
+
+		if (SceneChangeTime > 5) {
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
 		}
 	}
 }

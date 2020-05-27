@@ -12,14 +12,16 @@ namespace basecross {
 		Vec3 m_Rotation;
 		Vec3 m_Position;
 
-		bool flg;
+		bool flg = false;
+		int GoalCount;
 		int count;
 	public:
 		//\’z‚Æ”jŠü
 		GoalObject(const shared_ptr<Stage>& StagePtr,
 			const Vec3& Scale,
 			const Vec3& Rotation,
-			const Vec3& Position
+			const Vec3& Position,
+			int Count
 		);
 		virtual ~GoalObject();
 		//‰Šú‰»
@@ -29,5 +31,6 @@ namespace basecross {
 		void TargetCount() {
 			count++;
 		}
+		bool Getflg() { return flg; }
 	};
 }

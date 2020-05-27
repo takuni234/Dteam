@@ -16,6 +16,7 @@ namespace basecross {
 	//	ゲームステージクラス
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
+		bool GameEndFlg = false;
 		//CSV
 		CsvFile csvfile_1;
 		CsvFile csvfile_2;
@@ -73,7 +74,7 @@ namespace basecross {
 		CameraSelect GetCameraSelect() const {
 			return m_CameraSelect;
 		}
-
+		void StageChange();
 
 		void OnPushStart();
 		void OnPushA(){}
