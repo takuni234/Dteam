@@ -232,6 +232,34 @@ namespace basecross{
 		ptrDraw->UpdateVertices(newVertices);
 	}
 
+	//--------------------------------------------------------------------------------------
+//	class TransparentBox : public GameObject;
+//--------------------------------------------------------------------------------------
+//\’z‚Æ”jŠü
+	TransparentBox::TransparentBox(const shared_ptr<Stage>& StagePtr,
+		const Vec3& Scale,
+		const Vec3& Rotation,
+		const Vec3& Position
+	) :
+		GameObject(StagePtr),
+		m_Scale(Scale),
+		m_Rotation(Rotation),
+		m_Position(Position)
+	{
+	}
+	TransparentBox::~TransparentBox() {}
+
+	//‰Šú‰»
+	void TransparentBox::OnCreate() {
+		auto ptrTransform = GetComponent<Transform>();
+		ptrTransform->SetScale(m_Scale);
+		ptrTransform->SetRotation(m_Rotation);
+		ptrTransform->SetPosition(m_Position);
+		//OBBÕ“Ëj”»’è‚ğ•t‚¯‚é
+		auto ptrColl = AddComponent<CollisionObb>();
+		ptrColl->SetFixed(true);
+
+	}
 
 }
 
