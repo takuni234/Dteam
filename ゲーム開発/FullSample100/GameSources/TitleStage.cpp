@@ -68,7 +68,7 @@ namespace basecross {
 			KeyState.m_bPushKeyTbl[VK_SPACE];
 
 		if (start) {
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Game);
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Select);
 		}
 	}
 

@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "GameStage.h"
 #include "TitleStage.h"
+#include "StageSelect.h"
 #include "LoadStage.h"
 #include "Character.h"
 #include "PlayerGrabArea.h"

@@ -35,11 +35,12 @@ namespace basecross {
 
 	//スコアスプライト作成
 	void GameStage::CreateScoreSprite() {
-		AddGameObject<ScoreSprite>(3,
+		auto ptrScore = AddGameObject<ScoreSprite>(3,
 			L"NUMBER_TX",
 			true,
 			Vec2(250.0f, 100.0f),
 			Vec3(0.0f, 300.0f, 0.0f));
+		ptrScore->SetScore(m_TotalTime);
 	}
 
 
@@ -219,9 +220,10 @@ namespace basecross {
 
 	void GameStage::OnCreate() {
 		try {
+			auto ptrScene = App::GetApp()->GetScene<Scene>();
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + L"TestStage.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -234,7 +236,7 @@ namespace basecross {
 			ground->AddTag(L"Ground");
 			SetSharedGameObject(L"Stage", ground);
 
-			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f), Vec3(GoalPos),2);
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f, XM_PIDIV2, 0.0f), Vec3(GoalPos),2);
 			SetSharedGameObject(L"Goal", goalObj);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));

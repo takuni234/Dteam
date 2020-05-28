@@ -38,6 +38,9 @@ namespace basecross{
 		else if (event->m_MsgStr == L"ToTitleStage") {
 			ResetActiveStage<TitleStage>();
 		}
+		else if (event->m_MsgStr == L"ToStageSelect") {
+			ResetActiveStage<StageSelect>();
+		}
 		else if (event->m_MsgStr == L"ToResultStage") {
 
 		}
@@ -51,6 +54,9 @@ namespace basecross{
 		{
 		case SceneKey::Title:
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToTitleStage");
+			break;
+		case SceneKey::Select:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToStageSelect");
 			break;
 		case SceneKey::Game:
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameStage");

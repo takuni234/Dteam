@@ -52,6 +52,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
 		strTexture = DataDir + L"Tx_Ambulance3.png";
 		App::GetApp()->RegisterTexture(L"GOAL_TX", strTexture);
+		strTexture = DataDir + L"BaseCrossFullSample 2020_05_27 14_51_22.png";
+		App::GetApp()->RegisterTexture(L"Stage1_TX", strTexture);
 		
 		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
@@ -69,22 +71,23 @@ namespace basecross {
 		App::GetApp()->RegisterResource(L"GOAL_MESH", modelMesh);
 
 		//ƒTƒEƒ“ƒh
-		wstring DataWav = DataDir + L"cursor.wav";
+		wstring strFolder = L"‰¹‘fÞ/";
+		wstring DataDirFolder = DataDir + strFolder;
+		wstring DataWav = DataDirFolder + L"cursor.wav";
 		App::GetApp()->RegisterWav(L"cursor", DataWav);
-		DataWav = DataDir + L"air_shot.wav";
+		DataWav = DataDirFolder + L"air_shot.wav";
 		App::GetApp()->RegisterWav(L"ICEAX_ATTACK_WAV", DataWav);
-		DataWav = DataDir + L"Lava.wav";
+		DataWav = DataDirFolder + L"Lava.wav";
 		App::GetApp()->RegisterWav(L"ERUPTION_WAV", DataWav);
-		DataWav = DataDir + L"Î‚ªÓ‚¯‚é.wav";
+		DataWav = DataDirFolder + L"Î‚ªÓ‚¯‚é.wav";
 		App::GetApp()->RegisterWav(L"ROCK_DESTORY_WAV", DataWav);
-		DataWav = DataDir + L"left_foot.wav";
+		DataWav = DataDirFolder + L"left_foot.wav";
 		App::GetApp()->RegisterWav(L"WALK_LEFT_WAV", DataWav);
-		DataWav = DataDir + L"right_foot.wav";
+		DataWav = DataDirFolder + L"right_foot.wav";
 		App::GetApp()->RegisterWav(L"WALK_RIGHT_WAV", DataWav);
 		//BGM
-		wstring strMusic = DataDir + L"nanika .wav";
+		wstring strMusic = DataDirFolder + L"nanika .wav";
 		App::GetApp()->RegisterWav(L"Nanika", strMusic);
-
 		mtx.lock();
 		m_Loaded = true;
 		mtx.unlock();

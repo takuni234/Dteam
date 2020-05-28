@@ -19,5 +19,10 @@ namespace basecross {
 
 		virtual void OnCreate() override;
 		virtual void OnUpdate() override;
+
+		void SetTextureKey(const wstring& key) {
+			auto ptrDraw = GetComponent<PCTSpriteDraw>();
+			ptrDraw->SetTextureResource(key);
+		}
 	};
 }

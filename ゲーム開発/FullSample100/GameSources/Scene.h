@@ -9,6 +9,7 @@
 namespace basecross{
 	enum SceneKey {
 		Title,
+		Select,
 		Game,
 		Result,
 		Load
@@ -17,13 +18,15 @@ namespace basecross{
 	///	ゲームシーン
 	//--------------------------------------------------------------------------------------
 	class Scene : public SceneBase{
+		float m_LimitTime;
+		wstring m_StageCSVKey;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief コンストラクタ
 		*/
 		//--------------------------------------------------------------------------------------
-		Scene() :SceneBase(){}
+		Scene() :SceneBase(), m_LimitTime(0.0f){}
 		//--------------------------------------------------------------------------------------
 		/*!
 		@brief デストラクタ
@@ -45,6 +48,18 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
 		void ChangeScene(SceneKey key);
+		float GetLimitTime() const {
+			return m_LimitTime;
+		}
+		void SetLimitTime(float time) {
+			m_LimitTime = time;
+		}
+		wstring GetStageCSVKey() const {
+			return m_StageCSVKey;
+		}
+		void SetStageCSVKey(const wstring& key) {
+			m_StageCSVKey = key;
+		}
 	};
 
 }
