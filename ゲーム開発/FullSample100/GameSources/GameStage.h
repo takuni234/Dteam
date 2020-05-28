@@ -60,7 +60,7 @@ namespace basecross {
 	public:
 
 		//\’z‚Æ”jŠü
-		GameStage() :Stage(), m_IsUpdate(true),m_TotalTime(1000) {}
+		GameStage() :Stage(), m_IsUpdate(true),m_TotalTime(App::GetApp()->GetScene<Scene>()->GetLimitTime()) {}
 		virtual ~GameStage() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;
