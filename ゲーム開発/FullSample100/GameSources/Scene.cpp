@@ -42,7 +42,7 @@ namespace basecross{
 			ResetActiveStage<StageSelect>();
 		}
 		else if (event->m_MsgStr == L"ToResultStage") {
-
+			ResetActiveStage<ResultStage>();
 		}
 		else if (event->m_MsgStr == L"ToLoadStage") {
 			ResetActiveStage<LoadStage>();

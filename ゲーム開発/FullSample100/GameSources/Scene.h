@@ -7,13 +7,41 @@
 #include "stdafx.h"
 
 namespace basecross{
-	enum SceneKey {
+	//シーン遷移用
+	enum class SceneKey : int {
 		Title,
 		Select,
 		Game,
 		Result,
-		Load
+		Load,
+		Max
 	};
+
+	//ゲームステージのメニュー用
+	enum class GameStageMenuKey : int{
+		Back,
+		Retry,
+		Title,
+		Select,
+		Game,
+		Max
+	};
+
+	//ゲームステージのメニュー用
+	enum class ResultStageMenuKey : int{
+		Select,
+		Retry,
+		Title,
+		Max
+	};
+
+	//ステージ数
+	enum class SelectKey : int{
+		Stage1,
+		Stage2,
+		Max
+	};
+
 	//--------------------------------------------------------------------------------------
 	///	ゲームシーン
 	//--------------------------------------------------------------------------------------

@@ -65,7 +65,7 @@ namespace basecross {
 		bool start =
 			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START ||
 			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B ||
-			KeyState.m_bPushKeyTbl[VK_SPACE];
+			KeyState.m_bPressedKeyTbl[VK_SPACE];
 
 		if (start) {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Select);
