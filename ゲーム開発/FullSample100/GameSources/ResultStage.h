@@ -1,6 +1,6 @@
 /*!
-@file StageSelect.h
-@brief ステージセレクト
+@file ResultStage.h
+@brief リザルトステージ
 */
 
 #pragma once
@@ -8,27 +8,30 @@
 
 namespace basecross {
 	//--------------------------------------------------------------------------------------
-	//	ステージセレクトクラス
+	//	リザルトステージクラス
 	//--------------------------------------------------------------------------------------
-	class StageSelect : public Stage {
-		//ビューの作成
-		void CreateViewLight();
-		shared_ptr<SoundItem> m_BGM;
+	class ResultStage : public Stage {
+		float m_Time;
 		int m_SelectNum;
-		SelectKey m_SelectKey;
+		ResultStageMenuKey m_MenuKey;
 		//入力判定フラグ
 		bool m_InputOnce;
-		float m_Time;
+		vector<Vec3> m_ResultSpriteDefultScale;
+		vector<Vec3> m_ResultSpritePos;
+		void CreateViewLight();
+		//スプライト作成
+		void CreatePushSprite();
 
-		void CreateSelectSprite();
+		void CreateSprite();
+		shared_ptr<SoundItem> m_BGM;
 		//入力から選択カーソルを移動
 		void StageSelectKeyInput();
-		void UpdateSpriteTX();
+		void UpdateCursor();
 		void ChangeStageSceneSelected();
 	public:
 		//構築と破棄
-		StageSelect() :Stage(), m_SelectKey(SelectKey::Stage1), m_InputOnce(false), m_Time(0.0f) {}
-		virtual ~StageSelect() {}
+		ResultStage() :Stage(), m_Time(0.0f) {}
+		virtual ~ResultStage() {}
 		//初期化
 		virtual void OnCreate()override;
 		virtual void OnUpdate() override;

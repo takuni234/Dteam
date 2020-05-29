@@ -24,5 +24,11 @@ namespace basecross {
 			auto ptrDraw = GetComponent<PCTSpriteDraw>();
 			ptrDraw->SetTextureResource(key);
 		}
+		Vec2 GetScale()const {
+			return m_StartScale;
+		}
+		void SetPosition(const Vec3& pos) {
+			GetComponent<Transform>()->SetPosition(m_StartPos);
+		}
 	};
 }

@@ -70,13 +70,14 @@ namespace basecross {
 			else {
 				auto elapsedTime = App::GetApp()->GetElapsedTime();
 				m_Time += elapsedTime;
-				if (m_Time > 0.5f) {
+				if (m_Time > 0.3f) {
 					m_InputOnce = false;
 					m_Time = 0.0f;
 				}
 			}
 			if (CntlVec[0].fThumbLX <= 0.05f && CntlVec[0].fThumbLX >= -0.05f) {
 				m_InputOnce = false;
+				m_Time = 0.0f;
 			}
 		}
 		else if (!(KeyState.m_bPressedKeyTbl[VK_LEFT] && KeyState.m_bPressedKeyTbl[VK_RIGHT])) {
@@ -87,8 +88,10 @@ namespace basecross {
 				m_SelectNum--;
 			}
 		}
-
-		m_SelectKey = SelectKey(m_SelectNum % SelectKey::Max);
+		if (m_SelectNum <= 0) {
+			m_SelectNum = static_cast<int>(SelectKey::Max);
+		}
+		m_SelectKey = SelectKey(m_SelectNum % static_cast<int>(SelectKey::Max));
 	}
 
 	void StageSelect::OnDestroy() {
@@ -118,17 +121,17 @@ namespace basecross {
 		bool start =
 			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START ||
 			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B ||
-			KeyState.m_bPushKeyTbl[VK_SPACE];
+			KeyState.m_bPressedKeyTbl[VK_SPACE];
 		if (start) {
 			switch (m_SelectKey)
 			{
 			case SelectKey::Stage1:
-				ptrScene->SetLimitTime(90.0f);
+				ptrScene->SetLimitTime(90.0f); // Stage1.csv‚Å‚Ì§ŒÀŽžŠÔ
 				ptrScene->SetStageCSVKey(L"Stage1.csv");
 				break;
 			case SelectKey::Stage2:
-				ptrScene->SetLimitTime(90.0f);
-				ptrScene->SetStageCSVKey(L"");
+				ptrScene->SetLimitTime(3.0f);
+				ptrScene->SetStageCSVKey(L"TestStage.csv");
 				break;
 			default:
 				break;
