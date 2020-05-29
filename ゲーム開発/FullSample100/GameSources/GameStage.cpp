@@ -102,7 +102,29 @@ namespace basecross {
 			//Vec3 Rot2(Rot.x - 45 / 3.1415f, Rot.y / 3.1415f, Rot.z - 90 / 3.1415f);
 			AddGameObject<CollisionBox>(Vec3(col_Pos.x, col_Pos.y - 0.5f, col_Pos.z), col_Scale,  col_Rot); //-1 * (* 13.74f )
 		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"Wall");
+		for (auto& v : LineVec) {
+			//トークン（カラム）の配列
+			vector<wstring> torkns;
 
+			Util::WStrToTokenVector(torkns, v, L',');
+
+			Vec3 col_Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+			Vec3 col_Scale(
+				(float)_wtof(torkns[4].c_str()),
+				(float)_wtof(torkns[5].c_str()),
+				(float)_wtof(torkns[6].c_str())
+			);
+
+			AddGameObject<TransparentBox>(
+				Vec3(col_Scale), 
+				Vec3(0.0f),
+				Vec3(col_Pos));
+		}
 
 		ObjCsvfile.GetSelect(LineVec, 0, L"Player");
 		for (auto& v : LineVec) {
@@ -151,7 +173,7 @@ namespace basecross {
 			Util::WStrToTokenVector(torkns, v, L',');
 			Vec3 Pos(
 				(float)_wtof(torkns[1].c_str()),
-				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[2].c_str()-1),
 				(float)_wtof(torkns[3].c_str())
 			);
 
@@ -170,7 +192,22 @@ namespace basecross {
 				(float)_wtof(torkns[3].c_str())
 			);
 
-			AddGameObject<ObjRock>(Pos,Vec3(1),Vec3(0));
+			AddGameObject<ObjRock>(Pos, Vec3(1), Vec3(0), L"HOTROCK_TX", false);
+
+			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
+		}
+		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Cinder");
+		for (auto& v : LineVec) {
+			vector<wstring> torkns;
+
+			Util::WStrToTokenVector(torkns, v, L',');
+			Vec3 Pos(
+				(float)_wtof(torkns[1].c_str()),
+				(float)_wtof(torkns[2].c_str()),
+				(float)_wtof(torkns[3].c_str())
+			);
+
+			AddGameObject<Obj_Cinder>(Pos,Pos.x);
 
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
@@ -223,7 +260,8 @@ namespace basecross {
 			auto ptrScene = App::GetApp()->GetScene<Scene>();
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
+			//ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
+			ObjCsvfile.SetFileName(detadir + L"TestStage2.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -250,7 +288,7 @@ namespace basecross {
 			//AddGameObject<RescurTarget_1>(Vec3(-2,5 , -2), Vec3(0.25f), Vec3(0));
 			//AddGameObject<IncreaseObject>(magumaPos);
 
-			AddGameObject<TransparentBox>(Vec3(10.0f, 80.0f, 10.0f), Vec3(0.0f), Vec3(0.0f, 0.0f, 0.0f));
+			//AddGameObject<TransparentBox>(Vec3(10.0f, 80.0f, 10.0f), Vec3(0.0f), Vec3(0.0f, 0.0f, 0.0f));
 			CreateScoreSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();

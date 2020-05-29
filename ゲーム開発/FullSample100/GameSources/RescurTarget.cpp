@@ -15,7 +15,7 @@ namespace basecross {
 	}
 	void RescurTarget_Base::OnUpdate() {
 		PLAYERCHASE();
-
+		m_Position.getY();
 	}
 	float RescurTarget_Base::INGOALLENGTH() {
 		auto Goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
@@ -394,7 +394,6 @@ namespace basecross {
 
 	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
 		:GameObject(stage), Pos(pos), m_Position(Pos){
-
 	}
 
 	void GameEndSplite::OnCreate() {

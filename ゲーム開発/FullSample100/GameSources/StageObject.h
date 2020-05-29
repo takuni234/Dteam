@@ -24,9 +24,16 @@ namespace basecross {
 		Vec3 m_SaveRot;
 		Vec3 m_SavePos;
 		bool m_Arrangement;
+
+		wstring Tx_name;
+		bool FallFlg;
 	public:
-		ObjRock(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
-			: GameObject(stage), m_Position(pos), m_Scale(scale), m_Rotation(rotate), m_SaveRot(rotate), m_SavePos(pos), m_Arrangement(false){
+		ObjRock(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate, wstring name,bool fallFlg)
+			: GameObject(stage),
+			m_Position(pos), m_Scale(scale), m_Rotation(rotate),
+			m_SaveRot(rotate), m_SavePos(pos),
+			m_Arrangement(false), 
+			Tx_name(name), FallFlg(fallFlg){
 
 		}
 		~ObjRock() {}
@@ -50,4 +57,18 @@ namespace basecross {
 
 	};
 
+	class Obj_Cinder :public GameObject {
+		Vec3 m_Position;
+		float time = 0;
+		bool AddFlg = false;
+		int UpNO;
+	public:
+		Obj_Cinder(const shared_ptr<Stage>& stage,Vec3 Pos,int UpRNo)
+			:GameObject(stage),m_Position(Pos),UpNO(UpRNo){}
+		~Obj_Cinder(){}
+		 
+		void OnCreate() override;
+		void OnUpdate() override;
+	};
+	
 }

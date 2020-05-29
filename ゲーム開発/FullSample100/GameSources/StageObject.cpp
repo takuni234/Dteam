@@ -1,6 +1,8 @@
 #pragma oncem 
 #include "stdafx.h"
 #include "Project.h"
+#include <sstream>
+#include <random>
 
 namespace basecross {
 	void Rock::OnCreate() {
@@ -68,34 +70,31 @@ namespace basecross {
 		auto Draw = AddComponent<PNTStaticModelDraw>();
 		Draw->SetMeshResource(L"HOTROCK_MESH");
 		Draw->SetMeshToTransformMatrix(spanMat);
-		Draw->SetTextureResource(L"HOTROCK_TX");
+		Draw->SetTextureResource(Tx_name);
 
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
-		Trans->SetScale(m_Scale.x + 0.2f, m_Scale.y, m_Scale.z + 0.2f);
+		Trans->SetScale(m_Scale.x + 0.1f, m_Scale.y, m_Scale.z + 0.1f);
 		Trans->SetRotation(m_Rotation);
 		//Trans->SetPivot(m_Position.x, m_Position.y, m_Position.z);
 
 		auto Collision = AddComponent<CollisionObb>();
 		Collision->SetDrawActive(true);
-
+		if (FallFlg) {
+			Collision->SetFixed(true);
+		}
 		AddComponent<Gravity>();
 		AddTag(L"ObjRock");
 	}
 	void ObjRock::OnUpdate() {
-		/*auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
-		auto plyTrans = player->GetComponent<Transform>();
-		auto plyPos = plyTrans->GetPosition();
-		auto Trans = GetComponent<Transform>();
-		auto Pos = Trans->GetPosition();
-		Vec3 langthPos = Pos - plyPos;
-		float langth = langthPos.length();
-		if (langth < 2) {
-			if (App::GetApp()->GetInputDevice().GetControlerVec()[0].wPressedButtons &
-				XINPUT_GAMEPAD_Y) {
-				GetStage()->RemoveGameObject<GameObject>(GetThis<GameObject>());
-			}
-		}*/
+		Vec3 move;
+		auto trans = GetComponent<Transform>();
+		auto pos = trans->GetPosition();
+		m_Position = pos;
+		move = Vec3(0, -1, 0);
+		m_Position += move * App::GetApp()->GetElapsedTime()*1.0f;
+		trans->SetPosition(m_Position);
+		
 	}
 	void ObjRock::OnUpdate2() {
 		//ˆÊ’u‚ÌC³
@@ -135,5 +134,29 @@ namespace basecross {
 		Collision->SetDrawActive(true);
 
 		AddTag(L"StageObjColl");
+	}
+
+
+	void Obj_Cinder::OnCreate() {
+		auto Trans = GetComponent<Transform>();
+		Trans->SetPosition(m_Position);
+	}
+
+	void Obj_Cinder::OnUpdate() {
+		 
+		mt19937 mt(static_cast<unsigned int> (time));
+		//uniform_int_distribution<int> rand(0, 10);
+
+		random_device rnd;
+		//mt19937 mt(rnd());
+		uniform_int_distribution<> rand(UpNO+15, 40);
+
+		
+		time += App::GetApp()->GetElapsedTime();
+		if (time >rand(mt) &&AddFlg==false) {
+			GetStage()->AddGameObject<ObjRock>(Vec3(m_Position.x,m_Position.y+5,m_Position.z), Vec3(1), Vec3(0), L"HOTROCK_TX",false);
+		
+			AddFlg = true;
+		}
 	}
 }

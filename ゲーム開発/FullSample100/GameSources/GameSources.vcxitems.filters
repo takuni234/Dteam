@@ -83,9 +83,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)StageSelect.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp">
@@ -149,9 +147,6 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)IncreaseBox2.cpp">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)StageSelect.cpp">
-      <Filter>Stage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

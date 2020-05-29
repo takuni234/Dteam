@@ -43,6 +43,7 @@ namespace basecross {
 		int GoalInCount;
 		float time;
 
+		int HP;
 	};
 
 	//“Áê‹Z”\‚ğ‚½‚È‹~o‘ÎÛ
