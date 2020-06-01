@@ -109,6 +109,9 @@ namespace basecross {
 		case SelectKey::Stage2:
 			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"SKY_TX");
 			break;
+		case SelectKey::Stage3:
+			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"GROUND_TX");
+			break;
 		default:
 			break;
 		}
@@ -131,6 +134,10 @@ namespace basecross {
 				break;
 			case SelectKey::Stage2:
 				ptrScene->SetLimitTime(30.0f);
+				ptrScene->SetStageCSVKey(L"Stage2.csv");
+				break;
+			case SelectKey::Stage3:
+				ptrScene->SetLimitTime(1.0f);
 				ptrScene->SetStageCSVKey(L"Stage2.csv");
 				break;
 			default:

@@ -39,7 +39,8 @@ namespace basecross {
 	void GameOverStage::CreateSprite() {
 		CreateSharedObjectGroup(L"GameOverSprite");
 		//配置する位置（全体）
-		Vec3 DefultPos(0.0f, 0.0f, 0.0f);
+		Vec3 DefultPos(-500.0f, 0.0f, 0.0f);
+		Vec3 alignVec(0.0f);
 		for (int i = 0; i < static_cast<int>(ResultStageMenuKey::Max); i++) {
 			Vec2 createScale;
 			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
@@ -67,14 +68,18 @@ namespace basecross {
 				createScale = Vec2(100.0f);
 				break;
 			}
-			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos);
+			if (m_SpriteAlign) {
+				//左揃え
+				alignVec = Vec3(createScale.x, 0.0f, 0.0f) * 0.5f;
+			}
+			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos + alignVec);
 			m_ResultSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
 			m_ResultSpritePos.push_back(createPos);
 			GetSharedObjectGroup(L"GameOverSprite")->IntoGroup(ptrSprite);
 		}
 
 		auto ptrCursol = AddGameObject<Sprite>(L"SPARK_TX");
-		ptrCursol->SetPosition(DefultPos + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f));
+		ptrCursol->SetPosition(DefultPos + Vec3((m_ResultSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 		SetSharedGameObject(L"GameOverCursor", ptrCursol);
 	}
 
@@ -161,7 +166,12 @@ namespace basecross {
 		GetSharedGameObject<ScoreSprite>(L"TestScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
 		auto ptrCursor = GetSharedGameObject<Sprite>(L"GameOverCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
-		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));
+		Vec3 alignVec(0.0f);
+		if (m_SpriteAlign) {
+			//左揃え
+			alignVec = Vec3(m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x, 0.0f, 0.0f) * 0.5f;
+		}
+		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 	}
 
 	void GameOverStage::ChangeStageSceneSelected() {

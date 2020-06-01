@@ -270,9 +270,9 @@ namespace basecross {
 			//ビューとライトの作成
 			CreateViewLight();
 
-			auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
-			ground->AddTag(L"Ground");
-			SetSharedGameObject(L"Stage", ground);
+			//auto ground = AddGameObject<FixedBox>(Vec3(100.0f, 1.0f, 100.0f), Vec3(0.0f), Vec3(0.0f, -0.5f, 0.0f));
+			//ground->AddTag(L"Ground");
+			//SetSharedGameObject(L"Stage", ground);
 
 			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f, XM_PIDIV2, 0.0f), Vec3(GoalPos),2);
 			SetSharedGameObject(L"Goal", goalObj);
@@ -311,7 +311,7 @@ namespace basecross {
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		m_TotalTime -= elapsedTime;
 		if (m_TotalTime <= 0) {
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Result);
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
 		}
 		//スコアを更新する
 		if (goal->Getflg()==false) {

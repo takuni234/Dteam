@@ -14,6 +14,8 @@ namespace basecross {
 		Vec3 m_MoveDir;
 		//移動スピード
 		float m_Speed;
+		//向いている方向
+		Vec3 m_HeadRot;
 		//放水の間隔時間
 		float m_IntervalTime;
 		//インプットハンドラー
@@ -94,6 +96,9 @@ namespace basecross {
 		}
 		void SetSpeed(float speed) {
 			m_Speed = speed;
+		}
+		Vec3 GetHeadRot() const {
+			return m_HeadRot;
 		}
 	};
 

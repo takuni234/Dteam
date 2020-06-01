@@ -16,6 +16,8 @@ namespace basecross {
 		GameOverStageMenuKey m_MenuKey;
 		//入力判定フラグ
 		bool m_InputOnce;
+		//スプライトをそろえるか
+		bool m_SpriteAlign;
 		vector<Vec3> m_ResultSpriteDefultScale;
 		vector<Vec3> m_ResultSpritePos;
 		void CreateViewLight();
@@ -30,7 +32,7 @@ namespace basecross {
 		void ChangeStageSceneSelected();
 	public:
 		//構築と破棄
-		GameOverStage() :Stage(), m_Time(0.0f) {}
+		GameOverStage() :Stage(), m_Time(0.0f), m_SpriteAlign(true) {}
 		virtual ~GameOverStage() {}
 		//初期化
 		virtual void OnCreate()override;

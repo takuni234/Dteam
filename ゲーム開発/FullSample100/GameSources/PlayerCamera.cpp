@@ -4,6 +4,7 @@
 namespace basecross {
 	PlayerCamera::PlayerCamera()
 		:m_Rad(0.0f),
+		m_RadY(0.0f),
 		m_TargetToAt(0,0,0),
 		m_ArmLen(2.0f)
 	{}
@@ -23,16 +24,25 @@ namespace basecross {
 
 		if (cntlVec[0].bConnected) {
 			m_Rad += cntlVec[0].fThumbRX * 3.0f * elapsedTime;
+			m_RadY -= cntlVec[0].fThumbRY * 3.0f * elapsedTime;
 		}
 		else if (!(keyState.m_bPushKeyTbl[VK_LEFT] && keyState.m_bPushKeyTbl[VK_RIGHT])) {
 			if (keyState.m_bPushKeyTbl[VK_RIGHT]) {
 				m_Rad += 3.0f * elapsedTime;
+				m_RadY -= 3.0f * elapsedTime;
 			}
 			if (keyState.m_bPushKeyTbl[VK_LEFT]) {
 				m_Rad -= 3.0f * elapsedTime;
+				m_RadY += 3.0f * elapsedTime;
 			}
 		}
 
+		if (m_RadY >= XM_PIDIV4) {
+			m_RadY = XM_PIDIV4;
+		}
+		else if (m_RadY <= -XM_PIDIV4) {
+			m_RadY = -XM_PIDIV4;
+		}
 		Quat qtXZ;
 		qtXZ.rotation(m_Rad, bsm::Vec3(0.0f, 1.0f, 0.0f));
 		qtXZ.normalize();
@@ -55,13 +65,13 @@ namespace basecross {
 		if (ptrTarget) {
 			//–ÚŽw‚µ‚½‚¢êŠ
 			Vec3 toAt = ptrTarget->GetComponent<Transform>()->GetWorldMatrix().transInMatrix();
-			toAt += m_TargetToAt;
+			toAt += m_TargetToAt + Vec3(0.0f,0.5f,0.0f);
 			newAt = Lerp::CalculateLerp(GetAt(), toAt, 0, 1.0f, 1.0, Lerp::Linear);
 		}
 
 		Vec3 toEye = newAt + armVec;
 		newEye = Lerp::CalculateLerp(GetEye(), toEye, 0.0f, 1.0f, 1.0f, Lerp::Linear);
-		m_Eye = Vec3(newEye.x, newEye.y + 0.2f, newEye.z);
+		m_Eye = Vec3(newEye.x, newEye.y + sinf(m_RadY), newEye.z);
 		SetEye(m_Eye);
 		SetAt(newAt);
 		Camera::OnUpdate();

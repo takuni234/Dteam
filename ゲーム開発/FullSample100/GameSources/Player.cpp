@@ -306,6 +306,7 @@ namespace basecross {
 			GetComponent<Transform>()->SetPosition(pos);
 			auto utilPtr = GetBehavior<UtilBehavior>();
 			utilPtr->RotToHead(angle, 1.0f);
+			m_HeadRot = angle;
 		}
 	}
 

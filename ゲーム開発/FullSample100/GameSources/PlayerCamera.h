@@ -11,6 +11,7 @@ namespace basecross {
 		weak_ptr<GameObject> m_TargetObject;
 		Vec3 m_TargetToAt;
 		float m_Rad;
+		float m_RadY;
 		//ƒvƒŒƒCƒ„[‚Ü‚Å‚Ì‹——£
 		float m_ArmLen;
 

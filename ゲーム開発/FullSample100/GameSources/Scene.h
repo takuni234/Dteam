@@ -48,6 +48,7 @@ namespace basecross{
 	enum class SelectKey : int{
 		Stage1,
 		Stage2,
+		Stage3,
 		Max
 	};
 
