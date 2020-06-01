@@ -14,6 +14,7 @@
 #include "StageSelect.h"
 #include "LoadStage.h"
 #include "ResultStage.h"
+#include "GameOverStage.h"
 #include "Character.h"
 #include "PlayerGrabArea.h"
 #include "PlayerIceaxArea.h"

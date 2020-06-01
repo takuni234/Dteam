@@ -80,4 +80,13 @@ namespace basecross {
 	void Sprite::OnUpdate() {
 
 	}
+
+	TransformSprite::TransformSprite(const shared_ptr<Stage>& stage, const wstring& key)
+		:Sprite(stage, key)
+	{}
+
+	void TransformSprite::OnUpdate() {
+		Vec2 newScale = Vec2(GetScale().x + 10.0f, GetScale().y);
+		SetScale(newScale);
+	}
 }

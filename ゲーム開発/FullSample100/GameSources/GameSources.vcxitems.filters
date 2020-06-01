@@ -86,8 +86,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)StageSelect.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox2.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ResultStage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IncreaseBox2.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GameOverStage.h">
       <Filter>Stage</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,6 +163,9 @@
       <Filter>Stage</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ResultStage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GameOverStage.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
   </ItemGroup>

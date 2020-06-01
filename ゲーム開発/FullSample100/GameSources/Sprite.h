@@ -27,8 +27,23 @@ namespace basecross {
 		Vec2 GetScale()const {
 			return m_StartScale;
 		}
+		void SetScale(const Vec2& scale) {
+			m_StartScale = scale;
+		}
 		void SetPosition(const Vec3& pos) {
 			GetComponent<Transform>()->SetPosition(m_StartPos);
 		}
+		void UpdateScale() {
+			GetComponent<Transform>()->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
+		}
+		void UpdatePosition() {
+
+		}
+	};
+
+	class TransformSprite : public Sprite {
+	public:
+		TransformSprite(const shared_ptr<Stage>& stage, const wstring& key);
+		virtual void OnUpdate() override;
 	};
 }

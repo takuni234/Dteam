@@ -1,6 +1,6 @@
 /*!
-@file ResultStage.cpp
-@brief リザルトステージ実体
+@file GameOverStage.cpp
+@brief ゲームオーバーステージ実体
 */
 
 #include "stdafx.h"
@@ -8,9 +8,9 @@
 
 namespace basecross {
 	//--------------------------------------------------------------------------------------
-	//	リザルトステージクラス実体
+	//	ゲームオーバーステージ実体
 	//--------------------------------------------------------------------------------------
-	void ResultStage::CreateViewLight() {
+	void GameOverStage::CreateViewLight() {
 		const Vec3 eye(0.0f, 5.0f, -5.0f);
 		const Vec3 at(0.0f);
 		auto PtrView = CreateView<SingleView>();
@@ -26,7 +26,7 @@ namespace basecross {
 	}
 
 	//点滅するスプライト作成
-	void ResultStage::CreatePushSprite() {
+	void GameOverStage::CreatePushSprite() {
 		auto ptrScore = AddGameObject<ScoreSprite>(1,
 			L"NUMBER_TX",
 			true,
@@ -36,10 +36,10 @@ namespace basecross {
 		SetSharedGameObject(L"TestScoreSprite", ptrScore);
 	}
 
-	void ResultStage::CreateSprite() {
-		CreateSharedObjectGroup(L"ResultSprite");
+	void GameOverStage::CreateSprite() {
+		CreateSharedObjectGroup(L"GameOverSprite");
 		//配置する位置（全体）
-		Vec3 DefultPos(0.0f,0.0f,0.0f);
+		Vec3 DefultPos(0.0f, 0.0f, 0.0f);
 		for (int i = 0; i < static_cast<int>(ResultStageMenuKey::Max); i++) {
 			Vec2 createScale;
 			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
@@ -48,7 +48,7 @@ namespace basecross {
 			{
 				// 「ステージセレクトへ」の画像
 			case ResultStageMenuKey::Select:
-				txKey = L"SKY_TX";
+				txKey = L"GROUND_TX";
 				createScale = Vec2(200.0f, 100.0f);
 				break;
 				// 「リトライ」の画像
@@ -70,15 +70,15 @@ namespace basecross {
 			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos);
 			m_ResultSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
 			m_ResultSpritePos.push_back(createPos);
-			GetSharedObjectGroup(L"ResultSprite")->IntoGroup(ptrSprite);
+			GetSharedObjectGroup(L"GameOverSprite")->IntoGroup(ptrSprite);
 		}
 
 		auto ptrCursol = AddGameObject<Sprite>(L"SPARK_TX");
-		ptrCursol->SetPosition(DefultPos + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(ResultStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f,0.0f));
-		SetSharedGameObject(L"ResultCursor", ptrCursol);
+		ptrCursol->SetPosition(DefultPos + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f));
+		SetSharedGameObject(L"GameOverCursor", ptrCursol);
 	}
 
-	void ResultStage::OnCreate() {
+	void GameOverStage::OnCreate() {
 		try {
 			//ビューとライトの作成
 			CreateViewLight();
@@ -92,7 +92,7 @@ namespace basecross {
 		}
 	}
 
-	void ResultStage::OnUpdate() {
+	void GameOverStage::OnUpdate() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
 		StageSelectKeyInput();
@@ -108,13 +108,13 @@ namespace basecross {
 		}
 	}
 
-	void ResultStage::OnDestroy() {
+	void GameOverStage::OnDestroy() {
 		//BGMのストップ
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		XAPtr->Stop(m_BGM);
 	}
 
-	void ResultStage::StageSelectKeyInput() {
+	void GameOverStage::StageSelectKeyInput() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
 
@@ -152,29 +152,29 @@ namespace basecross {
 		}
 
 		if (m_SelectNum <= 0) {
-			m_SelectNum = static_cast<int>(ResultStageMenuKey::Max);
+			m_SelectNum = static_cast<int>(GameOverStageMenuKey::Max);
 		}
-		m_MenuKey = ResultStageMenuKey(m_SelectNum % static_cast<int>(ResultStageMenuKey::Max));
+		m_MenuKey = GameOverStageMenuKey(m_SelectNum % static_cast<int>(GameOverStageMenuKey::Max));
 	}
 
-	void ResultStage::UpdateCursor() {
+	void GameOverStage::UpdateCursor() {
 		GetSharedGameObject<ScoreSprite>(L"TestScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
-		auto ptrCursor = GetSharedGameObject<Sprite>(L"ResultCursor");
+		auto ptrCursor = GetSharedGameObject<Sprite>(L"GameOverCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
 		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));
 	}
 
-	void ResultStage::ChangeStageSceneSelected() {
+	void GameOverStage::ChangeStageSceneSelected() {
 		auto ptrScene = App::GetApp()->GetScene<Scene>();
 		switch (m_MenuKey)
 		{
-		case ResultStageMenuKey::Select:
+		case GameOverStageMenuKey::Select:
 			ptrScene->ChangeScene(SceneKey::Select);
 			break;
-		case ResultStageMenuKey::Retry:
+		case GameOverStageMenuKey::Retry:
 			ptrScene->ChangeScene(SceneKey::Game);
 			break;
-		case ResultStageMenuKey::Title:
+		case GameOverStageMenuKey::Title:
 			ptrScene->ChangeScene(SceneKey::Title);
 			break;
 		default:

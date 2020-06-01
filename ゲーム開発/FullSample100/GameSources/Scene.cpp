@@ -47,6 +47,9 @@ namespace basecross{
 		else if (event->m_MsgStr == L"ToLoadStage") {
 			ResetActiveStage<LoadStage>();
 		}
+		else if (event->m_MsgStr == L"ToGameOverStage") {
+			ResetActiveStage<GameOverStage>();
+		}
 	}
 
 	void Scene::ChangeScene(SceneKey key) {
@@ -63,6 +66,9 @@ namespace basecross{
 			break;
 		case SceneKey::Result:
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToResultStage");
+			break;
+		case SceneKey::GameOver:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToGameOverStage");
 			break;
 		case SceneKey::Load:
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToLoadStage");

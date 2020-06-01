@@ -13,6 +13,7 @@ namespace basecross{
 		Select,
 		Game,
 		Result,
+		GameOver,
 		Load,
 		Max
 	};
@@ -27,8 +28,16 @@ namespace basecross{
 		Max
 	};
 
-	//ゲームステージのメニュー用
+	//リザルトステージのメニュー用
 	enum class ResultStageMenuKey : int{
+		Select,
+		Retry,
+		Title,
+		Max
+	};
+
+	//ゲームオーバーステージのメニュー用
+	enum class GameOverStageMenuKey : int{
 		Select,
 		Retry,
 		Title,
