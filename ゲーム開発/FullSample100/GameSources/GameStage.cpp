@@ -173,12 +173,12 @@ namespace basecross {
 			Util::WStrToTokenVector(torkns, v, L',');
 			Vec3 Pos(
 				(float)_wtof(torkns[1].c_str()),
-				(float)_wtof(torkns[2].c_str()-1),
+				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
 
 			magumaPos = Pos;
-			AddGameObject<IncreaseObject>(Pos);
+			AddGameObject<IncreaseObject2>(Pos);
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"Obj_Rock");
@@ -260,8 +260,8 @@ namespace basecross {
 			auto ptrScene = App::GetApp()->GetScene<Scene>();
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			//ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
-			ObjCsvfile.SetFileName(detadir + L"TestStage2.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
+			//ObjCsvfile.SetFileName(detadir + L"TestStage2.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
