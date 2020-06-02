@@ -310,8 +310,10 @@ namespace basecross {
 		}
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		m_TotalTime -= elapsedTime;
-		if (m_TotalTime <= 0) {
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
+		if (m_TotalTime <= 0&&TimeUpFlg==false) {
+			//App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
+			TimeUpFlg = true;
 		}
 		//スコアを更新する
 		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
@@ -328,6 +330,7 @@ namespace basecross {
 		if (goal->GetEndflg() && GameEndFlg) {
 			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
 			GameEndFlg = false;
+			TimeUpFlg = false;
 		}
 	}
 	void GameStage::StageChange() {

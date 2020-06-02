@@ -473,8 +473,11 @@ namespace basecross {
 				if (target) {
 					if (target->GetGoalflg()) {
 						App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Result);
-					}
+					}else
 					if (target->GetEndflg()) {
+						App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
+					}
+					else {
 						App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
 					}
 				}

@@ -17,6 +17,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
 		bool GameEndFlg = false;
+		bool TimeUpFlg = false;
 		int GoalCount = 0;
 		//CSV
 		CsvFile csvfile_1;
@@ -75,6 +76,7 @@ namespace basecross {
 		CameraSelect GetCameraSelect() const {
 			return m_CameraSelect;
 		}
+		bool GetEndFlg() { return TimeUpFlg; }
 		void StageChange();
 
 		void OnPushStart();
