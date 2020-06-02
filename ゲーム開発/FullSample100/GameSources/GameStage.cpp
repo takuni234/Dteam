@@ -327,7 +327,7 @@ namespace basecross {
 			GameEndFlg = false;
 		}
 		//ゲームオーバー
-		if (goal->GetEndflg() && GameEndFlg) {
+		if (goal->GetEndflg() && GameEndFlg&&TimeUpFlg==false) {
 			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
 			GameEndFlg = false;
 			TimeUpFlg = false;
