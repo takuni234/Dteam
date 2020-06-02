@@ -24,16 +24,16 @@ namespace basecross {
 
 		if (cntlVec[0].bConnected) {
 			m_Rad += cntlVec[0].fThumbRX * 3.0f * elapsedTime;
-			m_RadY -= cntlVec[0].fThumbRY * 3.0f * elapsedTime;
+			m_RadY -= cntlVec[0].fThumbRY * 2.0f * elapsedTime;
 		}
 		else if (!(keyState.m_bPushKeyTbl[VK_LEFT] && keyState.m_bPushKeyTbl[VK_RIGHT])) {
 			if (keyState.m_bPushKeyTbl[VK_RIGHT]) {
 				m_Rad += 3.0f * elapsedTime;
-				m_RadY -= 3.0f * elapsedTime;
+				m_RadY -= 2.0f * elapsedTime;
 			}
 			if (keyState.m_bPushKeyTbl[VK_LEFT]) {
 				m_Rad -= 3.0f * elapsedTime;
-				m_RadY += 3.0f * elapsedTime;
+				m_RadY += 2.0f * elapsedTime;
 			}
 		}
 
