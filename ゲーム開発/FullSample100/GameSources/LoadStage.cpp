@@ -40,6 +40,14 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"MESSAGE_TX", strTexture);
 		strTexture = DataDir + L"TitleLogo.png";
 		App::GetApp()->RegisterTexture(L"TITLELOGO_TX", strTexture);
+		strTexture = DataDir + L"title.png";
+		App::GetApp()->RegisterTexture(L"TOTITLE_TX", strTexture);
+		strTexture = DataDir + L"select.png";
+		App::GetApp()->RegisterTexture(L"TOSTAGESELECT_TX", strTexture);
+		strTexture = DataDir + L"retry.png";
+		App::GetApp()->RegisterTexture(L"TORETRY_TX", strTexture);
+		strTexture = DataDir + L"TitleLogo.png";
+		App::GetApp()->RegisterTexture(L"TONEXTSTAGE_TX", strTexture);
 		strTexture = DataDir + L"HelpMe.png";
 		App::GetApp()->RegisterTexture(L"HELPTEXT_TX", strTexture);
 		strTexture = DataDir + L"Tx_survivor.png";

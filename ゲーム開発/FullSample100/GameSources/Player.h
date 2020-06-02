@@ -18,6 +18,8 @@ namespace basecross {
 		Vec3 m_HeadRot;
 		//放水の間隔時間
 		float m_IntervalTime;
+		//ノックバック中の操作不能時間
+		float m_KnockBackTime;
 		//インプットハンドラー
 		InputHandler<Player> m_InputHandler;
 
@@ -99,6 +101,9 @@ namespace basecross {
 		}
 		Vec3 GetHeadRot() const {
 			return m_HeadRot;
+		}
+		float GetKnockBackTime()const {
+			return m_KnockBackTime;
 		}
 	};
 
@@ -201,6 +206,20 @@ namespace basecross {
 		PullState() {}
 	public:
 		static shared_ptr<PullState> Instance();
+		virtual void Enter(const shared_ptr<Player>& Obj)override;
+		virtual void Execute(const shared_ptr<Player>& Obj)override;
+		virtual void Exit(const shared_ptr<Player>& Obj)override;
+	};
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	class DamageState : public ObjState<Player>
+	{
+		float m_Time;
+		DamageState() {}
+	public:
+		static shared_ptr<DamageState> Instance();
 		virtual void Enter(const shared_ptr<Player>& Obj)override;
 		virtual void Execute(const shared_ptr<Player>& Obj)override;
 		virtual void Exit(const shared_ptr<Player>& Obj)override;

@@ -41,25 +41,26 @@ namespace basecross {
 		//配置する位置（全体）
 		Vec3 DefultPos(0.0f,0.0f,0.0f);
 		for (int i = 0; i < static_cast<int>(ResultStageMenuKey::Max); i++) {
-			Vec2 createScale;
+			Vec2 createScale(100.0f, 100.0f);
 			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
 			wstring txKey;
 			switch (static_cast<ResultStageMenuKey>(i))
 			{
+				//「次のステージへ」の画像
+			case ResultStageMenuKey::NextStage:
+				txKey = L"TONEXTSTAGE_TX";
+				break;
 				// 「ステージセレクトへ」の画像
 			case ResultStageMenuKey::Select:
-				txKey = L"SKY_TX";
-				createScale = Vec2(200.0f, 100.0f);
+				txKey = L"TOSTAGESELECT_TX";
 				break;
 				// 「リトライ」の画像
 			case ResultStageMenuKey::Retry:
-				txKey = L"SKY_TX";
-				createScale = Vec2(100.0f, 100.0f);
+				txKey = L"TORETRY_TX";
 				break;
 				// 「タイトルへ」の画像
 			case ResultStageMenuKey::Title:
-				txKey = L"SKY_TX";
-				createScale = Vec2(300.0f, 100.0f);
+				txKey = L"TOTITLE_TX";
 				break;
 			default:
 				//エラー

@@ -18,8 +18,8 @@ namespace basecross {
 		bool m_InputOnce;
 		//スプライトをそろえるか
 		bool m_SpriteAlign;
-		vector<Vec3> m_ResultSpriteDefultScale;
-		vector<Vec3> m_ResultSpritePos;
+		vector<Vec3> m_GameOverSpriteDefultScale;
+		vector<Vec3> m_GameOverSpritePos;
 		void CreateViewLight();
 		//スプライト作成
 		void CreatePushSprite();

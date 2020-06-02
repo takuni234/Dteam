@@ -39,33 +39,29 @@ namespace basecross {
 	void GameOverStage::CreateSprite() {
 		CreateSharedObjectGroup(L"GameOverSprite");
 		//配置する位置（全体）
-		Vec3 DefultPos(-500.0f, 0.0f, 0.0f);
+		Vec3 DefultPos(-500.0f, 50.0f, 0.0f);
 		Vec3 alignVec(0.0f);
-		for (int i = 0; i < static_cast<int>(ResultStageMenuKey::Max); i++) {
-			Vec2 createScale;
+		for (int i = 0; i < static_cast<int>(GameOverStageMenuKey::Max); i++) {
+			Vec2 createScale(300.0f, 100.0f);
 			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
 			wstring txKey;
-			switch (static_cast<ResultStageMenuKey>(i))
+			switch (static_cast<GameOverStageMenuKey>(i))
 			{
 				// 「ステージセレクトへ」の画像
-			case ResultStageMenuKey::Select:
-				txKey = L"GROUND_TX";
-				createScale = Vec2(200.0f, 100.0f);
+			case GameOverStageMenuKey::Select:
+				txKey = L"TOSTAGESELECT_TX";
 				break;
 				// 「リトライ」の画像
-			case ResultStageMenuKey::Retry:
-				txKey = L"SKY_TX";
-				createScale = Vec2(100.0f, 100.0f);
+			case GameOverStageMenuKey::Retry:
+				txKey = L"TORETRY_TX";
 				break;
 				// 「タイトルへ」の画像
-			case ResultStageMenuKey::Title:
-				txKey = L"SKY_TX";
-				createScale = Vec2(300.0f, 100.0f);
+			case GameOverStageMenuKey::Title:
+				txKey = L"TOTITLE_TX";
 				break;
 			default:
 				//エラー
 				txKey = L"SKY_TX";
-				createScale = Vec2(100.0f);
 				break;
 			}
 			if (m_SpriteAlign) {
@@ -73,13 +69,13 @@ namespace basecross {
 				alignVec = Vec3(createScale.x, 0.0f, 0.0f) * 0.5f;
 			}
 			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos + alignVec);
-			m_ResultSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
-			m_ResultSpritePos.push_back(createPos);
+			m_GameOverSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
+			m_GameOverSpritePos.push_back(createPos);
 			GetSharedObjectGroup(L"GameOverSprite")->IntoGroup(ptrSprite);
 		}
 
 		auto ptrCursol = AddGameObject<Sprite>(L"SPARK_TX");
-		ptrCursol->SetPosition(DefultPos + Vec3((m_ResultSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
+		ptrCursol->SetPosition(DefultPos + Vec3((m_GameOverSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 		SetSharedGameObject(L"GameOverCursor", ptrCursol);
 	}
 
@@ -169,9 +165,9 @@ namespace basecross {
 		Vec3 alignVec(0.0f);
 		if (m_SpriteAlign) {
 			//左揃え
-			alignVec = Vec3(m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x, 0.0f, 0.0f) * 0.5f;
+			alignVec = Vec3(m_GameOverSpriteDefultScale[static_cast<int>(m_MenuKey)].x, 0.0f, 0.0f) * 0.5f;
 		}
-		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
+		ptrTrans->SetPosition(m_GameOverSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_GameOverSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 	}
 
 	void GameOverStage::ChangeStageSceneSelected() {

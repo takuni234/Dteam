@@ -3,6 +3,13 @@
 
 namespace basecross {
 	class Sprite : public GameObject {
+		void UpdateScale() {
+			GetComponent<Transform>()->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
+		}
+		void UpdatePosition() {
+			GetComponent<Transform>()->SetPosition(m_StartPos);
+		}
+	protected:
 		Vec2 m_StartScale;
 		Vec3 m_StartPos;
 		bool m_Trace;
@@ -29,21 +36,40 @@ namespace basecross {
 		}
 		void SetScale(const Vec2& scale) {
 			m_StartScale = scale;
+			UpdateScale();
 		}
 		void SetPosition(const Vec3& pos) {
-			GetComponent<Transform>()->SetPosition(m_StartPos);
-		}
-		void UpdateScale() {
-			GetComponent<Transform>()->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
-		}
-		void UpdatePosition() {
-
+			m_StartPos = pos;
+			UpdatePosition();
 		}
 	};
 
-	class TransformSprite : public Sprite {
+	class HPSprite : public Sprite {
+		float m_HPMAX;
+		float m_Hp;
+
+		void UpdateHP();
 	public:
-		TransformSprite(const shared_ptr<Stage>& stage, const wstring& key);
-		virtual void OnUpdate() override;
+		HPSprite(const shared_ptr<Stage>& stage, const wstring& key);
+		HPSprite(const shared_ptr<Stage>& stage, const wstring& key, const float& HPMAX);
+		HPSprite(const shared_ptr<Stage>& stage, const wstring& key, const float& HP, const float& HPMAX);
+		HPSprite(const shared_ptr<Stage>& stage, const wstring& key, const float& HPMAX, const Vec2& startScale, const Vec3& startPos);
+		HPSprite(const shared_ptr<Stage>& stage, const wstring& key, const float& HP, const float& HPMAX, const Vec2& startScale, const Vec3& startPos);
+		virtual ~HPSprite(){}
+		virtual void OnCreate()override;
+		//ç∂ëµÇ¶ÇÃHP
+		void SetHPScale(const Vec2& vec);
+
+		float AddHp(const float& value) {
+			m_Hp += value;
+			if (m_Hp <= 0.0f) {
+				m_Hp = 0.0f;
+			}
+			else if (m_Hp >= m_HPMAX) {
+				m_Hp = m_HPMAX;
+			}
+			UpdateHP();
+			return m_Hp;
+		}
 	};
 }

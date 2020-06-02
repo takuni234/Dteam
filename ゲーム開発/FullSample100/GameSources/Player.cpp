@@ -14,6 +14,7 @@ namespace basecross {
 		m_Position(pos),
 		m_Speed(2.0f), // ※スピードを変更する場合、足音の音量も変化してしまうので気を付けてください
 		m_IntervalTime(0.0f),
+		m_KnockBackTime(1.0f),
 		m_BGMInterval(0.2f),// 最初の一歩目のモーションに合わせる為の値(0.2f)
 		m_Stride(0.25f)
 	{}
@@ -158,6 +159,7 @@ namespace basecross {
 		ptrDraw->SetMeshToTransformMatrix(spanMat);
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 	
+		//アニメーションの登録
 		ptrDraw->AddAnimation(L"Default", 200, 30, false, 60.0f);
 		ptrDraw->AddAnimation(L"Walk", 0, 30, true, 60.0f);
 		ptrDraw->AddAnimation(L"Push", 40, 30, true, 60.0f);
@@ -199,7 +201,9 @@ namespace basecross {
 	}
 
 	void Player::OnCollisionEnter(shared_ptr<GameObject>& Other) {
-
+		if (Other->FindTag(L"IncBox")) {
+			this->GetStateMachine()->ChangeState(DamageState::Instance());
+		}
 	}
 
 	Vec3 Player::GetMoveVector() const {
@@ -254,11 +258,11 @@ namespace basecross {
 		m_BGMInterval += inputTimeLength;
 		if (m_BGMInterval >= m_Stride && !m_BGMflg) {
 			//足音を鳴らす
-			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.1f * GetMoveVector().length());
+			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.1f * GetMoveVector().length()); // 0.1f　設定音量
 			m_BGMflg = true;
 		}
 		else if (m_BGMInterval >= m_Stride * 2.0f) {
-			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.1f * GetMoveVector().length());
+			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.1f * GetMoveVector().length()); // 0.1f　設定音量
 			m_BGMflg = false;
 			m_BGMInterval = 0.0f;
 		}
@@ -587,6 +591,38 @@ namespace basecross {
 
 	void PullState::Exit(const shared_ptr<Player>& Obj) {
 		Obj->SetSpeed(2.0f);
+	}
+
+	//--------------------------------------------------------------------------------------
+	//	class DamageState : public ObjState<Player>;
+	//--------------------------------------------------------------------------------------
+	shared_ptr<DamageState> DamageState::Instance() {
+		static shared_ptr<DamageState> instance(new DamageState);
+		return instance;
+	}
+	void DamageState::Enter(const shared_ptr<Player>& Obj) {
+		m_Time = 0.0f;
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->ChangeCurrentAnimation(L"Walk");
+		auto ptrHPSprite = Obj->GetStage()->GetSharedGameObject<HPSprite>(L"PlayerHPSprite");
+		ptrHPSprite->AddHp(-1.0f);
+		auto ptrGra = Obj->GetComponent<Gravity>();
+		Vec3 playerBack = -Obj->GetComponent<Transform>()->GetForword().normalize();
+		Vec3 knockBackPos(playerBack.x, playerBack.y + 5.0f, playerBack.z);
+		ptrGra->SetGravityVerocity(knockBackPos);
+	}
+	void DamageState::Execute(const shared_ptr<Player>& Obj) {
+		float elapsedTime = App::GetApp()->GetElapsedTime();
+		m_Time += elapsedTime;
+		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
+		ptrDraw->UpdateAnimation(elapsedTime * 2.0f);
+		if (Obj->GetKnockBackTime() <= m_Time) {
+			Obj->GetStateMachine()->ChangeState(DefaultState::Instance());
+		}
+	}
+
+	void DamageState::Exit(const shared_ptr<Player>& Obj) {
+		m_Time = 0.0f;
 	}
 }
 //end basecross

@@ -30,6 +30,7 @@ namespace basecross{
 
 	//リザルトステージのメニュー用
 	enum class ResultStageMenuKey : int{
+		NextStage,
 		Select,
 		Retry,
 		Title,
