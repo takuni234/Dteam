@@ -195,7 +195,7 @@ namespace basecross {
 	}
 
 	void Player::OnUpdate2() {
-		DrawStrings();
+		//DrawStrings();
 	}
 
 	void Player::OnCollisionEnter(shared_ptr<GameObject>& Other) {

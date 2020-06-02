@@ -43,6 +43,10 @@ namespace basecross {
 		ptrScore->SetScore(m_TotalTime);
 	}
 
+	void GameStage::CreateHPSprite() {
+		auto ptrHP = AddGameObject<Sprite>(L"SKY_TX");
+		SetSharedGameObject(L"PlayerHPSprite", ptrHP);
+	}
 
 	void GameStage::CreateObjectB_CSV() {
 		auto group = CreateSharedObjectGroup(L"RescurTargetGroup");
@@ -279,7 +283,7 @@ namespace basecross {
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
-
+			CreateHPSprite();
 			//ƒJƒƒ‰ƒ}ƒ“‚Ìì¬
 			CreateCameraman();
 
