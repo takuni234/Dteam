@@ -149,7 +149,7 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-
+			GoalCount++;
 			group->IntoGroup(AddGameObject<RescurTarget_1>(Vec3(Pos), Vec3(0.25f), Vec3(0)));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"RescurTarget_2");
@@ -163,7 +163,7 @@ namespace basecross {
 				(float)_wtof(torkns[2].c_str()),
 				(float)_wtof(torkns[3].c_str())
 			);
-
+			GoalCount++;
 			group->IntoGroup(AddGameObject<RescurTarget_2>(Vec3(Pos), Vec3(0.25f), Vec3(0)));
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"maguma");
@@ -261,7 +261,7 @@ namespace basecross {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
 			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
-			//ObjCsvfile.SetFileName(detadir + L"TestStage2.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
+			//ObjCsvfile.SetFileName(detadir + L"TestStage.csv");// SaveDataStage4.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -274,7 +274,7 @@ namespace basecross {
 			//ground->AddTag(L"Ground");
 			//SetSharedGameObject(L"Stage", ground);
 
-			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f, XM_PIDIV2, 0.0f), Vec3(GoalPos),2);
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f, XM_PIDIV2, 0.0f), Vec3(GoalPos),GoalCount);
 			SetSharedGameObject(L"Goal", goalObj);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
@@ -314,28 +314,28 @@ namespace basecross {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
 		}
 		//スコアを更新する
-		if (goal->Getflg()==false) {
+		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
 			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 			ptrScor->SetScore(m_TotalTime);
 			GameEndFlg = true;
 		}
-		if(goal->Getflg()&&GameEndFlg){
-			AddGameObject<GameEndSplite>(Vec3(-740,0,0), Vec3(0), Vec3(0));
+		//クリア
+		if (goal->GetGoalflg() && GameEndFlg) {
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"HELPTEXT_TX");
 			GameEndFlg = false;
 		}
-		auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&goal->Getflg()) {
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
+		//ゲームオーバー
+		if (goal->GetEndflg() && GameEndFlg) {
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
+			GameEndFlg = false;
 		}
-
 	}
 	void GameStage::StageChange() {
 		auto goal = GetSharedGameObject<GoalObject>(L"Goal");
 		auto cntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
-		if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&goal->Getflg()) {
+		if (cntlVec[0].wPressedButtons & XINPUT_GAMEPAD_A&&goal->GetGoalflg()) {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
 		}
-
 	}
 
 	void GameStage::UpdateStage() {

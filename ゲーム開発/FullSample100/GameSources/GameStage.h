@@ -17,6 +17,7 @@ namespace basecross {
 	//--------------------------------------------------------------------------------------
 	class GameStage : public Stage {
 		bool GameEndFlg = false;
+		int GoalCount = 0;
 		//CSV
 		CsvFile csvfile_1;
 		CsvFile csvfile_2;

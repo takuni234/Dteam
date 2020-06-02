@@ -52,24 +52,11 @@ namespace basecross {
 
 	}
 	void GoalObject::OnUpdate() {
-		shared_ptr<RescurTarget_Base> target = nullptr;
-		auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-		for (auto obj : gameobjects) {
-			target = dynamic_pointer_cast<RescurTarget_Base>(obj);
-			if (target) {
-				
-				auto Tpos = target->GetComponent<Transform>()->GetPosition();
-				auto pos = GetComponent<Transform>()->GetPosition();
-				Vec3 length = Tpos - pos;
-				if (length.length() < 1 && target->GetFlg(L"1")==true || target->GetFlg(L"2") == true){					
-				}		
-
-			}
-		}
 		if (count == GoalCount) {
-			flg = true;
-			//App::GetApp()->GetScene<Scene>()->
-			//	ChangeScene(SceneKey::Title);
+			Goalflg = true;
+		}
+		if (EndCount == GoalCount) {
+			GameEndflg = true;
 		}
 	}
 }

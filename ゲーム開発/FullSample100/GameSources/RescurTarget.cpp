@@ -9,13 +9,15 @@ namespace basecross {
 	}
 	void RescurTarget_Base::OnCreate() {
 		//ナンバースクエアを作成して関連させる		
-		GetStage()->AddGameObject<HelpSplite>(m_Position,Vec3(0),Vec3(0));
+		GetStage()->AddGameObject<HelpSplite>(Vec3(m_Position.x,m_Position.y,m_Position.z),Vec3(0),Vec3(0));
 		Goalflg1 = false;
 		Goalflg2 = false;
 	}
 	void RescurTarget_Base::OnUpdate() {
 		PLAYERCHASE();
-		m_Position.getY();
+		auto Pos = GetComponent<Transform>()->GetPosition();
+		m_Position = Pos;
+
 	}
 	float RescurTarget_Base::INGOALLENGTH() {
 		auto Goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
@@ -134,7 +136,7 @@ namespace basecross {
 			Vec3(1.0f, 1.0f, 1.0f),
 			Vec3(0.0f, 0.0f, 0.0f),
 			Vec3(0.0f, XM_PI, 0.0f),
-			Vec3(0.0f, -0.5f, 0.0f)
+			Vec3(0.0f, -1.0f, 0.0f)
 		);
 
 		auto Draw = AddComponent<BcPNTBoneModelDraw>();
@@ -152,7 +154,7 @@ namespace basecross {
 		Trans->SetRotation(m_Rotation);
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
 
-		auto collision = AddComponent<CollisionObb>();
+		auto collision = AddComponent<CollisionCapsule>();
 		collision->SetDrawActive(true);
 
 		GetStage()->SetSharedGameObject(L"s", GetThis<GameObject>());
@@ -169,6 +171,7 @@ namespace basecross {
 		//GetStage()->AddGameObject<HelpSplite>(m_Position);
 		INFlg = false;
 		flg = false;
+		HP = 10;
 	}
 
 	void RescurTarget_1::OnUpdate() {
@@ -205,6 +208,20 @@ namespace basecross {
 			}
 			draw2->UpdateAnimation(time);
 		}
+
+		if (HP < 0) {
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					target->GameEndCount();
+				}
+			}
+
+			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+		}
+
 	}
 	void RescurTarget_1::OnCollisionEnter(shared_ptr<GameObject>& obj) {
 		if (obj->FindTag(L"GoalObj")) {
@@ -218,10 +235,13 @@ namespace basecross {
 					target->TargetCount();
 				}
 			}
-			//if()
 			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+		}else
+		if (obj->FindTag(L"IncBox")) {
+			HP--;
 		}
 	}
+
 
 	//
 	void RescurTarget_2::OnCreate() {
@@ -247,10 +267,8 @@ namespace basecross {
 		Trans->SetRotation(m_Rotation);
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
 
-		auto collision = AddComponent<CollisionObb>();
+		auto collision = AddComponent<CollisionCapsule>();
 		collision->SetDrawActive(true);
-
-
 
 		auto gravity = AddComponent<Gravity>();
 		gravity->GetGravityVelocity();
@@ -261,6 +279,7 @@ namespace basecross {
 
 		INFlg = false;
 		Vec3 pos = m_Position;
+		HP = 10;
 	}
 
 	void RescurTarget_2::OnUpdate() {
@@ -296,6 +315,18 @@ namespace basecross {
 			draw2->UpdateAnimation(time);
 		}
 
+		if (HP < 0) {
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					target->GameEndCount();
+				}
+			}
+
+			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+		}
 	}
 
 	void RescurTarget_2::OnCollisionEnter(shared_ptr<GameObject>& obj) {
@@ -314,9 +345,11 @@ namespace basecross {
 					target->TargetCount();
 				}
 			}
-
 			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
-			
+		}
+		else 
+		if (obj->FindTag(L"IncBox")) {
+			HP--;
 		}
 	}
 
@@ -352,7 +385,7 @@ namespace basecross {
 		auto PtrTransform = GetComponent<Transform>();
 
 		//if (!m_SeekObject.expired()) {
-		Pos.y += 1.0f;// 0.75f;
+		Pos.y += 0.75f;
 			PtrTransform->SetPosition(Vec3(Pos.x,Pos.y,Pos.z));
 			PtrTransform->SetScale(1.0f, 1.0f, 1.0f);
 			//PtrTransform->SetQuaternion(SeekTransPtr->GetQuaternion());
@@ -365,9 +398,9 @@ namespace basecross {
 
 			SetAlphaActive(true);
 			//auto PtrTransform = GetComponent<Transform>();
-			PtrTransform->SetScale(Vec3(1));
-			PtrTransform->SetRotation(0, 0, 0);
-			PtrTransform->SetPosition(Pos);
+			//PtrTransform->SetScale(Vec3(1));
+			//PtrTransform->SetRotation(0, 0, 0);
+			//PtrTransform->SetPosition(Pos);
 
 			auto DrawComp = AddComponent<PCTStaticDraw>();
 			DrawComp->SetMeshResource(mesh);
@@ -392,8 +425,8 @@ namespace basecross {
 	}
 
 
-	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
-		:GameObject(stage), Pos(pos), m_Position(Pos){
+	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot,wstring name)
+		:GameObject(stage), Pos(pos), m_Position(Pos),Txname(name){
 	}
 
 	void GameEndSplite::OnCreate() {
@@ -415,7 +448,7 @@ namespace basecross {
 		//頂点とインデックスを指定してスプライト作成
 		auto ptrDraw = AddComponent<PCTSpriteDraw>(vertices, indices);
 		ptrDraw->SetSamplerState(SamplerState::LinearWrap);
-		ptrDraw->SetTextureResource(L"HELPTEXT_TX");
+		ptrDraw->SetTextureResource(Txname);
 	}
 	void GameEndSplite::OnUpdate() {
 		Vec3 movePos;
@@ -433,7 +466,19 @@ namespace basecross {
 		}
 
 		if (SceneChangeTime > 5) {
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			for (auto obj : gameobjects) {
+				target = dynamic_pointer_cast<GoalObject>(obj);
+				if (target) {
+					if (target->GetGoalflg()) {
+						App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Result);
+					}
+					if (target->GetEndflg()) {
+						App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
+					}
+				}
+			}
 		}
 	}
 }

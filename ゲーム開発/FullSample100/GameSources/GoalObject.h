@@ -12,9 +12,11 @@ namespace basecross {
 		Vec3 m_Rotation;
 		Vec3 m_Position;
 
-		bool flg = false;
+		bool Goalflg = false;
+		bool GameEndflg = false;
 		int GoalCount;
 		int count;
+		int EndCount;
 	public:
 		//\’z‚Æ”jŠü
 		GoalObject(const shared_ptr<Stage>& StagePtr,
@@ -31,6 +33,10 @@ namespace basecross {
 		void TargetCount() {
 			count++;
 		}
-		bool Getflg() { return flg; }
+		void GameEndCount() {
+			EndCount++ ;
+		}
+		bool GetGoalflg() { return Goalflg; }
+		bool GetEndflg() { return GameEndflg; }
 	};
 }
