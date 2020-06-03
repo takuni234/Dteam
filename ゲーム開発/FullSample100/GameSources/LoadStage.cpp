@@ -28,6 +28,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
 		strTexture = DataDir + L"number.png";
 		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
+		strTexture = DataDir + L"number_color (1).png";
+		App::GetApp()->RegisterTexture(L"NUMBERCOLOR_TX", strTexture);
 		strTexture = DataDir + L"Ground.png";
 		App::GetApp()->RegisterTexture(L"GROUND_TX", strTexture);
 		strTexture = DataDir + L"Ground2.png";
@@ -38,10 +40,12 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"FIRE_TX", strTexture);
 		strTexture = DataDir + L"PushBButton.png";
 		App::GetApp()->RegisterTexture(L"MESSAGE_TX", strTexture);
-		strTexture = DataDir + L"TitleLogo.png";
+		strTexture = DataDir + L"ƒ^ƒCƒgƒ‹ƒƒS.png";
 		App::GetApp()->RegisterTexture(L"TITLELOGO_TX", strTexture);
 		strTexture = DataDir + L"title.png";
 		App::GetApp()->RegisterTexture(L"TOTITLE_TX", strTexture);
+		strTexture = DataDir + L"stage.png";
+		App::GetApp()->RegisterTexture(L"STAGE_TX", strTexture);
 		strTexture = DataDir + L"select.png";
 		App::GetApp()->RegisterTexture(L"TOSTAGESELECT_TX", strTexture);
 		strTexture = DataDir + L"retry.png";
@@ -60,6 +64,12 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"HOTROCK_TX", strTexture);
 		strTexture = DataDir + L"Tx_Ambulance3.png";
 		App::GetApp()->RegisterTexture(L"GOAL_TX", strTexture);
+		strTexture = DataDir + L"rightmark.png";
+		App::GetApp()->RegisterTexture(L"RIGHTARROWCURSOL_TX", strTexture);
+		strTexture = DataDir + L"leftmark.png";
+		App::GetApp()->RegisterTexture(L"LEFTARROWCURSOL_TX", strTexture);
+		strTexture = DataDir + L"choice_rightmark.png";
+		App::GetApp()->RegisterTexture(L"CHOICE_RIGHTARROWCURSOL_TX", strTexture);
 		strTexture = DataDir + L"BaseCrossFullSample 2020_05_27 14_51_22.png";
 		App::GetApp()->RegisterTexture(L"Stage1_TX", strTexture);
 		
@@ -96,6 +106,8 @@ namespace basecross {
 		//BGM
 		wstring strMusic = DataDirFolder + L"nanika .wav";
 		App::GetApp()->RegisterWav(L"Nanika", strMusic);
+		strMusic = DataDirFolder + L"Reiscue.wav";
+		App::GetApp()->RegisterWav(L"REISCUE_BGM", strMusic);
 		mtx.lock();
 		m_Loaded = true;
 		mtx.unlock();

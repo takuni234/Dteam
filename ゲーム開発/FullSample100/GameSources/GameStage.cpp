@@ -298,7 +298,8 @@ namespace basecross {
 			CreateScoreSprite();
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"ERUPTION_WAV", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"ERUPTION_WAV", XAUDIO2_LOOP_INFINITE, 0.0f);
+			m_RescueBGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
 			CreateSharedObjectGroup(L"PlayerBullet");
 		}
 		catch (...) {
@@ -325,6 +326,7 @@ namespace basecross {
 		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
 			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 			ptrScor->SetScore(m_TotalTime);
+			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME) * 0.3f));
 			GameEndFlg = true;
 		}
 		//ƒNƒŠƒA

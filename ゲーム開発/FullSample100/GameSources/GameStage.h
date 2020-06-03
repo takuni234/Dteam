@@ -30,9 +30,10 @@ namespace basecross {
 		void CreateHPSprite();
 		//トータル時間
 		float m_TotalTime;
-
+		float m_MAXTIME;
 
 		shared_ptr<SoundItem> m_BGM;
+		shared_ptr<SoundItem> m_RescueBGM;
 		//ビューの作成
 
 		void CreateViewLight();
@@ -65,7 +66,7 @@ namespace basecross {
 	public:
 
 		//構築と破棄
-		GameStage() :Stage(), m_IsUpdate(true),m_TotalTime(App::GetApp()->GetScene<Scene>()->GetLimitTime()) {}
+		GameStage() :Stage(), m_IsUpdate(true),m_TotalTime(App::GetApp()->GetScene<Scene>()->GetLimitTime()), m_MAXTIME(m_TotalTime) {}
 		virtual ~GameStage() {}
 		//初期化
 		virtual void OnCreate()override;

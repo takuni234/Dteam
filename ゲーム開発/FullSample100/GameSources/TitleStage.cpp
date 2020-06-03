@@ -51,7 +51,7 @@ namespace basecross {
 			CreateSprite();
 			CreatePushSprite();
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"Nanika", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
 		}
 		catch (...) {
 			throw;
