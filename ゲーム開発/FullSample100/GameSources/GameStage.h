@@ -42,7 +42,7 @@ namespace basecross {
 		Vec3 PlayerPos;
 		Vec3 GoalPos;
 		Vec3 magumaPos;
-
+		Vec3 StagePos, StageScale;
 		//‹óF
 		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
 		//•¬‰Î‚Ì‹óF

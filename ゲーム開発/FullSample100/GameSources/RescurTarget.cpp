@@ -17,6 +17,9 @@ namespace basecross {
 		PLAYERCHASE();
 		auto Pos = GetComponent<Transform>()->GetPosition();
 		m_Position = Pos;
+		if (m_Position.y <Pos.y ) {
+			HP--;
+		}
 
 	}
 	float RescurTarget_Base::INGOALLENGTH() {
@@ -37,6 +40,14 @@ namespace basecross {
 		Vec3 langthPos = Pos - plyPos;
 		return  langthPos.length();
 
+	}
+	float RescurTarget_Base::INPLAYER(Vec3 target) {
+		auto player = GetStage()->GetSharedGameObject<Player>(L"Player");
+		auto plyTrans = player->GetComponent<Transform>();
+		auto plyPos = plyTrans->GetPosition();
+		auto Trans = GetComponent<Transform>();
+		Vec3 langthPos = target - plyPos;
+		return  langthPos.length();
 	}
 	Vec3 RescurTarget_Base::PlayerPos() {
 		return GetStage()->GetSharedGameObject<Player>(L"Player")->
@@ -409,6 +420,10 @@ namespace basecross {
 			SetDrawLayer(1);
 	}
 	void HelpSplite::OnUpdate() {
+		auto trans = GetComponent<Transform>();
+		auto pos = trans->GetPosition();
+
+		
 		auto PtrCamera = GetStage()->GetView()->GetTargetCamera();
 		auto PtrTransform = GetComponent<Transform>();
 
@@ -419,7 +434,21 @@ namespace basecross {
 		PtrTransform->SetQuaternion(Qt);
 
 		time += App::GetApp()->GetElapsedTime();
-		if (INPLAYERLANGSE()<2) {
+		shared_ptr<RescurTarget_Base> target = nullptr;
+		auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+		for (auto obj : gameobjects) {
+			target = dynamic_pointer_cast<RescurTarget_Base>(obj);
+			if (target) {
+				auto targetPos = target->GetComponent<Transform>()->GetPosition();
+				auto Trans = GetComponent<Transform>();
+				auto Pos = Trans->GetPosition();
+				Vec3 lengthPos = Pos - targetPos;
+				//length = lengthPos.length();
+				
+			}
+		}
+		length = INPLAYER(Vec3(pos.x,pos.y-1,pos.z));
+		if (length < 2.0f) {
 			GetStage()->RemoveGameObject<HelpSplite>(GetThis<HelpSplite>());
 		}
 	}
