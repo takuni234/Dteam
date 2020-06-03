@@ -26,8 +26,26 @@ namespace basecross {
 	}
 
 	void StageSelect::CreateSelectSprite() {
-		auto ptrSprite = AddGameObject<Sprite>(L"Stage1_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		//「ステージ」のテキスト
+		auto ptrStageTx = AddGameObject<Sprite>(L"STAGE_TX", Vec2(600.0f, 200.0f), Vec3(-70.0f,300.0f,0.0f));
+		//「0～9」
+		auto ptrScore = AddGameObject<ScoreSprite>(1,
+			L"NUMBERCOLOR_TX",
+			true,
+			Vec2(65.0f, 130.0f),
+			Vec3(130.0f, 300.0f, 0.0f));
+		ptrScore->SetScore(static_cast<int>(SelectKey::Stage1) + 1);
+
+		//ステージのスクリーンショット
+		auto ptrSprite = AddGameObject<Sprite>(L"Stage1_TX", Vec2(1280.0f, 800.0f) * 0.5f, Vec3(0.0f));
 		SetSharedGameObject(L"StageTXSprite", ptrSprite);
+
+		//選択カーソル
+		auto ptrRArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", Vec2(100.0f), Vec3(500.0f,0.0f,0.0f));
+		SetSharedGameObject(L"RArrowCursorSprite", ptrRArrowCursol);
+		//選択カーソル
+		auto ptrLArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", Vec2(100.0f), Vec3(0.0f,0.0f,XM_PI), Vec3(-500.0f,0.0f,0.0f));
+		SetSharedGameObject(L"LArrowCursorSprite", ptrLArrowCursol);
 	}
 
 	void StageSelect::OnCreate() {
@@ -36,7 +54,7 @@ namespace basecross {
 			CreateViewLight();
 			CreateSelectSprite();
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"Nanika", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
 		}
 		catch (...) {
 			throw;
@@ -55,6 +73,7 @@ namespace basecross {
 	void StageSelect::StageSelectKeyInput() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+		int currentNum = m_SelectNum;
 
 		if (CntlVec[0].bConnected) {
 			if (!m_InputOnce) {
@@ -80,14 +99,29 @@ namespace basecross {
 				m_Time = 0.0f;
 			}
 		}
-		else if (!(KeyState.m_bPressedKeyTbl[VK_LEFT] && KeyState.m_bPressedKeyTbl[VK_RIGHT])) {
-			if (KeyState.m_bPressedKeyTbl[VK_RIGHT]) {
+		else if (!(KeyState.m_bPressedKeyTbl['A'] && KeyState.m_bPressedKeyTbl['D'])) {
+			if (KeyState.m_bPressedKeyTbl['D']) {
 				m_SelectNum++;
 			}
-			if (KeyState.m_bPressedKeyTbl[VK_LEFT]) {
+			if (KeyState.m_bPressedKeyTbl['A']) {
 				m_SelectNum--;
 			}
 		}
+		//選択キーが変わったら
+		if (currentNum < m_SelectNum) {
+			GetSharedGameObject<Sprite>(L"RArrowCursorSprite")->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+		}
+		else {
+			GetSharedGameObject<Sprite>(L"RArrowCursorSprite")->SetTextureKey(L"RIGHTARROWCURSOL_TX");
+		}
+		//選択キーが変わったら
+		if (currentNum > m_SelectNum) {
+			GetSharedGameObject<Sprite>(L"LArrowCursorSprite")->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+		}
+		else {
+			GetSharedGameObject<Sprite>(L"LArrowCursorSprite")->SetTextureKey(L"RIGHTARROWCURSOL_TX");
+		}
+
 		if (m_SelectNum <= 0) {
 			m_SelectNum = static_cast<int>(SelectKey::Max);
 		}
@@ -115,6 +149,8 @@ namespace basecross {
 		default:
 			break;
 		}
+		auto ptrScoreSprite = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
+		ptrScoreSprite->SetScore(static_cast<int>(m_SelectKey) + 1);
 	}
 
 	void StageSelect::ChangeStageSceneSelected() {

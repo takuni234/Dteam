@@ -7,6 +7,7 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(Vec2(200.0f)),
+		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
 		m_Color(Col4(1.0f,1.0f,1.0f,1.0f))
@@ -15,6 +16,7 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(Vec2(200.0f)),
+		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
 		m_Color(color)
@@ -23,6 +25,7 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(trace),
 		m_StartScale(Vec2(200.0f)),
+		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
 		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -31,6 +34,7 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(startScale),
+		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
 		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -39,6 +43,16 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(true),
 		m_StartScale(startScale),
+		m_Rotation(0.0f),
+		m_StartPos(startPos),
+		m_Key(key),
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+	{}
+	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& rot, const Vec3& startPos)
+		:GameObject(stage),
+		m_Trace(true),
+		m_StartScale(startScale),
+		m_Rotation(rot),
 		m_StartPos(startPos),
 		m_Key(key),
 		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -47,6 +61,7 @@ namespace basecross {
 		:GameObject(stage),
 		m_Trace(trace),
 		m_StartScale(startScale),
+		m_Rotation(0.0f),
 		m_StartPos(startPos),
 		m_Key(key),
 		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
@@ -69,7 +84,7 @@ namespace basecross {
 		SetAlphaActive(m_Trace);
 		auto ptrTrans = GetComponent<Transform>();
 		ptrTrans->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
-		ptrTrans->SetRotation(Vec3(0.0f));
+		ptrTrans->SetRotation(m_Rotation);
 		ptrTrans->SetPosition(m_StartPos);
 
 		auto ptrDraw = AddComponent<PCTSpriteDraw>(vertex, indices);

@@ -74,7 +74,7 @@ namespace basecross {
 			GetSharedObjectGroup(L"GameOverSprite")->IntoGroup(ptrSprite);
 		}
 
-		auto ptrCursol = AddGameObject<Sprite>(L"SPARK_TX");
+		auto ptrCursol = AddGameObject<Sprite>(L"LEFTARROWCURSOL_TX", Vec2(50.0f));
 		ptrCursol->SetPosition(DefultPos + Vec3((m_GameOverSpriteDefultScale[static_cast<int>(GameOverStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 		SetSharedGameObject(L"GameOverCursor", ptrCursol);
 	}
@@ -86,7 +86,7 @@ namespace basecross {
 			CreatePushSprite();
 			CreateSprite();
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"Nanika", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
 		}
 		catch (...) {
 			throw;

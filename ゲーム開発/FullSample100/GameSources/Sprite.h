@@ -11,6 +11,7 @@ namespace basecross {
 		}
 	protected:
 		Vec2 m_StartScale;
+		Vec3 m_Rotation;
 		Vec3 m_StartPos;
 		bool m_Trace;
 		wstring m_Key;
@@ -21,6 +22,7 @@ namespace basecross {
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& startPos);
+		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& rot, const Vec3& startPos);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace, const Vec2& startScale, const Vec3& startPos);
 		virtual ~Sprite();
 
