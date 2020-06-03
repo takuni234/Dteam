@@ -420,6 +420,10 @@ namespace basecross {
 			SetDrawLayer(1);
 	}
 	void HelpSplite::OnUpdate() {
+		auto trans = GetComponent<Transform>();
+		auto pos = trans->GetPosition();
+
+		
 		auto PtrCamera = GetStage()->GetView()->GetTargetCamera();
 		auto PtrTransform = GetComponent<Transform>();
 
@@ -440,9 +444,10 @@ namespace basecross {
 				auto Pos = Trans->GetPosition();
 				Vec3 lengthPos = Pos - targetPos;
 				//length = lengthPos.length();
-				length = INPLAYER(targetPos);
+				
 			}
 		}
+		length = INPLAYER(Vec3(pos.x,pos.y-1,pos.z));
 		if (length < 2.0f) {
 			GetStage()->RemoveGameObject<HelpSplite>(GetThis<HelpSplite>());
 		}
