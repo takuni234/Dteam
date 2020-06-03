@@ -17,6 +17,7 @@ namespace basecross {
 		float INGOALLENGTH();
 		void INGOAL();
 		float INPLAYERLANGSE();
+		float INPLAYER(Vec3 target);
 		bool OUTPLAYER_CALL();
 		Vec3 PlayerPos();
 		Vec3 GoalPos();
@@ -120,6 +121,7 @@ namespace basecross {
 			return Qt;
 		}
 		float time;
+		float length;
 	public:
 		HelpSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot);
 		~HelpSplite() {}
