@@ -39,7 +39,7 @@ namespace basecross {
 	void GameOverStage::CreateSprite() {
 		CreateSharedObjectGroup(L"GameOverSprite");
 		//配置する位置（全体）
-		Vec3 DefultPos(-500.0f, 50.0f, 0.0f);
+		Vec3 DefultPos(0.0f, 50.0f, 0.0f);
 		Vec3 alignVec(0.0f);
 		for (int i = 0; i < static_cast<int>(GameOverStageMenuKey::Max); i++) {
 			Vec2 createScale(300.0f, 100.0f);
@@ -143,11 +143,11 @@ namespace basecross {
 				m_Time = 0.0f;
 			}
 		}
-		else if (!(KeyState.m_bPressedKeyTbl[VK_UP] && KeyState.m_bPressedKeyTbl[VK_DOWN])) {
-			if (KeyState.m_bPressedKeyTbl[VK_DOWN]) {
+		else if (!(KeyState.m_bPressedKeyTbl['W'] && KeyState.m_bPressedKeyTbl['S'])) {
+			if (KeyState.m_bPressedKeyTbl['S']) {
 				m_SelectNum++;
 			}
-			if (KeyState.m_bPressedKeyTbl[VK_UP]) {
+			if (KeyState.m_bPressedKeyTbl['W']) {
 				m_SelectNum--;
 			}
 		}

@@ -12,6 +12,8 @@ namespace basecross {
 		Vec3 m_Rotation;
 		Vec3 m_Position;
 		Vec3 m_MoveDir;
+		//岩の貫通バグ防止用
+		Vec3 m_CollisionPos;
 		//移動スピード
 		float m_Speed;
 		//向いている方向

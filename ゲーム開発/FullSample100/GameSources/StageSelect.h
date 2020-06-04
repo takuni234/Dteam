@@ -18,7 +18,11 @@ namespace basecross {
 		SelectKey m_SelectKey;
 		//入力判定フラグ
 		bool m_InputOnce;
-		float m_Time;
+		float m_InputTime;
+		//カーソルのサイズ
+		Vec2 m_ArrowCursorScale;
+		float m_RCursorTime;
+		float m_LCursorTime;
 
 		void CreateSelectSprite();
 		//入力から選択カーソルを移動
@@ -27,7 +31,7 @@ namespace basecross {
 		void ChangeStageSceneSelected();
 	public:
 		//構築と破棄
-		StageSelect() :Stage(), m_SelectKey(SelectKey::Stage1), m_InputOnce(false), m_Time(0.0f) {}
+		StageSelect() :Stage(), m_SelectKey(SelectKey::Stage1), m_InputOnce(false), m_InputTime(0.0f), m_ArrowCursorScale(100.0f), m_RCursorTime(0.0f) {}
 		virtual ~StageSelect() {}
 		//初期化
 		virtual void OnCreate()override;

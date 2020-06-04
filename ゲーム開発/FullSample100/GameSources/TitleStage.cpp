@@ -42,6 +42,10 @@ namespace basecross {
 		logoRatio *= logoScale;
 		//タイトル画像
 		AddGameObject<Sprite>(L"TITLELOGO_TX", true, logoRatio, Vec3(0.0f, 120.0f, 0.0f));
+
+		//ステージの背景
+		auto ptrSprite = AddGameObject<Sprite>(L"TITLE_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrSprite->SetDrawLayer(-1);
 	}
 
 	void TitleStage::OnCreate() {

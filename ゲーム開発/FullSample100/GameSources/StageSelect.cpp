@@ -40,11 +40,14 @@ namespace basecross {
 		auto ptrSprite = AddGameObject<Sprite>(L"Stage1_TX", Vec2(1280.0f, 800.0f) * 0.5f, Vec3(0.0f));
 		SetSharedGameObject(L"StageTXSprite", ptrSprite);
 
+		auto ptrBGSprite = AddGameObject<Sprite>(L"STAGESELECT_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrBGSprite->SetDrawLayer(-1);
+
 		//選択カーソル
-		auto ptrRArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", Vec2(100.0f), Vec3(500.0f,0.0f,0.0f));
+		auto ptrRArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", m_ArrowCursorScale, Vec3(500.0f,0.0f,0.0f));
 		SetSharedGameObject(L"RArrowCursorSprite", ptrRArrowCursol);
 		//選択カーソル
-		auto ptrLArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", Vec2(100.0f), Vec3(0.0f,0.0f,XM_PI), Vec3(-500.0f,0.0f,0.0f));
+		auto ptrLArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", m_ArrowCursorScale, Vec3(0.0f,0.0f,XM_PI), Vec3(-500.0f,0.0f,0.0f));
 		SetSharedGameObject(L"LArrowCursorSprite", ptrLArrowCursol);
 	}
 
@@ -74,6 +77,7 @@ namespace basecross {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
 		int currentNum = m_SelectNum;
+		auto elapsedTime = App::GetApp()->GetElapsedTime();
 
 		if (CntlVec[0].bConnected) {
 			if (!m_InputOnce) {
@@ -87,16 +91,15 @@ namespace basecross {
 				}
 			}
 			else {
-				auto elapsedTime = App::GetApp()->GetElapsedTime();
-				m_Time += elapsedTime;
-				if (m_Time > 0.3f) {
+				m_InputTime += elapsedTime;
+				if (m_InputTime > 0.3f) {
 					m_InputOnce = false;
-					m_Time = 0.0f;
+					m_InputTime = 0.0f;
 				}
 			}
 			if (CntlVec[0].fThumbLX <= 0.05f && CntlVec[0].fThumbLX >= -0.05f) {
 				m_InputOnce = false;
-				m_Time = 0.0f;
+				m_InputTime = 0.0f;
 			}
 		}
 		else if (!(KeyState.m_bPressedKeyTbl['A'] && KeyState.m_bPressedKeyTbl['D'])) {
@@ -109,17 +112,33 @@ namespace basecross {
 		}
 		//選択キーが変わったら
 		if (currentNum < m_SelectNum) {
-			GetSharedGameObject<Sprite>(L"RArrowCursorSprite")->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"RArrowCursorSprite");
+			ptrSprite->SetScale(m_ArrowCursorScale * 0.8f);
+			ptrSprite->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+			m_RCursorTime = 0.0f;
+		}
+		else if(m_RCursorTime >= 0.1f) {
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"RArrowCursorSprite");
+			ptrSprite->SetScale(m_ArrowCursorScale);
+			ptrSprite->SetTextureKey(L"RIGHTARROWCURSOL_TX");
 		}
 		else {
-			GetSharedGameObject<Sprite>(L"RArrowCursorSprite")->SetTextureKey(L"RIGHTARROWCURSOL_TX");
+			m_RCursorTime += elapsedTime;
 		}
 		//選択キーが変わったら
 		if (currentNum > m_SelectNum) {
-			GetSharedGameObject<Sprite>(L"LArrowCursorSprite")->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"LArrowCursorSprite");
+			ptrSprite->SetScale(m_ArrowCursorScale * 0.8f);
+			ptrSprite->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
+			m_LCursorTime = 0.0f;
+		}
+		else if(m_LCursorTime >= 0.1f) {
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"LArrowCursorSprite");
+			ptrSprite->SetScale(m_ArrowCursorScale);
+			ptrSprite->SetTextureKey(L"RIGHTARROWCURSOL_TX");
 		}
 		else {
-			GetSharedGameObject<Sprite>(L"LArrowCursorSprite")->SetTextureKey(L"RIGHTARROWCURSOL_TX");
+			m_LCursorTime += elapsedTime;
 		}
 
 		if (m_SelectNum <= 0) {

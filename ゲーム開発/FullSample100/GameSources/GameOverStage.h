@@ -32,7 +32,7 @@ namespace basecross {
 		void ChangeStageSceneSelected();
 	public:
 		//\’z‚Æ”jŠü
-		GameOverStage() :Stage(), m_Time(0.0f), m_SpriteAlign(true) {}
+		GameOverStage() :Stage(), m_Time(0.0f), m_SpriteAlign(false) {}
 		virtual ~GameOverStage() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;

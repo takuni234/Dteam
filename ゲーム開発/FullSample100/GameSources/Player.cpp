@@ -201,6 +201,14 @@ namespace basecross {
 	}
 
 	void Player::OnCollisionEnter(shared_ptr<GameObject>& Other) {
+		if (Other->FindTag(L"ObjRock")) {
+			//auto ptrGra = GetComponent<Gravity>();
+			//ptrGra->SetGravity(Vec3(0.0f,-9.8f,0.0f));
+			//ptrGra->SetGravityVerocityZero();
+			auto ptrTrans = GetComponent<Transform>();
+			Vec3 posy = ptrTrans->GetPosition();
+			ptrTrans->SetPosition(posy + Vec3(0.0f,0.004f,0.0f));
+		}
 		if (Other->FindTag(L"IncBox")) {
 			this->GetStateMachine()->ChangeState(DamageState::Instance());
 		}

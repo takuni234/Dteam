@@ -27,13 +27,37 @@ namespace basecross {
 
 	//点滅するスプライト作成
 	void ResultStage::CreatePushSprite() {
+		//スコア
 		auto ptrScore = AddGameObject<ScoreSprite>(1,
 			L"NUMBER_TX",
 			true,
-			Vec2(250.0f, 100.0f),
-			Vec3(0.0f, 300.0f, 0.0f));
+			Vec2(70.0f, 140.0f),
+			Vec3(120.0f, 200.0f, 0.0f));
 		ptrScore->SetScore(static_cast<float>(m_SelectNum));
-		SetSharedGameObject(L"TestScoreSprite", ptrScore);
+		SetSharedGameObject(L"ResultScoreSprite", ptrScore);
+		//ステージ内で取得可能な最大スコア
+		auto ptrMaxScore = AddGameObject<ScoreSprite>(1,
+			L"NUMBER_TX",
+			true,
+			Vec2(70.0f, 140.0f),
+			Vec3(300.0f, 200.0f, 0.0f));
+		ptrMaxScore->SetScore(static_cast<float>(m_SelectNum));
+		SetSharedGameObject(L"MaxResultScoreSprite", ptrMaxScore);
+		//ステージの背景
+		auto ptrSprite = AddGameObject<Sprite>(L"RESULT_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrSprite->SetDrawLayer(-3);
+		//UI フレーム
+		ptrSprite = AddGameObject<Sprite>(L"RESULT_FRAME1_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrSprite->SetDrawLayer(-2);
+		//UI フレーム
+		ptrSprite = AddGameObject<Sprite>(L"RESULT_FRAME2_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f, 200.0f,0.0));
+		ptrSprite->SetDrawLayer(-1);
+		//「助けた人数」
+		ptrSprite = AddGameObject<Sprite>(L"SCORE_TX", Vec2(600.0f, 200.0f), Vec3(-200.0f, 200.0f,0.0));
+		ptrSprite->SetDrawLayer(0);
+		//「/」
+		ptrSprite = AddGameObject<Sprite>(L"SLASH_TX", Vec2(840.0f, 280.0f), Vec3(210.0f, 200.0f,0.0));
+		ptrSprite->SetDrawLayer(0);
 	}
 
 	void ResultStage::CreateSprite() {
@@ -41,8 +65,8 @@ namespace basecross {
 		//配置する位置（全体）
 		Vec3 DefultPos(0.0f,0.0f,0.0f);
 		for (int i = 0; i < static_cast<int>(ResultStageMenuKey::Max); i++) {
-			Vec2 createScale(100.0f, 100.0f);
-			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
+			Vec2 createScale(450.0f, 150.0f);
+			Vec3 createPos(Vec3(0.0f, -i * 100.0f, 0.0f) + DefultPos);
 			wstring txKey;
 			switch (static_cast<ResultStageMenuKey>(i))
 			{
@@ -143,11 +167,11 @@ namespace basecross {
 				m_Time = 0.0f;
 			}
 		}
-		else if (!(KeyState.m_bPressedKeyTbl[VK_UP] && KeyState.m_bPressedKeyTbl[VK_DOWN])) {
-			if (KeyState.m_bPressedKeyTbl[VK_DOWN]) {
+		else if (!(KeyState.m_bPressedKeyTbl['W'] && KeyState.m_bPressedKeyTbl['S'])) {
+			if (KeyState.m_bPressedKeyTbl['S']) {
 				m_SelectNum++;
 			}
-			if (KeyState.m_bPressedKeyTbl[VK_UP]) {
+			if (KeyState.m_bPressedKeyTbl['W']) {
 				m_SelectNum--;
 			}
 		}
@@ -159,10 +183,11 @@ namespace basecross {
 	}
 
 	void ResultStage::UpdateCursor() {
-		GetSharedGameObject<ScoreSprite>(L"TestScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
+		GetSharedGameObject<ScoreSprite>(L"ResultScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
+		GetSharedGameObject<ScoreSprite>(L"MaxResultScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
 		auto ptrCursor = GetSharedGameObject<Sprite>(L"ResultCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
-		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3(-(m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));
+		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));
 	}
 
 	void ResultStage::ChangeStageSceneSelected() {

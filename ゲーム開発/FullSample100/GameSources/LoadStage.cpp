@@ -50,7 +50,7 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"TOSTAGESELECT_TX", strTexture);
 		strTexture = DataDir + L"retry.png";
 		App::GetApp()->RegisterTexture(L"TORETRY_TX", strTexture);
-		strTexture = DataDir + L"TitleLogo.png";
+		strTexture = DataDir + L"nextstage.png";
 		App::GetApp()->RegisterTexture(L"TONEXTSTAGE_TX", strTexture);
 		strTexture = DataDir + L"HelpMe.png";
 		App::GetApp()->RegisterTexture(L"HELPTEXT_TX", strTexture);
@@ -70,6 +70,20 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"LEFTARROWCURSOL_TX", strTexture);
 		strTexture = DataDir + L"choice_rightmark.png";
 		App::GetApp()->RegisterTexture(L"CHOICE_RIGHTARROWCURSOL_TX", strTexture);
+		strTexture = DataDir + L"resultbackground.png";
+		App::GetApp()->RegisterTexture(L"TITLE_BACKGROUND_TX", strTexture);
+		strTexture = DataDir + L"resultbackground.png";
+		App::GetApp()->RegisterTexture(L"STAGESELECT_BACKGROUND_TX", strTexture);
+		strTexture = DataDir + L"resultbackground.png";
+		App::GetApp()->RegisterTexture(L"RESULT_BACKGROUND_TX", strTexture);
+		strTexture = DataDir + L"score.png";
+		App::GetApp()->RegisterTexture(L"SCORE_TX", strTexture);
+		strTexture = DataDir + L"slash.png";
+		App::GetApp()->RegisterTexture(L"SLASH_TX", strTexture);
+		strTexture = DataDir + L"resultframe1.png";
+		App::GetApp()->RegisterTexture(L"RESULT_FRAME1_TX", strTexture);
+		strTexture = DataDir + L"resultframe2.png";
+		App::GetApp()->RegisterTexture(L"RESULT_FRAME2_TX", strTexture);
 		strTexture = DataDir + L"BaseCrossFullSample 2020_05_27 14_51_22.png";
 		App::GetApp()->RegisterTexture(L"Stage1_TX", strTexture);
 		

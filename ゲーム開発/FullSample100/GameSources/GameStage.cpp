@@ -41,6 +41,7 @@ namespace basecross {
 			Vec2(250.0f, 100.0f),
 			Vec3(0.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(m_TotalTime);
+		SetSharedGameObject(L"ScoreSprite", ptrScore);
 	}
 
 	void GameStage::CreateHPSprite() {
@@ -348,7 +349,7 @@ namespace basecross {
 		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
 			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 			ptrScor->SetScore(m_TotalTime);
-			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME) * 0.3f));
+			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME) * 0.1f));
 			GameEndFlg = true;
 		}
 		//ƒNƒŠƒA
