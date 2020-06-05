@@ -92,6 +92,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"HPGAUGE1_TX", strTexture);
 		strTexture = DataDir + L"HPgauge2.png";
 		App::GetApp()->RegisterTexture(L"HPGAUGE2_TX", strTexture);
+		strTexture = DataDir + L"volcanicash2.png";
+		App::GetApp()->RegisterTexture(L"SMOKE_TX", strTexture);
 		
 		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);

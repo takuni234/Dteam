@@ -19,10 +19,44 @@ namespace basecross {
 		bool GameEndFlg = false;
 		bool TimeUpFlg = false;
 		int GoalCount = 0;
+		//トータル時間
+		float m_TotalTime;
+		float m_MAXTIME;
+
+		bool m_IsUpdate;
+
 		//CSV
 		CsvFile csvfile_1;
 		CsvFile csvfile_2;
 		CsvFile ObjCsvfile;
+
+		//BGM
+		shared_ptr<SoundItem> m_BGM;
+		shared_ptr<SoundItem> m_RescueBGM;
+		//カメラ用
+		//OpeningCamera用のビュー
+		shared_ptr<SingleView> m_OpeningCameraView;
+		//PlayerCamera用のビュー
+		shared_ptr<SingleView> m_PlayerCameraView;
+		CameraSelect m_CameraSelect;
+
+		Vec3 PlayerPos;
+		Vec3 GoalPos;
+		Vec3 magumaPos;
+		Vec3 StagePos, StageScale;
+		Vec2 StageWallScale;
+		
+		//インプットハンドラー
+		InputHandler<GameStage> m_InputHandler;
+
+		//空色
+		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
+		//噴火時の空色
+		Col4 m_Color1 = Col4(87.0f / 255.0f, 56.0f / 255.0f, 38.0f / 255.0f, 1.0f);
+		
+		//ビューの作成
+		void CreateViewLight();
+		//CSV読込
 		void CreateObjectB_CSV();
 		//スコアスプライト作成
 		void CreateScoreSprite();
@@ -30,42 +64,14 @@ namespace basecross {
 		void CreateTreeObjects(const Vec2& mapSize, const Vec3& stageSize);
 		//HPバーの作成
 		void CreateHPSprite();
-		//トータル時間
-		float m_TotalTime;
-		float m_MAXTIME;
-
-		shared_ptr<SoundItem> m_BGM;
-		shared_ptr<SoundItem> m_RescueBGM;
-		//ビューの作成
-
-		void CreateViewLight();
-		bool m_IsUpdate;
-
-		Vec3 PlayerPos;
-		Vec3 GoalPos;
-		Vec3 magumaPos;
-		Vec3 StagePos, StageScale;
-		Vec2 StageWallScale;
-		//空色
-		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
-		//噴火時の空色
-		Col4 m_Color1 = Col4(87.0f/255.0f,56.0f/255.0f, 38.0f/255.0f, 1.0f);
-
 		//背景色を変更する
 		void SetBackGroundColor(Col4 color);
 		//設定した高度に合わせて背景色を変更する
 		void SetBackGroundPlayerPosColor(Col4 posZero, Col4 posMax, float posSizeMax);
-
-		//カメラ用
-		//OpeningCamera用のビュー
-		shared_ptr<SingleView> m_OpeningCameraView;
-		//PlayerCamera用のビュー
-		shared_ptr<SingleView> m_PlayerCameraView;
-		CameraSelect m_CameraSelect;
 		//カメラマンの作成
 		void CreateCameraman();
-
-		InputHandler<GameStage> m_InputHandler;
+		//煙の作成
+		void CreateSmoke();
 	public:
 
 		//構築と破棄

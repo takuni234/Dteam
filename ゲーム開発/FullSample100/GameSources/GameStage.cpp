@@ -294,6 +294,9 @@ namespace basecross {
 		Col4 ZeroCol = posZeroCol - posZeroCol * playerPosCol;
 		Col4 MaxCol = posMaxCol * playerPosCol;
 		SetBackGroundColor(ZeroCol + MaxCol);
+		//煙の濃度(alpha)
+		auto ptrSmoke = GetSharedGameObject<Sprite>(L"SmokeSprite");
+		ptrSmoke->SetAlpha(playerPosCol);
 	}
 
 	//カメラマンの作成
@@ -309,6 +312,12 @@ namespace basecross {
 			m_CameraSelect = CameraSelect::openingCamera;
 		}
 
+	}
+
+	void GameStage::CreateSmoke() {
+		auto ptrHP = AddGameObject<Sprite>(L"SMOKE_TX", 10.0f, Vec2(1280.0f, 800.0f), Vec3(0.0));
+		ptrHP->SetDrawLayer(1);
+		SetSharedGameObject(L"SmokeSprite", ptrHP);
 	}
 
 	void GameStage::OnCreate() {
@@ -337,6 +346,7 @@ namespace basecross {
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 			CreateHPSprite();
+			CreateSmoke();
 			//カメラマンの作成
 			CreateCameraman();
 
@@ -363,6 +373,7 @@ namespace basecross {
 		auto goal = GetSharedGameObject<GoalObject>(L"Goal");
 
 		SetBackGroundPlayerPosColor(m_Color, m_Color1, 2.24f);
+
 		if (GetThis<GameStage>()->GetCameraSelect() == CameraSelect::openingCamera) {
 			return;
 		}

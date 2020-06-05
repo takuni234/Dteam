@@ -10,7 +10,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
-		m_Color(Col4(1.0f,1.0f,1.0f,1.0f))
+		m_Color(Col4(1.0f,1.0f,1.0f,1.0f)),
+		m_Alpha(1.0f)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Col4& color)
 		:GameObject(stage),
@@ -19,7 +20,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
-		m_Color(color)
+		m_Color(color),
+		m_Alpha(m_Color.w)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace)
 		:GameObject(stage),
@@ -28,7 +30,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
-		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f)),
+		m_Alpha(1.0f)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale)
 		:GameObject(stage),
@@ -37,7 +40,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(Vec3(0.0f)),
 		m_Key(key),
-		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f)),
+		m_Alpha(1.0f)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& startPos)
 		:GameObject(stage),
@@ -46,7 +50,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(startPos),
 		m_Key(key),
-		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f)),
+		m_Alpha(1.0f)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Vec2& startScale, const Vec3& rot, const Vec3& startPos)
 		:GameObject(stage),
@@ -55,7 +60,8 @@ namespace basecross {
 		m_Rotation(rot),
 		m_StartPos(startPos),
 		m_Key(key),
-		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f)),
+		m_Alpha(1.0f)
 	{}
 	Sprite::Sprite(const shared_ptr<Stage>& stage, const wstring& key, const bool& trace, const Vec2& startScale, const Vec3& startPos)
 		:GameObject(stage),
@@ -64,7 +70,8 @@ namespace basecross {
 		m_Rotation(0.0f),
 		m_StartPos(startPos),
 		m_Key(key),
-		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f))
+		m_Color(Col4(1.0f, 1.0f, 1.0f, 1.0f)),
+		m_Alpha(1.0f)
 	{}
 
 	Sprite::~Sprite() {

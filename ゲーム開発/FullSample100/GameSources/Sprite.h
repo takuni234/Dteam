@@ -3,12 +3,6 @@
 
 namespace basecross {
 	class Sprite : public GameObject {
-		void UpdateScale() {
-			GetComponent<Transform>()->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
-		}
-		void UpdatePosition() {
-			GetComponent<Transform>()->SetPosition(m_StartPos);
-		}
 	protected:
 		Vec2 m_StartScale;
 		Vec3 m_Rotation;
@@ -16,6 +10,7 @@ namespace basecross {
 		bool m_Trace;
 		wstring m_Key;
 		Col4 m_Color;
+		float m_Alpha;
 	public:
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key);
 		Sprite(const shared_ptr<Stage>& stage, const wstring& key, const Col4& color);
@@ -38,14 +33,19 @@ namespace basecross {
 		}
 		void SetScale(const Vec2& scale) {
 			m_StartScale = scale;
-			UpdateScale();
+			GetComponent<Transform>()->SetScale(m_StartScale.x, m_StartScale.y, 1.0f);
 		}
 		Vec3 GetPosition() const {
 			return m_StartPos;
 		}
 		void SetPosition(const Vec3& pos) {
 			m_StartPos = pos;
-			UpdatePosition();
+			GetComponent<Transform>()->SetPosition(m_StartPos);
+		}
+		void SetAlpha(const float& alpha) {
+			m_Alpha = alpha;
+			auto ptrDraw = GetComponent<PCTSpriteDraw>();
+			ptrDraw->SetDiffuse(Col4(m_Color.x, m_Color.y, m_Color.z, m_Alpha));
 		}
 	};
 
