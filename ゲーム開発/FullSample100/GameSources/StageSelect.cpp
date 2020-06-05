@@ -188,7 +188,7 @@ namespace basecross {
 				ptrScene->SetStageCSVKey(L"Stage1.csv");
 				break;
 			case SelectKey::Stage2:
-				ptrScene->SetLimitTime(30.0f);
+				ptrScene->SetLimitTime(120.0f);
 				ptrScene->SetStageCSVKey(L"Stage2.csv");
 				break;
 			case SelectKey::Stage3:
