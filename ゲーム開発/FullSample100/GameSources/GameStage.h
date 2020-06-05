@@ -26,6 +26,8 @@ namespace basecross {
 		void CreateObjectB_CSV();
 		//スコアスプライト作成
 		void CreateScoreSprite();
+		//木の作成
+		void CreateTreeObjects(const Vec2& mapSize, const Vec3& stageSize);
 		//HPバーの作成
 		void CreateHPSprite();
 		//トータル時間
@@ -43,6 +45,7 @@ namespace basecross {
 		Vec3 GoalPos;
 		Vec3 magumaPos;
 		Vec3 StagePos, StageScale;
+		Vec2 StageWallScale;
 		//空色
 		Col4 m_Color = Col4(144.0f / 255.0f, 215.0f / 255.0f, 236.0f / 255.0f, 1.0f);
 		//噴火時の空色

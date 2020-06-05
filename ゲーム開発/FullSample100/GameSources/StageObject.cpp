@@ -123,6 +123,26 @@ namespace basecross {
 			m_SavePos = transComp->GetPosition();
 		}
 	}
+
+	Tree::Tree(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos)
+		: GameObject(stage), m_Scale(scale), m_Rotation(rot), m_Position(pos) 
+	{}
+
+	void Tree::OnCreate() {
+		auto Trans = GetComponent<Transform>();
+		Trans->SetScale(m_Scale);
+		Trans->SetRotation(m_Rotation);
+		Trans->SetPosition(m_Position);
+
+		//‰e‚ð‚Â‚¯‚é
+		auto ptrShadow = AddComponent<Shadowmap>();
+		ptrShadow->SetMeshResource(L"TREE_MESH");
+
+		auto Draw = AddComponent<PNTStaticDraw>();
+		Draw->SetMeshResource(L"TREE_MESH");
+		Draw->SetTextureResource(L"TREE_TX");
+	}
+
 	void CollisionBox::OnCreate() {
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position);

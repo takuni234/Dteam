@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "Project.h"
+#include <random>
 
 namespace basecross {
 
@@ -42,6 +43,23 @@ namespace basecross {
 			Vec3(0.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(m_TotalTime);
 		SetSharedGameObject(L"ScoreSprite", ptrScore);
+	}
+
+	//木の作成
+	void GameStage::CreateTreeObjects(const Vec2& mapSize, const Vec3& stageSize) {
+		srand((unsigned int)time(NULL));
+		for (int i = -int(stageSize.z * 0.5f); i < int(stageSize.z * 0.5f); i++) {
+			for (int j = -int(stageSize.x * 0.5f); j < int(stageSize.x * 0.5f); j++) {
+				if (-mapSize.x * 0.5f <= j && mapSize.x * 0.5f >= j && mapSize.y * 0.5f >= i) {
+				}
+				else {
+					//40%の確立で生成
+					if (float(rand() % 10 + 1) < 5) {
+						AddGameObject<Tree>(Vec3(0.3f), Vec3(0.0f), Vec3(float(j) + 0.5f, 0.0f, float(i) + 0.5f));
+					}
+				}
+			}
+		}
 	}
 
 	void GameStage::CreateHPSprite() {
@@ -127,7 +145,7 @@ namespace basecross {
 				(float)_wtof(torkns[6].c_str())
 			);
 			StagePos = col_Pos;
-			StagePos = col_Scale;
+			StageScale = col_Scale;
 			auto ground = AddGameObject<FixedBox>(col_Scale, Vec3(0.0f), col_Pos);
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"Wall");
@@ -149,6 +167,12 @@ namespace basecross {
 			);
 			AddGameObject<CollisionBox>(Vec3(col_Pos.x, col_Pos.y - 0.5f, col_Pos.z), col_Scale,Vec3(0)); //-1 * (* 13.74f )
 
+			if (col_Scale.x > StageWallScale.x) {
+				StageWallScale.x = col_Scale.x;
+			}
+			if (col_Scale.z > StageWallScale.y) {
+				StageWallScale.y = col_Scale.z;
+			}
 			AddGameObject<TransparentBox>(
 				Vec3(col_Scale), 
 				Vec3(0.0f),
@@ -289,8 +313,8 @@ namespace basecross {
 			auto ptrScene = App::GetApp()->GetScene<Scene>();
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
-			//ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
-			ObjCsvfile.SetFileName(detadir + /*L"TestStage.csv");*/ L"SaveData25.csv");// SaveData.csv");// GameStageA.csv");
+			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
+			//ObjCsvfile.SetFileName(detadir + /*L"TestStage.csv");*/ L"SaveData25.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();
@@ -298,7 +322,8 @@ namespace basecross {
 			//SetPhysicsActive(true);
 			//ビューとライトの作成
 			CreateViewLight();
-
+			//マップのサイズに合わせて木を生成する
+			CreateTreeObjects(StageWallScale, StageScale);
 			auto ground = AddGameObject<FixedBox>(StageScale, Vec3(0.0f),StagePos);
 			//ground->AddTag(L"Ground");
 			//SetSharedGameObject(L"Stage", ground);
@@ -322,7 +347,7 @@ namespace basecross {
 			//BGM
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
 			m_BGM = XAPtr->Start(L"ERUPTION_WAV", XAUDIO2_LOOP_INFINITE, 0.0f);
-			m_RescueBGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_RescueBGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.07f);
 			CreateSharedObjectGroup(L"PlayerBullet");
 		}
 		catch (...) {
@@ -349,7 +374,7 @@ namespace basecross {
 		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
 			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
 			ptrScor->SetScore(m_TotalTime);
-			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME) * 0.1f));
+			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME)) * 0.2f);
 			GameEndFlg = true;
 		}
 		//クリア

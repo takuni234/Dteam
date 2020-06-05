@@ -44,6 +44,16 @@ namespace basecross {
 		virtual void OnCollisionEnter(shared_ptr<GameObject>& Other)override;
 		virtual void OnCollisionExcute(shared_ptr<GameObject>& Other)override;
 	};
+
+	class Tree :public GameObject {
+		Vec3 m_Position, m_Scale, m_Rotation;
+	public:
+		Tree(const shared_ptr<Stage>& stage, const Vec3& scale, const Vec3& rot, const Vec3& pos);
+		~Tree() {}
+
+		void OnCreate() override;
+	};
+
 	class CollisionBox :public GameObject {
 		Vec3 m_Position, m_Scale, m_Rotation;
 	public:
