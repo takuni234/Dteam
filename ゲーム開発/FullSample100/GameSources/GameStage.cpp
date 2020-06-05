@@ -65,7 +65,10 @@ namespace basecross {
 	void GameStage::CreateHPSprite() {
 		Vec2 HPUIScale(200.0f,100.0f);
 		Vec3 HPUIPos(-450.0f, 300.0f, 0.0f);
-		auto ptrHP = AddGameObject<HPSprite>(L"SKY_TX", 10.0f, HPUIScale, HPUIPos);
+		auto ptrHP = AddGameObject<HPSprite>(L"HPGAUGE1_TX", 10.0f, HPUIScale, HPUIPos);
+		ptrHP->SetDrawLayer(2);
+		ptrHP = AddGameObject<HPSprite>(L"HPGAUGE2_TX", 10.0f, HPUIScale, HPUIPos + Vec3(6.5f,0.0f,0.0f));
+		ptrHP->SetDrawLayer(3);
 		SetSharedGameObject(L"PlayerHPSprite", ptrHP);
 	}
 

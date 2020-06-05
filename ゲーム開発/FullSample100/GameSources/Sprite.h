@@ -40,6 +40,9 @@ namespace basecross {
 			m_StartScale = scale;
 			UpdateScale();
 		}
+		Vec3 GetPosition() const {
+			return m_StartPos;
+		}
 		void SetPosition(const Vec3& pos) {
 			m_StartPos = pos;
 			UpdatePosition();

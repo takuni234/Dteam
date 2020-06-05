@@ -88,6 +88,10 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"RESULT_FRAME2_TX", strTexture);
 		strTexture = DataDir + L"BaseCrossFullSample 2020_05_27 14_51_22.png";
 		App::GetApp()->RegisterTexture(L"Stage1_TX", strTexture);
+		strTexture = DataDir + L"HPgauge1.png";
+		App::GetApp()->RegisterTexture(L"HPGAUGE1_TX", strTexture);
+		strTexture = DataDir + L"HPgauge2.png";
+		App::GetApp()->RegisterTexture(L"HPGAUGE2_TX", strTexture);
 		
 		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
