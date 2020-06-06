@@ -56,7 +56,7 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"TORETRY_TX", strTexture);
 		strTexture = DataDir + L"nextstage.png";
 		App::GetApp()->RegisterTexture(L"TONEXTSTAGE_TX", strTexture);
-		strTexture = DataDir + L"HelpMe.png";
+		strTexture = DataDir + L"help.png";
 		App::GetApp()->RegisterTexture(L"HELPTEXT_TX", strTexture);
 		strTexture = DataDir + L"Tx_survivor.png";
 		App::GetApp()->RegisterTexture(L"SURVIVOR_TX", strTexture);
