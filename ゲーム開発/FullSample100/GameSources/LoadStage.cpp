@@ -42,6 +42,10 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"MESSAGE_TX", strTexture);
 		strTexture = DataDir + L"ƒ^ƒCƒgƒ‹ƒƒS.png";
 		App::GetApp()->RegisterTexture(L"TITLELOGO_TX", strTexture);
+		strTexture = DataDir + L"gameover2.png";
+		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
+		strTexture = DataDir + L"gameclear.png";
+		App::GetApp()->RegisterTexture(L"GAMECREAR_TX", strTexture);
 		strTexture = DataDir + L"title.png";
 		App::GetApp()->RegisterTexture(L"TOTITLE_TX", strTexture);
 		strTexture = DataDir + L"stage.png";
@@ -78,6 +82,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"STAGESELECT_BACKGROUND_TX", strTexture);
 		strTexture = DataDir + L"resultbackground.png";
 		App::GetApp()->RegisterTexture(L"RESULT_BACKGROUND_TX", strTexture);
+		strTexture = DataDir + L"resultbackground.png";
+		App::GetApp()->RegisterTexture(L"GAMEOVER_BACKGROUND_TX", strTexture);
 		strTexture = DataDir + L"score.png";
 		App::GetApp()->RegisterTexture(L"SCORE_TX", strTexture);
 		strTexture = DataDir + L"slash.png";

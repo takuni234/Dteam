@@ -58,6 +58,8 @@ namespace basecross{
 	//--------------------------------------------------------------------------------------
 	class Scene : public SceneBase{
 		float m_LimitTime;
+		int m_AllMember;
+		int m_RescueCount;
 		wstring m_StageCSVKey;
 	public:
 		//--------------------------------------------------------------------------------------
@@ -98,6 +100,18 @@ namespace basecross{
 		}
 		void SetStageCSVKey(const wstring& key) {
 			m_StageCSVKey = key;
+		}
+		void SetAllMember(const int& value) {
+			m_AllMember = value;
+		}
+		int GetAllMember() const {
+			return m_AllMember;
+		}
+		void SetRescueCount(const int& rescueCount) {
+			m_RescueCount = rescueCount;
+		}
+		int GetRescueCount() const {
+			return m_RescueCount;
 		}
 	};
 

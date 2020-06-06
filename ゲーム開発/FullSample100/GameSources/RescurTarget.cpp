@@ -166,7 +166,7 @@ namespace basecross {
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
 
 		auto collision = AddComponent<CollisionCapsule>();
-		collision->SetDrawActive(true);
+		collision->SetDrawActive(false);
 
 		GetStage()->SetSharedGameObject(L"s", GetThis<GameObject>());
 		AddTag(L"RescurTarget1");
@@ -279,7 +279,7 @@ namespace basecross {
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
 
 		auto collision = AddComponent<CollisionCapsule>();
-		collision->SetDrawActive(true);
+		collision->SetDrawActive(false);
 
 		auto gravity = AddComponent<Gravity>();
 		gravity->GetGravityVelocity();
@@ -454,12 +454,12 @@ namespace basecross {
 	}
 
 
-	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot,wstring name)
-		:GameObject(stage), Pos(pos), m_Position(Pos),Txname(name){
+	GameEndSplite::GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec2 scale, Vec3 rot,wstring name)
+		:GameObject(stage), Pos(pos), m_Scale(scale), m_Position(Pos),Txname(name){
 	}
 
 	void GameEndSplite::OnCreate() {
-		float helfSize = 100.5f;
+		float helfSize = 0.5f;
 		//頂点配列(縦横5個ずつ表示)
 		vector<VertexPositionColorTexture> vertices = {
 			{ VertexPositionColorTexture(Vec3(-helfSize, helfSize, 0),Col4(1.0f,1.0f,1.0f,1.0f), Vec2(0.0f, 0.0f)) },
@@ -471,7 +471,7 @@ namespace basecross {
 		vector<uint16_t> indices = { 0, 1, 2, 2,1,3 };
 		SetAlphaActive(true);
 		auto ptrTrans = GetComponent<Transform>();
-		ptrTrans->SetScale(1.0f, 1.0f, 1.0f);
+		ptrTrans->SetScale(m_Scale.x, m_Scale.y, 1.0f);
 		ptrTrans->SetRotation(0, 0, 0);
 		ptrTrans->SetPosition(Pos);
 		//頂点とインデックスを指定してスプライト作成

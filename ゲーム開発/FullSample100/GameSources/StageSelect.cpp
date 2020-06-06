@@ -57,7 +57,7 @@ namespace basecross {
 			CreateViewLight();
 			CreateSelectSprite();
 			auto XAPtr = App::GetApp()->GetXAudio2Manager();
-			m_BGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.1f);
+			m_BGM = XAPtr->Start(L"REISCUE_BGM", XAUDIO2_LOOP_INFINITE, 0.07f);
 		}
 		catch (...) {
 			throw;
@@ -192,7 +192,7 @@ namespace basecross {
 				ptrScene->SetStageCSVKey(L"Stage2.csv");
 				break;
 			case SelectKey::Stage3:
-				ptrScene->SetLimitTime(100.0f);
+				ptrScene->SetLimitTime(200.0f);
 				ptrScene->SetStageCSVKey(L"SaveData25.csv");
 				break;
 			default:

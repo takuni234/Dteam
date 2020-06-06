@@ -134,6 +134,7 @@ namespace basecross {
 	class GameEndSplite :public GameObject {
 		wstring Txname;
 		float SceneChangeTime = 0;
+		Vec2 m_Scale;
 		Vec3 m_Position;
 		Vec3 Pos;
 		shared_ptr<MeshResource> mesh;
@@ -155,7 +156,7 @@ namespace basecross {
 		}
 		float time;
 	public:
-		GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot,wstring name);
+		GameEndSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec2 scale, Vec3 rot,wstring name);
 		~GameEndSplite() {}
 
 		void OnCreate() override;

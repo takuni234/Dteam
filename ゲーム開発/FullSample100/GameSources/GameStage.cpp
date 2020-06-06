@@ -280,6 +280,7 @@ namespace basecross {
 			GoalPos = Pos;
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
+		App::GetApp()->GetScene<Scene>()->SetAllMember(GoalCount);
 	}
 
 	void GameStage::SetBackGroundColor(Col4 color) {
@@ -381,7 +382,7 @@ namespace basecross {
 		m_TotalTime -= elapsedTime;
 		if (m_TotalTime <= 0&&TimeUpFlg==false) {
 			//App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
-			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec2(900.0f, 300.0f), Vec3(0), L"GAMEOVER_TX");
 			TimeUpFlg = true;
 		}
 		//スコアを更新する
@@ -393,12 +394,12 @@ namespace basecross {
 		}
 		//クリア
 		if (goal->GetGoalflg() && GameEndFlg) {
-			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"HELPTEXT_TX");
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec2(900.0f, 300.0f), Vec3(0), L"GAMECREAR_TX");
 			GameEndFlg = false;
 		}
 		//ゲームオーバー
 		if (goal->GetEndflg() && GameEndFlg&&TimeUpFlg==false) {
-			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec3(0), Vec3(0), L"TITLELOGO_TX");
+			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec2(900.0f,300.0f), Vec3(0), L"GAMEOVER_TX");
 			GameEndFlg = false;
 			TimeUpFlg = false;
 		}

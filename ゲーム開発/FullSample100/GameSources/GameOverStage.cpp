@@ -27,13 +27,15 @@ namespace basecross {
 
 	//点滅するスプライト作成
 	void GameOverStage::CreatePushSprite() {
-		auto ptrScore = AddGameObject<ScoreSprite>(1,
-			L"NUMBER_TX",
-			true,
-			Vec2(250.0f, 100.0f),
-			Vec3(0.0f, 300.0f, 0.0f));
-		ptrScore->SetScore(static_cast<float>(m_SelectNum));
-		SetSharedGameObject(L"TestScoreSprite", ptrScore);
+		//ステージの背景
+		auto ptrSprite = AddGameObject<Sprite>(L"GAMEOVER_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrSprite->SetDrawLayer(-3);
+		//UI フレーム
+		ptrSprite = AddGameObject<Sprite>(L"RESULT_FRAME1_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
+		ptrSprite->SetDrawLayer(-2);
+		//「ゲームオーバー」
+		ptrSprite = AddGameObject<Sprite>(L"GAMEOVER_TX", Vec2(900.0f, 300.0f), Vec3(0.0f, 220.0f,0.0f));
+		ptrSprite->SetDrawLayer(-1);
 	}
 
 	void GameOverStage::CreateSprite() {
@@ -42,7 +44,7 @@ namespace basecross {
 		Vec3 DefultPos(0.0f, 50.0f, 0.0f);
 		Vec3 alignVec(0.0f);
 		for (int i = 0; i < static_cast<int>(GameOverStageMenuKey::Max); i++) {
-			Vec2 createScale(300.0f, 100.0f);
+			Vec2 createScale(450.0f, 150.0f);
 			Vec3 createPos(Vec3(0.0f, -i * 150.0f, 0.0f) + DefultPos);
 			wstring txKey;
 			switch (static_cast<GameOverStageMenuKey>(i))
@@ -159,7 +161,6 @@ namespace basecross {
 	}
 
 	void GameOverStage::UpdateCursor() {
-		GetSharedGameObject<ScoreSprite>(L"TestScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
 		auto ptrCursor = GetSharedGameObject<Sprite>(L"GameOverCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
 		Vec3 alignVec(0.0f);
