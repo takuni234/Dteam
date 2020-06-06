@@ -15,8 +15,11 @@ namespace basecross {
 		m_Scale(Scale),
 		m_Rotation(Rotation),
 		m_Position(Position),
-		GoalCount(Count)
+		GoalCount(Count),
+		count(0)
 	{
+		auto ptrScene = App::GetApp()->GetScene<Scene>();
+		ptrScene->SetRescueCount(count);
 	}
 	GoalObject::~GoalObject() {}
 
