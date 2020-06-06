@@ -194,6 +194,9 @@ namespace basecross {
 		auto ptrScene = App::GetApp()->GetScene<Scene>();
 		switch (m_MenuKey)
 		{
+		case ResultStageMenuKey::NextStage:
+			ptrScene->ChangeScene(SceneKey::Game);
+			break;
 		case ResultStageMenuKey::Select:
 			ptrScene->ChangeScene(SceneKey::Select);
 			break;

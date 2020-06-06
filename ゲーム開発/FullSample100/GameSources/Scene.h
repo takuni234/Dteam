@@ -61,6 +61,7 @@ namespace basecross{
 		int m_AllMember;
 		int m_RescueCount;
 		wstring m_StageCSVKey;
+		SceneKey m_CurrentScene;
 	public:
 		//--------------------------------------------------------------------------------------
 		/*!
@@ -112,6 +113,9 @@ namespace basecross{
 		}
 		int GetRescueCount() const {
 			return m_RescueCount;
+		}
+		void SetCurrentSceneKey() {
+
 		}
 	};
 
