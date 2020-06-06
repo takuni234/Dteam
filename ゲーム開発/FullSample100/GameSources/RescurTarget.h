@@ -103,6 +103,7 @@ namespace basecross {
 
 	class HelpSplite :public RescurTarget_Base {
 		Vec3 Pos;
+		Vec3 m_Scale;
 		shared_ptr<MeshResource> mesh;
 		Quat Billboard(const Vec3& Line) {
 			Vec3 Temp = Line;

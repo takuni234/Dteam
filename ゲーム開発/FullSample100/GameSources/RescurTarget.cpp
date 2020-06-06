@@ -9,7 +9,7 @@ namespace basecross {
 	}
 	void RescurTarget_Base::OnCreate() {
 		//ナンバースクエアを作成して関連させる		
-		GetStage()->AddGameObject<HelpSplite>(Vec3(m_Position.x,m_Position.y,m_Position.z),Vec3(0),Vec3(0));
+		GetStage()->AddGameObject<HelpSplite>(Vec3(m_Position.x,m_Position.y,m_Position.z),Vec3(2.5f),Vec3(0));
 		Goalflg1 = false;
 		Goalflg2 = false;
 	}
@@ -72,7 +72,7 @@ namespace basecross {
 		}
 		else {		
 			if (SpliteFlg==false&&LightFlg) {
-				GetStage()->AddGameObject<HelpSplite>(m_Position, Vec3(0), Vec3(0));
+				GetStage()->AddGameObject<HelpSplite>(Vec3(m_Position.x, m_Position.y+0.5f, m_Position.z), Vec3(2.5f), Vec3(0));
 				LightFlg = false;
 			}
 			SpliteFlg = true;
@@ -262,7 +262,7 @@ namespace basecross {
 			Vec3(1.0f, 1.0f, 1.0f),
 			Vec3(0.0f, 0.0f, 0.0f),
 			Vec3(0.0f, XM_PI, 0.0f),
-			Vec3(0.0f, -0.5f, 0.0f)
+			Vec3(0.0f, -1.0f, 0.0f)
 		);
 
 		auto Draw = AddComponent<BcPNTBoneModelDraw>();
@@ -377,7 +377,7 @@ namespace basecross {
 	}
 
 	HelpSplite::HelpSplite(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rot)
-		:RescurTarget_Base(stage,pos,scale,rot) ,Pos(pos){
+		:RescurTarget_Base(stage,pos,scale,rot) ,Pos(pos),m_Scale(scale){
 
 	}
 	void HelpSplite::OnCreate() {
@@ -398,7 +398,7 @@ namespace basecross {
 		//if (!m_SeekObject.expired()) {
 		Pos.y += 0.75f;
 			PtrTransform->SetPosition(Vec3(Pos.x,Pos.y,Pos.z));
-			PtrTransform->SetScale(1.0f, 1.0f, 1.0f);
+			PtrTransform->SetScale(m_Scale);
 			//PtrTransform->SetQuaternion(SeekTransPtr->GetQuaternion());
 			///変更できるスクエアリソースを作成
 			vector<uint16_t> indices = { 0, 1, 2, 1, 3, 2 };
@@ -447,7 +447,7 @@ namespace basecross {
 				
 			}
 		}
-		length = INPLAYER(Vec3(pos.x,pos.y-1,pos.z));
+		length = INPLAYER(Vec3(pos.x,pos.y-1.5f,pos.z));
 		if (length < 2.0f) {
 			GetStage()->RemoveGameObject<HelpSplite>(GetThis<HelpSplite>());
 		}
