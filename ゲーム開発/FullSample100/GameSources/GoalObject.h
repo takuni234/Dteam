@@ -31,6 +31,8 @@ namespace basecross {
 		//‘€ì
 		virtual void OnUpdate() override;
 		void TargetCount() {
+			auto ptrScene = App::GetApp()->GetScene<Scene>();
+			ptrScene->AddRescueCount(1);
 			count++;
 		}
 		void GameEndCount() {

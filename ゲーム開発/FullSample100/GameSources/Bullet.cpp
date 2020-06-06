@@ -26,7 +26,8 @@ namespace basecross {
 
 		auto ptrDraw = AddComponent<PNTStaticDraw>();
 		ptrDraw->SetMeshResource(L"DEFAULT_SPHERE");
-		ptrDraw->SetTextureResource(L"SKY_TX");
+		ptrDraw->SetTextureResource(L"WATER_TX");
+		//SetAlphaActive(true);
 
 		AddComponent<CollisionSphere>();
 
