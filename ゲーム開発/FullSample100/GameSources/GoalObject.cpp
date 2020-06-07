@@ -53,13 +53,20 @@ namespace basecross {
 		ptrDraw->SetFogEnabled(true);
 		ptrDraw->SetOwnShadowActive(true);
 
+		auto obj = GetStage()->GetThis<GameStage>();
+		GoalCount = obj->GetGoalCount();
+		TargetEndCount = obj->GetGoalCount();
 	}
 	void GoalObject::OnUpdate() {
+		auto obj = GetStage()->GetThis<GameStage>();
+		obj->SetGoalCount(GoalCount);
+
 		if (count == GoalCount) {
 			Goalflg = true;
 		}
-		if (EndCount == GoalCount) {
+		if (EndCount == TargetEndCount) {
 			GameEndflg = true;
-		}
+		}		
+
 	}
 }

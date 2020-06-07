@@ -14,9 +14,11 @@ namespace basecross {
 
 		bool Goalflg = false;
 		bool GameEndflg = false;
-		int GoalCount;
-		int count;
-		int EndCount;
+		bool swithFlg = false;
+		int GoalCount=0;
+		int count=0;
+		int EndCount=0;
+		int TargetEndCount = 0;
 	public:
 		//\’z‚Æ”jŠü
 		GoalObject(const shared_ptr<Stage>& StagePtr,
@@ -35,8 +37,15 @@ namespace basecross {
 			ptrScene->AddRescueCount(1);
 			count++;
 		}
+		void BadTargetCount() {
+			count--;
+		}
 		void GameEndCount() {
-			EndCount++ ;
+			EndCount++;
+		}
+		void BadGoalCount() {
+			if(GoalCount >1)
+			GoalCount--;
 		}
 		bool GetGoalflg() { return Goalflg; }
 		bool GetEndflg() { return GameEndflg; }

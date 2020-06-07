@@ -221,14 +221,9 @@ namespace basecross {
 		}
 
 		if (HP < 0) {
-			shared_ptr<GoalObject> target = nullptr;
-			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-			for (auto obj : gameobjects) {
-				target = dynamic_pointer_cast<GoalObject>(obj);
-				if (target) {
-					target->GameEndCount();
-				}
-			}
+			auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+			goal->BadGoalCount();
+			goal->GameEndCount();
 
 			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
 		}
@@ -272,7 +267,7 @@ namespace basecross {
 		Draw->AddAnimation(L"Default", 200, 100, true, 20.0f);
 		Draw->AddAnimation(L"Walk", 0, 30, true, 60);
 		Draw->AddAnimation(L"jump", 34, 65, true, 30);
-
+		
 		auto Trans = GetComponent<Transform>();
 		Trans->SetScale(Vec3(0.25f, 0.25f, 0.25f));
 		Trans->SetRotation(m_Rotation);
@@ -326,15 +321,10 @@ namespace basecross {
 			draw2->UpdateAnimation(time);
 		}
 
-		if (HP < 0) {
-			shared_ptr<GoalObject> target = nullptr;
-			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-			for (auto obj : gameobjects) {
-				target = dynamic_pointer_cast<GoalObject>(obj);
-				if (target) {
-					target->GameEndCount();
-				}
-			}
+		if (HP == 0) {
+			auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+			goal->BadGoalCount();
+			goal->GameEndCount();
 
 			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
 		}

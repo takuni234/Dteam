@@ -42,6 +42,7 @@ namespace basecross {
 		bool LightFlg = false;
 		bool Goalflg1, Goalflg2;
 		int GoalInCount;
+		bool HPflg = false;
 		float time;
 
 		int HP;

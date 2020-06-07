@@ -89,6 +89,9 @@ namespace basecross {
 			return m_CameraSelect;
 		}
 		bool GetEndFlg() { return TimeUpFlg; }
+		void LowCountTarget() { GoalCount -= 1; }
+		void SetGoalCount(int goal) { GoalCount = goal; }
+		int GetGoalCount() { return GoalCount; }
 		void StageChange();
 
 		void OnPushStart();
