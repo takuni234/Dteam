@@ -90,6 +90,8 @@ namespace basecross{
 		//--------------------------------------------------------------------------------------
 		virtual void OnEvent(const shared_ptr<Event>& event) override;
 		void ChangeScene(SceneKey key);
+
+		//ゲッターセッター群
 		float GetLimitTime() const {
 			return m_LimitTime;
 		}

@@ -79,7 +79,6 @@ namespace basecross {
 		//Trans->SetPivot(m_Position.x, m_Position.y, m_Position.z);
 
 		auto Collision = AddComponent<CollisionObb>();
-		Collision->SetDrawActive(true);
 		if (FallFlg) {
 			Collision->SetFixed(true);
 		}

@@ -138,6 +138,9 @@ namespace basecross {
 			m_DrawObj->SetDrawActive(false);
 			m_DrawObj->SetUpdateActive(false);
 			GetStage()->AddGameObject<ColdBox>(m_Scale * 0.999f, m_Rotation, m_Position);
+			// ƒWƒ…[
+			auto ptrXM = App::GetApp()->GetXAudio2Manager();
+			ptrXM->Start(L"WATER_WAV", 0, 0.1f);
 		}
 	}
 

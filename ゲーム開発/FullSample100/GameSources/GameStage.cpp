@@ -36,13 +36,38 @@ namespace basecross {
 
 	//スコアスプライト作成
 	void GameStage::CreateScoreSprite() {
+		// 制限時間の設定
 		auto ptrScore = AddGameObject<ScoreSprite>(3,
 			L"NUMBER_TX",
 			true,
 			Vec2(250.0f, 100.0f),
 			Vec3(0.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(m_TotalTime);
-		SetSharedGameObject(L"ScoreSprite", ptrScore);
+		SetSharedGameObject(L"TimeSprite", ptrScore);
+
+		// 助けた人数の表示
+		ptrScore = AddGameObject<ScoreSprite>(1,
+			L"NUMBER_TX",
+			true,
+			Vec2(65.0f, 130.0f),
+			Vec3(410.0f, 300.0f, 0.0f));
+		ptrScore->SetScore(App::GetApp()->GetScene<Scene>()->GetRescueCount());
+		SetSharedGameObject(L"StageScoreSprite", ptrScore);
+	
+		//「/」
+		auto ptrSprite = AddGameObject<Sprite>(L"SLASH_TX", Vec2(840.0f, 280.0f), Vec3(470.0f, 300.0f, 0.0));
+
+		//「救出対象」
+		ptrSprite = AddGameObject<Sprite>(L"SURVIVOR_UI_TX", Vec2(100.0f, 100.0f), Vec3(330.0f, 300.0f, 0.0));
+
+		// ステージ内にいる総人数の表示
+		ptrScore = AddGameObject<ScoreSprite>(1,
+			L"NUMBER_TX",
+			true,
+			Vec2(65.0f, 130.0f),
+			Vec3(530.0f, 300.0f, 0.0f));
+		ptrScore->SetScore(App::GetApp()->GetScene<Scene>()->GetAllMember());
+		SetSharedGameObject(L"StageMaxScoreSprite", ptrScore);
 	}
 
 	//木の作成
@@ -380,6 +405,9 @@ namespace basecross {
 		}
 		float elapsedTime = App::GetApp()->GetElapsedTime();
 		m_TotalTime -= elapsedTime;
+		//助けた人数の更新
+		auto ptrObj = GetSharedGameObject<ScoreSprite>(L"StageScoreSprite");
+		ptrObj->SetScore(App::GetApp()->GetScene<Scene>()->GetRescueCount());
 		if (m_TotalTime <= 0&&TimeUpFlg==false) {
 			//App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
 			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec2(900.0f, 300.0f), Vec3(0), L"GAMEOVER_TX");
@@ -387,7 +415,7 @@ namespace basecross {
 		}
 		//スコアを更新する
 		if (goal->GetGoalflg() == false&&goal->GetEndflg() == false) {
-			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"ScoreSprite");
+			auto ptrScor = GetSharedGameObject<ScoreSprite>(L"TimeSprite");
 			ptrScor->SetScore(m_TotalTime);
 			m_BGM->m_SourceVoice->SetVolume(0.0f + (1-(m_TotalTime / m_MAXTIME)) * 0.2f);
 			GameEndFlg = true;
@@ -424,6 +452,7 @@ namespace basecross {
 		//BGMのストップ
 		auto XAPtr = App::GetApp()->GetXAudio2Manager();
 		XAPtr->Stop(m_BGM);
+		XAPtr->Stop(m_RescueBGM);
 	}
 
 	void GameStage::ToPlayerCamera() {

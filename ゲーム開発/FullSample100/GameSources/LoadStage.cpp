@@ -36,6 +36,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"GROUND_TX", strTexture);
 		strTexture = DataDir + L"Ground2.png";
 		App::GetApp()->RegisterTexture(L"GROUND2_TX", strTexture);
+		strTexture = DataDir + L"Survivor_UI.png";
+		App::GetApp()->RegisterTexture(L"SURVIVOR_UI_TX", strTexture);
 		strTexture = DataDir + L"spark.png";
 		App::GetApp()->RegisterTexture(L"SPARK_TX", strTexture);
 		strTexture = DataDir + L"fire.png";
@@ -139,6 +141,8 @@ namespace basecross {
 		App::GetApp()->RegisterWav(L"WALK_LEFT_WAV", DataWav);
 		DataWav = DataDirFolder + L"right_foot.wav";
 		App::GetApp()->RegisterWav(L"WALK_RIGHT_WAV", DataWav);
+		DataWav = DataDirFolder + L"Water3.wav";
+		App::GetApp()->RegisterWav(L"WATER_WAV", DataWav);
 		//BGM
 		wstring strMusic = DataDirFolder + L"nanika .wav";
 		App::GetApp()->RegisterWav(L"Nanika", strMusic);

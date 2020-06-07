@@ -46,10 +46,12 @@ namespace basecross {
 		//ステージの背景
 		auto ptrSprite = AddGameObject<Sprite>(L"RESULT_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
 		ptrSprite->SetDrawLayer(-3);
-		//UI フレーム
+		//「救出対象」
+		ptrSprite = AddGameObject<Sprite>(L"SURVIVOR_UI_TX", Vec2(100.0f, 100.0f), Vec3(40.0f, 200.0f, 0.0));
+		//UIフレーム「□」
 		ptrSprite = AddGameObject<Sprite>(L"RESULT_FRAME1_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
 		ptrSprite->SetDrawLayer(-2);
-		//UI フレーム
+		//UIフレーム「＝」
 		ptrSprite = AddGameObject<Sprite>(L"RESULT_FRAME2_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f, 200.0f,0.0));
 		ptrSprite->SetDrawLayer(-1);
 		//「助けた人数」
