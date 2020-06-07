@@ -41,7 +41,7 @@ namespace basecross {
 		SetSharedGameObject(L"StageTXSprite", ptrSprite);
 
 		auto ptrBGSprite = AddGameObject<Sprite>(L"STAGESELECT_BACKGROUND_TX", Vec2(1280.0f, 800.0f), Vec3(0.0f));
-		ptrBGSprite->SetDrawLayer(-1);
+		ptrBGSprite->SetDrawLayer(-3);
 
 		//選択カーソル
 		auto ptrRArrowCursol = AddGameObject<Sprite>(L"RIGHTARROWCURSOL_TX", m_ArrowCursorScale, Vec3(500.0f,0.0f,0.0f));
@@ -160,10 +160,10 @@ namespace basecross {
 			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"Stage1_TX");
 			break;
 		case SelectKey::Stage2:
-			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"SKY_TX");
+			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"Stage2_TX");
 			break;
 		case SelectKey::Stage3:
-			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"GROUND_TX");
+			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"Stage3_TX");
 			break;
 		default:
 			break;
