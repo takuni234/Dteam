@@ -183,8 +183,9 @@ namespace basecross {
 	}
 
 	void ResultStage::UpdateCursor() {
-		GetSharedGameObject<ScoreSprite>(L"ResultScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
-		GetSharedGameObject<ScoreSprite>(L"MaxResultScoreSprite")->SetScore(static_cast<float>(m_MenuKey));
+		auto ptrScene = App::GetApp()->GetScene<Scene>();
+		GetSharedGameObject<ScoreSprite>(L"ResultScoreSprite")->SetScore(ptrScene->GetRescueCount());
+		GetSharedGameObject<ScoreSprite>(L"MaxResultScoreSprite")->SetScore(ptrScene->GetAllMember());
 		auto ptrCursor = GetSharedGameObject<Sprite>(L"ResultCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
 		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));
@@ -192,9 +193,28 @@ namespace basecross {
 
 	void ResultStage::ChangeStageSceneSelected() {
 		auto ptrScene = App::GetApp()->GetScene<Scene>();
+		auto key = ptrScene->GetCurrentSceneKey();
 		switch (m_MenuKey)
 		{
 		case ResultStageMenuKey::NextStage:
+			switch (key)
+			{
+			case SelectKey::Stage1:
+				ptrScene->SetLimitTime(120.0f);
+				ptrScene->SetCurrentSceneKey(key);
+				ptrScene->SetStageCSVKey(L"Stage2.csv");
+				break;
+			case SelectKey::Stage2:
+				ptrScene->SetLimitTime(200.0f);
+				ptrScene->SetCurrentSceneKey(key);
+				ptrScene->SetStageCSVKey(L"SaveData25.csv");
+				break;
+			case SelectKey((int(SelectKey::Max) - 1)):
+				ptrScene->ChangeScene(SceneKey::Title);
+				break;
+			default:
+				break;
+			}
 			ptrScene->ChangeScene(SceneKey::Game);
 			break;
 		case ResultStageMenuKey::Select:

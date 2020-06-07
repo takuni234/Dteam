@@ -24,6 +24,8 @@ namespace basecross {
 		App::GetApp()->GetDataDirectory(DataDir);
 		wstring strTexture = DataDir + L"sky.jpg";
 		App::GetApp()->RegisterTexture(L"SKY_TX", strTexture);
+		strTexture = DataDir + L"water5.png";
+		App::GetApp()->RegisterTexture(L"WATER_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
 		strTexture = DataDir + L"number.png";
@@ -40,7 +42,7 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"FIRE_TX", strTexture);
 		strTexture = DataDir + L"PushBButton.png";
 		App::GetApp()->RegisterTexture(L"MESSAGE_TX", strTexture);
-		strTexture = DataDir + L"タイトルロゴ.png";
+		strTexture = DataDir + L"タイトルロゴ_7.png";
 		App::GetApp()->RegisterTexture(L"TITLELOGO_TX", strTexture);
 		strTexture = DataDir + L"gameover2.png";
 		App::GetApp()->RegisterTexture(L"GAMEOVER_TX", strTexture);
