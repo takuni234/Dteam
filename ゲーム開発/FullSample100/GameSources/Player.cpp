@@ -266,11 +266,11 @@ namespace basecross {
 		m_BGMInterval += inputTimeLength;
 		if (m_BGMInterval >= m_Stride && !m_BGMflg) {
 			//足音を鳴らす
-			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.1f * GetMoveVector().length()); // 0.1f　設定音量
+			PlayerSound(true, L"WALK_LEFT_WAV", m_Speed * 0.2f * GetMoveVector().length()); // 0.1f　設定音量
 			m_BGMflg = true;
 		}
 		else if (m_BGMInterval >= m_Stride * 2.0f) {
-			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.1f * GetMoveVector().length()); // 0.1f　設定音量
+			PlayerSound(true, L"WALK_RIGHT_WAV", m_Speed * 0.2f * GetMoveVector().length()); // 0.1f　設定音量
 			m_BGMflg = false;
 			m_BGMInterval = 0.0f;
 		}

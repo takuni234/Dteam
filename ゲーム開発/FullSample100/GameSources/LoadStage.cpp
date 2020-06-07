@@ -94,8 +94,12 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"RESULT_FRAME1_TX", strTexture);
 		strTexture = DataDir + L"resultframe2.png";
 		App::GetApp()->RegisterTexture(L"RESULT_FRAME2_TX", strTexture);
-		strTexture = DataDir + L"BaseCrossFullSample 2020_05_27 14_51_22.png";
+		strTexture = DataDir + L"BaseCrossFullSample 2020_06_06 14_47_22.png";
 		App::GetApp()->RegisterTexture(L"Stage1_TX", strTexture);
+		strTexture = DataDir + L"BaseCrossFullSample 2020_06_06 14_49_15.png";
+		App::GetApp()->RegisterTexture(L"Stage2_TX", strTexture);
+		strTexture = DataDir + L"BaseCrossFullSample 2020_06_06 14_49_53.png";
+		App::GetApp()->RegisterTexture(L"Stage3_TX", strTexture);
 		strTexture = DataDir + L"HPgauge1.png";
 		App::GetApp()->RegisterTexture(L"HPGAUGE1_TX", strTexture);
 		strTexture = DataDir + L"HPgauge2.png";
