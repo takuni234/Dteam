@@ -18,16 +18,6 @@ namespace basecross{
 		Max
 	};
 
-	//ゲームステージのメニュー用
-	enum class GameStageMenuKey : int{
-		Back,
-		Retry,
-		Title,
-		Select,
-		Game,
-		Max
-	};
-
 	//リザルトステージのメニュー用
 	enum class ResultStageMenuKey : int{
 		NextStage,
@@ -41,6 +31,14 @@ namespace basecross{
 	enum class GameOverStageMenuKey : int{
 		Select,
 		Retry,
+		Title,
+		Max
+	};	
+	
+	//ゲームステージのメニュー用
+	enum class GameStageMenuKey : int{
+		Retry,
+		Select,
 		Title,
 		Max
 	};

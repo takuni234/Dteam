@@ -28,6 +28,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"WATER_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
+		strTexture = DataDir + L"Pause.png";
+		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture);
 		strTexture = DataDir + L"number.png";
 		App::GetApp()->RegisterTexture(L"NUMBER_TX", strTexture);
 		strTexture = DataDir + L"number_color (1).png";

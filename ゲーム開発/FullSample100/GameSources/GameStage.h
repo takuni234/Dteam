@@ -54,12 +54,23 @@ namespace basecross {
 		//噴火時の空色
 		Col4 m_Color1 = Col4(87.0f / 255.0f, 56.0f / 255.0f, 38.0f / 255.0f, 1.0f);
 		
+		//ポーズメニューのスプライトをそろえるか
+		bool m_SpriteAlign;
+		vector<Vec3> m_PauseMenuSpriteDefultScale;
+		vector<Vec3> m_PauseMenuSpritePos;
+		bool m_InputOnce;
+		int m_SelectNum;
+		float m_MenuKeyInputTime;
+		GameStageMenuKey m_MenuKey;
+
 		//ビューの作成
 		void CreateViewLight();
 		//CSV読込
 		void CreateObjectB_CSV();
 		//スコアスプライト作成
 		void CreateScoreSprite();
+		//ポーズメニュー作成
+		void CreatePauseSprite();
 		//木の作成
 		void CreateTreeObjects(const Vec2& mapSize, const Vec3& stageSize);
 		//HPバーの作成
@@ -72,6 +83,10 @@ namespace basecross {
 		void CreateCameraman();
 		//煙の作成
 		void CreateSmoke();
+		//ポーズメニューのキー操作
+		void GameStageMenuKeyInput();
+		void UpdateCursor();
+		void ChangeStageSceneSelected();
 	public:
 
 		//構築と破棄
@@ -95,7 +110,7 @@ namespace basecross {
 		void StageChange();
 
 		void OnPushStart();
-		void OnPushA(){}
+		void OnPushA();
 		void OnUpA(){}
 		void OnPushB(){}
 		void OnUpB(){}

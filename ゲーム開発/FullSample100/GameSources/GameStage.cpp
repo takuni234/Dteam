@@ -43,6 +43,7 @@ namespace basecross {
 			Vec2(250.0f, 100.0f),
 			Vec3(0.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(m_TotalTime);
+		ptrScore->SetDrawLayer(5);
 		SetSharedGameObject(L"TimeSprite", ptrScore);
 
 		// 助けた人数の表示
@@ -52,13 +53,15 @@ namespace basecross {
 			Vec2(65.0f, 130.0f),
 			Vec3(410.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(App::GetApp()->GetScene<Scene>()->GetRescueCount());
+		ptrScore->SetDrawLayer(5);
 		SetSharedGameObject(L"StageScoreSprite", ptrScore);
 	
 		//「/」
 		auto ptrSprite = AddGameObject<Sprite>(L"SLASH_TX", Vec2(840.0f, 280.0f), Vec3(470.0f, 300.0f, 0.0));
-
+		ptrSprite->SetDrawLayer(5);
 		//「救出対象」
 		ptrSprite = AddGameObject<Sprite>(L"SURVIVOR_UI_TX", Vec2(100.0f, 100.0f), Vec3(330.0f, 300.0f, 0.0));
+		ptrSprite->SetDrawLayer(5);
 
 		// ステージ内にいる総人数の表示
 		ptrScore = AddGameObject<ScoreSprite>(1,
@@ -67,7 +70,57 @@ namespace basecross {
 			Vec2(65.0f, 130.0f),
 			Vec3(530.0f, 300.0f, 0.0f));
 		ptrScore->SetScore(App::GetApp()->GetScene<Scene>()->GetAllMember());
+		ptrScore->SetDrawLayer(5);
 		SetSharedGameObject(L"StageMaxScoreSprite", ptrScore);
+	}
+
+	void GameStage::CreatePauseSprite() {
+		//ポーズ画面用
+		auto ptrSprite = AddGameObject<Sprite>(L"PAUSE_TX", Vec2(300.0f, 200.0f), Vec3(0.0f));
+		ptrSprite->SetAlpha(0.0f);
+		SetSharedGameObject(L"MenuBackGroudSprite", ptrSprite);
+		CreateSharedObjectGroup(L"MenuSprite");
+		//配置する位置（全体）
+		Vec3 DefultPos(0.0f, 50.0f, 0.0f);
+		Vec3 alignVec(0.0f);
+		for (int i = 0; i < static_cast<int>(GameStageMenuKey::Max); i++) {
+			Vec2 createScale(150.0f, 50.0f);
+			Vec3 createPos(Vec3(0.0f, -i * 50.0f, 0.0f) + DefultPos);
+			wstring txKey;
+			switch (static_cast<GameStageMenuKey>(i))
+			{
+				// 「ステージセレクトへ」の画像
+			case GameStageMenuKey::Select:
+				txKey = L"TOSTAGESELECT_TX";
+				break;
+				// 「リトライ」の画像
+			case GameStageMenuKey::Retry:
+				txKey = L"TORETRY_TX";
+				break;
+				// 「タイトルへ」の画像
+			case GameStageMenuKey::Title:
+				txKey = L"TOTITLE_TX";
+				break;
+			default:
+				//エラー
+				txKey = L"SKY_TX";
+				break;
+			}
+			if (m_SpriteAlign) {
+				//左揃え
+				alignVec = Vec3(createScale.x, 0.0f, 0.0f) * 0.5f;
+			}
+			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos + alignVec);
+			ptrSprite->SetAlpha(0.0f);
+			m_PauseMenuSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
+			m_PauseMenuSpritePos.push_back(createPos);
+			GetSharedObjectGroup(L"MenuSprite")->IntoGroup(ptrSprite);
+		}
+
+		auto ptrCursol = AddGameObject<Sprite>(L"LEFTARROWCURSOL_TX", Vec2(30.0f));
+		ptrCursol->SetAlpha(0.0f);
+		ptrCursol->SetPosition(DefultPos + Vec3((m_PauseMenuSpriteDefultScale[static_cast<int>(GameStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
+		SetSharedGameObject(L"MenuCursor", ptrCursol);
 	}
 
 	//木の作成
@@ -78,7 +131,7 @@ namespace basecross {
 				if (-mapSize.x * 0.5f <= j && mapSize.x * 0.5f >= j && mapSize.y * 0.5f >= i) {
 				}
 				else {
-					//40%の確立で生成
+					//40%の確率で生成
 					if (float(rand() % 10 + 1) < 5) {
 						AddGameObject<Tree>(Vec3(0.3f), Vec3(0.0f), Vec3(float(j) + 0.5f, 0.0f, float(i) + 0.5f));
 					}
@@ -346,6 +399,78 @@ namespace basecross {
 		SetSharedGameObject(L"SmokeSprite", ptrHP);
 	}
 
+	void GameStage::GameStageMenuKeyInput() {
+		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+
+		if (CntlVec[0].bConnected) {
+			if (!m_InputOnce) {
+				if (CntlVec[0].fThumbLY >= 0.9f) {
+					m_SelectNum--;
+					m_InputOnce = true;
+				}
+				else if (CntlVec[0].fThumbLY <= -0.9f) {
+					m_SelectNum++;
+					m_InputOnce = true;
+				}
+			}
+			else {
+				auto elapsedTime = App::GetApp()->GetElapsedTime();
+				m_MenuKeyInputTime += elapsedTime;
+				if (m_MenuKeyInputTime > 0.3f) {
+					m_InputOnce = false;
+					m_MenuKeyInputTime = 0.0f;
+				}
+			}
+			if (CntlVec[0].fThumbLY <= 0.05f && CntlVec[0].fThumbLY >= -0.05f) {
+				m_InputOnce = false;
+				m_MenuKeyInputTime = 0.0f;
+			}
+		}
+		else if (!(KeyState.m_bPressedKeyTbl['W'] && KeyState.m_bPressedKeyTbl['S'])) {
+			if (KeyState.m_bPressedKeyTbl['S']) {
+				m_SelectNum++;
+			}
+			if (KeyState.m_bPressedKeyTbl['W']) {
+				m_SelectNum--;
+			}
+		}
+
+		if (m_SelectNum <= 0) {
+			m_SelectNum = static_cast<int>(GameStageMenuKey::Max);
+		}
+		m_MenuKey = GameStageMenuKey(m_SelectNum % static_cast<int>(GameStageMenuKey::Max));
+	}
+
+	void GameStage::UpdateCursor() {
+		auto ptrCursor = GetSharedGameObject<Sprite>(L"MenuCursor");
+		auto ptrTrans = ptrCursor->GetComponent<Transform>();
+		Vec3 alignVec(0.0f);
+		if (m_SpriteAlign) {
+			//左揃え
+			alignVec = Vec3(m_PauseMenuSpriteDefultScale[static_cast<int>(m_MenuKey)].x, 0.0f, 0.0f) * 0.5f;
+		}
+		ptrTrans->SetPosition(m_PauseMenuSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_PauseMenuSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
+	}
+
+	void GameStage::ChangeStageSceneSelected() {
+		auto ptrScene = App::GetApp()->GetScene<Scene>();
+		switch (m_MenuKey)
+		{
+		case GameStageMenuKey::Select:
+			ptrScene->ChangeScene(SceneKey::Select);
+			break;
+		case GameStageMenuKey::Retry:
+			ptrScene->ChangeScene(SceneKey::Game);
+			break;
+		case GameStageMenuKey::Title:
+			ptrScene->ChangeScene(SceneKey::Title);
+			break;
+		default:
+			break;
+		}
+	}
+
 	void GameStage::OnCreate() {
 		try {
 			auto ptrScene = App::GetApp()->GetScene<Scene>();
@@ -372,6 +497,7 @@ namespace basecross {
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
 			SetSharedGameObject(L"Player", player);
 			CreateHPSprite();
+			CreatePauseSprite();
 			CreateSmoke();
 			//カメラマンの作成
 			CreateCameraman();
@@ -446,6 +572,17 @@ namespace basecross {
 		if (m_IsUpdate) {
 			Stage::UpdateStage();
 		}
+		else {
+			auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
+			auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+			GameStageMenuKeyInput();
+			UpdateCursor();
+			bool start = CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B || KeyState.m_bPressedKeyTbl[VK_SPACE];
+
+			if (start) {
+				ChangeStageSceneSelected();
+			}
+		}
 	}
 
 	void GameStage::OnDestroy() {
@@ -469,12 +606,56 @@ namespace basecross {
 
 	void GameStage::OnPushStart() {
 		if (m_IsUpdate) {
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"MenuBackGroudSprite");
+			ptrSprite->SetAlpha(0.5f);
+			auto vec = GetSharedObjectGroup(L"MenuSprite")->GetGroupVector();
+			for (auto& v : vec) {
+				auto obj = v.lock();
+				auto sprite = dynamic_pointer_cast<Sprite>(obj);
+				if (sprite) {
+					sprite->SetAlpha(1.0f);
+				}
+			}
+			ptrSprite = GetSharedGameObject<Sprite>(L"MenuCursor");
+			ptrSprite->SetAlpha(1.0f);
 			m_IsUpdate = false;
 		}
 		else {
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"MenuBackGroudSprite");
+			ptrSprite->SetAlpha(0.0f);
+			auto vec = GetSharedObjectGroup(L"MenuSprite")->GetGroupVector();
+			for (auto& v : vec) {
+				auto obj = v.lock();
+				auto sprite = dynamic_pointer_cast<Sprite>(obj);
+				if (sprite) {
+					sprite->SetAlpha(0.0f);
+				}
+			}
+			ptrSprite = GetSharedGameObject<Sprite>(L"MenuCursor");
+			ptrSprite->SetAlpha(0.0f);
 			m_IsUpdate = true;
 		}
 	}
 
+	void GameStage::OnPushA() {
+		if (m_IsUpdate) {
+
+		}
+		else {
+			auto ptrSprite = GetSharedGameObject<Sprite>(L"MenuBackGroudSprite");
+			ptrSprite->SetAlpha(0.0f);
+			auto vec = GetSharedObjectGroup(L"MenuSprite")->GetGroupVector();
+			for (auto& v : vec) {
+				auto obj = v.lock();
+				auto sprite = dynamic_pointer_cast<Sprite>(obj);
+				if (sprite) {
+					sprite->SetAlpha(0.0f);
+				}
+			}
+			ptrSprite = GetSharedGameObject<Sprite>(L"MenuCursor");
+			ptrSprite->SetAlpha(0.0f);
+			m_IsUpdate = true;
+		}
+	}
 }
 //end basecross

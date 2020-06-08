@@ -51,7 +51,7 @@ namespace basecross {
 		SetSharedGameObject(L"LArrowCursorSprite", ptrLArrowCursol);
 
 		//「救出対象」
-		ptrSprite = AddGameObject<Sprite>(L"SURVIVOR_UI_TX", Vec2(100.0f, 100.0f), Vec3(330.0f, 300.0f, 0.0));
+		ptrSprite = AddGameObject<Sprite>(L"SURVIVOR_UI_TX", Vec2(100.0f, 100.0f), Vec3(430.0f, 300.0f, 0.0));
 
 		// ステージ内にいる総人数の表示
 		ptrScore = AddGameObject<ScoreSprite>(1,
