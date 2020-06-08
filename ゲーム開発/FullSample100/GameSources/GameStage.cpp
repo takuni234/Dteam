@@ -136,7 +136,7 @@ namespace basecross {
 				else {
 					//40%ÇÃämó¶Ç≈ê∂ê¨
 					if (float(rand() % 10 + 1) < 5) {
-						AddGameObject<Tree>(Vec3(0.3f), Vec3(0.0f), Vec3(float(j) + 0.5f, 0.0f, float(i) + 0.5f));
+						AddGameObject<Tree>(Vec3(0.3f), Vec3(0.0f), Vec3(float(j), 0.0f, float(i) + 0.5f));
 					}
 				}
 			}
