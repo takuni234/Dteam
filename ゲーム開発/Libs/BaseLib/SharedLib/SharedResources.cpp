@@ -663,7 +663,7 @@ namespace basecross {
 			{ 0.0000000f, 0.0000000f, 0.0000000f,0.0f },
 			{ 0.3231373f, 0.3607844f, 0.3937255f,0.0f },
 		};
-		static const bsm::Col4 defaultAmbient = { 0.5f, 0.5f, 0.5f,0.0f };
+		static const bsm::Col4 defaultAmbient = { 1.0f, 1.0f, 1.0f,0.0f };
 		for (size_t i = 0; i < 3; i++) {
 			pImpl->m_LightVec[i].m_Directional = defaultDirections[i];
 			pImpl->m_LightVec[i].m_DiffuseColor = defaultDiffuse[i];

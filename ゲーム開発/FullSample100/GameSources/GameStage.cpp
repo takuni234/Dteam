@@ -78,6 +78,7 @@ namespace basecross {
 		//ポーズ画面用
 		auto ptrSprite = AddGameObject<Sprite>(L"PAUSE_TX", Vec2(300.0f, 200.0f), Vec3(0.0f));
 		ptrSprite->SetAlpha(0.0f);
+		ptrSprite->SetDrawLayer(5);
 		SetSharedGameObject(L"MenuBackGroudSprite", ptrSprite);
 		CreateSharedObjectGroup(L"MenuSprite");
 		//配置する位置（全体）
@@ -112,6 +113,7 @@ namespace basecross {
 			}
 			auto ptrSprite = AddGameObject<Sprite>(txKey, createScale, createPos + alignVec);
 			ptrSprite->SetAlpha(0.0f);
+			ptrSprite->SetDrawLayer(5);
 			m_PauseMenuSpriteDefultScale.push_back(ptrSprite->GetComponent<Transform>()->GetScale());
 			m_PauseMenuSpritePos.push_back(createPos);
 			GetSharedObjectGroup(L"MenuSprite")->IntoGroup(ptrSprite);
@@ -119,6 +121,7 @@ namespace basecross {
 
 		auto ptrCursol = AddGameObject<Sprite>(L"LEFTARROWCURSOL_TX", Vec2(30.0f));
 		ptrCursol->SetAlpha(0.0f);
+		ptrCursol->SetDrawLayer(5);
 		ptrCursol->SetPosition(DefultPos + Vec3((m_PauseMenuSpriteDefultScale[static_cast<int>(GameStageMenuKey::Select)].x + ptrCursol->GetScale().x) * 0.5f, 0.0f, 0.0f) + alignVec);
 		SetSharedGameObject(L"MenuCursor", ptrCursol);
 	}

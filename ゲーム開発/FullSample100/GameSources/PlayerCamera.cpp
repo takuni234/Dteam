@@ -37,11 +37,11 @@ namespace basecross {
 			}
 		}
 
-		if (m_RadY >= XM_PIDIV4) {
-			m_RadY = XM_PIDIV4;
+		if (m_RadY >= XM_1DIVPI) {
+			m_RadY = XM_1DIVPI;
 		}
-		else if (m_RadY <= -XM_PIDIV4) {
-			m_RadY = -XM_PIDIV4;
+		else if (m_RadY <= -XM_1DIVPI) {
+			m_RadY = -XM_1DIVPI;
 		}
 		Quat qtXZ;
 		qtXZ.rotation(m_Rad, bsm::Vec3(0.0f, 1.0f, 0.0f));
