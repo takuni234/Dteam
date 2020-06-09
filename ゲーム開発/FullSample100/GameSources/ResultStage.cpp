@@ -201,8 +201,8 @@ namespace basecross {
 
 	void ResultStage::UpdateCursor() {
 		auto ptrScene = App::GetApp()->GetScene<Scene>();
-		GetSharedGameObject<ScoreSprite>(L"ResultScoreSprite")->SetScore(ptrScene->GetRescueCount());
-		GetSharedGameObject<ScoreSprite>(L"MaxResultScoreSprite")->SetScore(ptrScene->GetAllMember());
+		GetSharedGameObject<ScoreSprite>(L"ResultScoreSprite")->SetScore(float(ptrScene->GetRescueCount()));
+		GetSharedGameObject<ScoreSprite>(L"MaxResultScoreSprite")->SetScore(float(ptrScene->GetAllMember()));
 		auto ptrCursor = GetSharedGameObject<Sprite>(L"ResultCursor");
 		auto ptrTrans = ptrCursor->GetComponent<Transform>();
 		ptrTrans->SetPosition(m_ResultSpritePos[static_cast<int>(m_MenuKey)] + Vec3((m_ResultSpriteDefultScale[static_cast<int>(m_MenuKey)].x + ptrTrans->GetScale().x) * 0.5f, 0.0f, 0.0f));

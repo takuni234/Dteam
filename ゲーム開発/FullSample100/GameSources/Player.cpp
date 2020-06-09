@@ -181,6 +181,7 @@ namespace basecross {
 			ptrCamera->SetTargetObject(GetThis<GameObject>());
 			ptrCamera->SetTargetToAt(Vec3(0, 0.25f, 0));
 		}
+
 		//ステートマシンの構築
 		m_StateMachine.reset(new StateMachine<Player>(GetThis<Player>()));
 		//最初のステートをSeekFarStateに設定
@@ -353,6 +354,31 @@ namespace basecross {
 		}
 	}
 
+	void Player::PlayerSound(bool active, const wstring& key, shared_ptr<SoundItem> bgm) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			bgm = ptrXA->Start(key, 0, m_Speed * 0.1f);
+		}
+		else {
+			ptrXA->Stop(bgm);
+		}
+	}
+
+	void Player::PlayerSound(bool active, const wstring& key, float volume, bool loop, shared_ptr<SoundItem> bgm) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		if (active) {
+			if (loop) {
+				bgm = ptrXA->Start(key, XAUDIO2_LOOP_INFINITE, volume);
+			}
+			else {
+				bgm = ptrXA->Start(key, 0, volume);
+			}
+		}
+		else {
+			ptrXA->Stop(bgm);
+		}
+	}
+
 	void Player::OnPushA() {
 
 	}
@@ -453,6 +479,8 @@ namespace basecross {
 		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Shoot");
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.1f));
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
@@ -463,6 +491,8 @@ namespace basecross {
 	}
 
 	void ShotState::Exit(const shared_ptr<Player>& Obj) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		ptrXA->Stop(Obj->GetSoundItem2());
 	}
 
 	//--------------------------------------------------------------------------------------
@@ -478,6 +508,8 @@ namespace basecross {
 		ptrDraw->SetMeshResource(L"RESCUECHARACTERGUN_MESH");
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.1f));
 	}
 	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerSneak();
@@ -489,6 +521,8 @@ namespace basecross {
 	}
 
 	void MovingShootingState::Exit(const shared_ptr<Player>& Obj) {
+		auto ptrXA = App::GetApp()->GetXAudio2Manager();
+		ptrXA->Stop(Obj->GetSoundItem2());
 		Obj->PlayerSound(false, L"WALK_LEFT_WAV");
 		Obj->PlayerSound(false, L"WALK_RIGHT_WAV");
 		Obj->ResetBGMInterval();
@@ -618,6 +652,7 @@ namespace basecross {
 		Vec3 playerBack = -Obj->GetComponent<Transform>()->GetForword().normalize();
 		Vec3 knockBackPos(playerBack.x, playerBack.y + 5.0f, playerBack.z);
 		ptrGra->SetGravityVerocity(knockBackPos);
+		Obj->PlayerSound(true, L"BURN_WAV", 0.25f);
 	}
 	void DamageState::Execute(const shared_ptr<Player>& Obj) {
 		float elapsedTime = App::GetApp()->GetElapsedTime();
@@ -631,6 +666,8 @@ namespace basecross {
 
 	void DamageState::Exit(const shared_ptr<Player>& Obj) {
 		m_Time = 0.0f;
+		//音を止める
+		Obj->PlayerSound(false, L"BURN_WAV");
 	}
 }
 //end basecross

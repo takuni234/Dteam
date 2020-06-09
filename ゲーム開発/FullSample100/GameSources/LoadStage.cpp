@@ -145,6 +145,10 @@ namespace basecross {
 		App::GetApp()->RegisterWav(L"WALK_RIGHT_WAV", DataWav);
 		DataWav = DataDirFolder + L"Water3.wav";
 		App::GetApp()->RegisterWav(L"WATER_WAV", DataWav);
+		DataWav = DataDirFolder + L"burn.wav";
+		App::GetApp()->RegisterWav(L"BURN_WAV", DataWav);
+		DataWav = DataDirFolder + L"hose2.wav";
+		App::GetApp()->RegisterWav(L"HOSE_WAV", DataWav);
 		//BGM
 		wstring strMusic = DataDirFolder + L"nanika .wav";
 		App::GetApp()->RegisterWav(L"Nanika", strMusic);
