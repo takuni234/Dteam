@@ -154,6 +154,8 @@ int MainLoop(HINSTANCE hInstance, HWND hWnd, bool isFullScreen, int iClientWidth
 			'Z',
 			VK_LEFT,
 			VK_RIGHT,
+			VK_UP,
+			VK_DOWN,
 			VK_SPACE,
 		};
 		while (WM_QUIT != msg.message) {

@@ -29,11 +29,17 @@ namespace basecross {
 		else if (!(keyState.m_bPushKeyTbl[VK_LEFT] && keyState.m_bPushKeyTbl[VK_RIGHT])) {
 			if (keyState.m_bPushKeyTbl[VK_RIGHT]) {
 				m_Rad += 3.0f * elapsedTime;
-				m_RadY -= 2.0f * elapsedTime;
 			}
 			if (keyState.m_bPushKeyTbl[VK_LEFT]) {
 				m_Rad -= 3.0f * elapsedTime;
-				m_RadY += 2.0f * elapsedTime;
+			}
+			if (!(keyState.m_bPushKeyTbl[VK_UP] && keyState.m_bPushKeyTbl[VK_DOWN])) {
+				if (keyState.m_bPushKeyTbl[VK_UP]) {
+					m_RadY -= 2.0f * elapsedTime;
+				}
+				if (keyState.m_bPushKeyTbl[VK_DOWN]) {
+					m_RadY += 2.0f * elapsedTime;
+				}
 			}
 		}
 

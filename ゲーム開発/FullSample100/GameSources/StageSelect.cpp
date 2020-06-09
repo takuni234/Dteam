@@ -34,7 +34,7 @@ namespace basecross {
 			true,
 			Vec2(65.0f, 130.0f),
 			Vec3(130.0f, 300.0f, 0.0f));
-		ptrScore->SetScore(static_cast<int>(SelectKey::Stage1) + 1);
+		ptrScore->SetScore(static_cast<int>(App::GetApp()->GetScene<Scene>()->GetCurrentSceneKey()));
 		SetSharedGameObject(L"ScoreSprite", ptrScore);
 		//ステージのスクリーンショット
 		auto ptrSprite = AddGameObject<Sprite>(L"Stage1_TX", Vec2(1280.0f, 800.0f) * 0.5f, Vec3(0.0f));
@@ -114,12 +114,27 @@ namespace basecross {
 				m_InputTime = 0.0f;
 			}
 		}
-		else if (!(KeyState.m_bPressedKeyTbl['A'] && KeyState.m_bPressedKeyTbl['D'])) {
-			if (KeyState.m_bPressedKeyTbl['D']) {
-				m_SelectNum++;
+		else if (!(KeyState.m_bPushKeyTbl['A'] && KeyState.m_bPushKeyTbl['D'])) {
+			if (!m_InputOnce) {
+				if (KeyState.m_bPushKeyTbl['D']) {
+					m_SelectNum++;
+					m_InputOnce = true;
+				}
+				if (KeyState.m_bPushKeyTbl['A']) {
+					m_SelectNum--;
+					m_InputOnce = true;
+				}
 			}
-			if (KeyState.m_bPressedKeyTbl['A']) {
-				m_SelectNum--;
+			else {
+				m_InputTime += elapsedTime;
+				if (m_InputTime > 0.3f) {
+					m_InputOnce = false;
+					m_InputTime = 0.0f;
+				}
+			}
+			if (KeyState.m_bUpKeyTbl['A'] && KeyState.m_bUpKeyTbl['D']) {
+				m_InputOnce = false;
+				m_InputTime = 0.0f;
 			}
 		}
 		//選択キーが変わったら
@@ -204,10 +219,14 @@ namespace basecross {
 		auto ptrScene = App::GetApp()->GetScene<Scene>();
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
-		bool start =
-			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START ||
-			CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B ||
-			KeyState.m_bPressedKeyTbl[VK_SPACE];
+		bool start = false;
+
+		if (CntlVec[0].bConnected) {
+			start = CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_START || CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B;
+		}
+		else {
+			start = KeyState.m_bPressedKeyTbl[VK_SPACE];
+		}
 		if (start) {
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Game);
 		}

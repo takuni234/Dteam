@@ -144,6 +144,7 @@ namespace basecross {
 	void ResultStage::StageSelectKeyInput() {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
+		auto elapsedTime = App::GetApp()->GetElapsedTime();
 
 		if (CntlVec[0].bConnected) {
 			if (!m_InputOnce) {
@@ -157,7 +158,6 @@ namespace basecross {
 				}
 			}
 			else {
-				auto elapsedTime = App::GetApp()->GetElapsedTime();
 				m_Time += elapsedTime;
 				if (m_Time > 0.3f) {
 					m_InputOnce = false;
@@ -169,12 +169,27 @@ namespace basecross {
 				m_Time = 0.0f;
 			}
 		}
-		else if (!(KeyState.m_bPressedKeyTbl['W'] && KeyState.m_bPressedKeyTbl['S'])) {
-			if (KeyState.m_bPressedKeyTbl['S']) {
-				m_SelectNum++;
+		else if (!(KeyState.m_bPushKeyTbl['S'] && KeyState.m_bPushKeyTbl['D'])) {
+			if (!m_InputOnce) {
+				if (KeyState.m_bPushKeyTbl['S']) {
+					m_SelectNum++;
+					m_InputOnce = true;
+				}
+				if (KeyState.m_bPushKeyTbl['W']) {
+					m_SelectNum--;
+					m_InputOnce = true;
+				}
 			}
-			if (KeyState.m_bPressedKeyTbl['W']) {
-				m_SelectNum--;
+			else {
+				m_Time += elapsedTime;
+				if (m_Time > 0.3f) {
+					m_InputOnce = false;
+					m_Time = 0.0f;
+				}
+			}
+			if (KeyState.m_bUpKeyTbl['S'] && KeyState.m_bUpKeyTbl['W']) {
+				m_InputOnce = false;
+				m_Time = 0.0f;
 			}
 		}
 
@@ -211,7 +226,7 @@ namespace basecross {
 				ptrScene->SetCurrentSceneKey(key);
 				ptrScene->SetStageCSVKey(L"SaveData25.csv");
 				break;
-			case SelectKey((int(SelectKey::Max) - 1)):
+			case SelectKey::Stage3:
 				ptrScene->ChangeScene(SceneKey::Title);
 				break;
 			default:
