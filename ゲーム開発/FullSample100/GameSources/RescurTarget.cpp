@@ -123,14 +123,30 @@ namespace basecross {
 		}
 		return false;
 	}
-	void RescurTarget_Base::HappyAction() {
+	void RescurTarget_Base::HappyAction(float jumpforce) {
 		Vec3 jumpPos;
 		auto Trans = GetComponent<Transform>();
 		auto Pos = Trans->GetPosition();
 		m_Position = Pos;
-		jumpPos = Vec3(0, 1, 0);
+		jumpPos = Vec3(0, jumpforce, 0);
 
 		m_Position += jumpPos * App::GetApp()->GetElapsedTime()*2.0f;
+
+		Trans->SetPosition(m_Position);
+	}
+	void RescurTarget_Base::DamegeAction(float jumpforce) {
+		Vec3 jumpPos;
+		auto Trans = GetComponent<Transform>();
+		auto Pos = Trans->GetPosition();
+		m_Position = Pos;
+		auto plypos = GetStage()->
+			GetSharedGameObject<Player>(L"Player")->
+			GetComponent<Transform>()->
+			GetPosition();
+
+		jumpPos = plypos-Vec3(0, jumpforce, 0);
+
+		m_Position += -jumpPos * App::GetApp()->GetElapsedTime()*2.0f;
 
 		Trans->SetPosition(m_Position);
 	}
@@ -157,7 +173,8 @@ namespace basecross {
 		Draw->AddAnimation(L"Default", 200, 100, true, 20.0f);
 		Draw->AddAnimation(L"Walk", 0, 30, true, 60);
 		Draw->AddAnimation(L"jump", 34, 65, true, 30);
-		
+		Draw->AddAnimation(L"Badjump", 65, 34, true, 30);
+
 
 
 		auto Trans = GetComponent<Transform>();
@@ -168,7 +185,6 @@ namespace basecross {
 		auto collision = AddComponent<CollisionCapsule>();
 		collision->SetDrawActive(false);
 
-		GetStage()->SetSharedGameObject(L"s", GetThis<GameObject>());
 		AddTag(L"RescurTarget1");
 
 		auto gravity = AddComponent<Gravity>();
@@ -198,51 +214,75 @@ namespace basecross {
 			if (draw2->GetCurrentAnimation() != L"Walk") {
 				draw2->ChangeCurrentAnimation(L"Walk");
 			}
-			draw2->UpdateAnimation(time);
-
+			//draw2->UpdateAnimation(time);
 		}
 		else {
 			PLAYERCHASE();
-
 			if (INFlg == false && draw2->GetCurrentAnimation() != L"jump") {
 				draw2->ChangeCurrentAnimation(L"jump");
 				flg = true;
 				//GetStage()->AddGameObject<HelpSplite>(Pos,Vec3(0),Vec3(0));
 			}
-
 			if (INFlg && draw2->GetCurrentAnimation() != L"Walk") {
 				draw2->ChangeCurrentAnimation(L"Walk");
 				flg = false;
 			}
 			if (flg) {
-				HappyAction();
+				HappyAction(1);
 			}
-			draw2->UpdateAnimation(time);
+			//draw2->UpdateAnimation(time);
+		}		
+		
+		if (Goal) {
+			HappyAction(1);		
+			HappyTime += App::GetApp()->GetElapsedTime();
+	
+			if (draw2->GetCurrentAnimation() != L"jump"&&
+				draw2->GetCurrentAnimation() == L"Walk") {
+		        draw2->ChangeCurrentAnimation(L"jump");
+			}					
+			draw2->UpdateAnimation(HappyTime);
+
+			shared_ptr<GoalObject> target = nullptr;
+			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+			if (HappyTime >1) {
+				for (auto obj : gameobjects) {
+					target = dynamic_pointer_cast<GoalObject>(obj);
+					if (target) {
+						target->TargetCount();
+					}
+				}
+				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+			}		
 		}
 
 		if (HP < 0) {
-			auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
-			goal->BadGoalCount();
-			goal->GameEndCount();
+			auto col = GetComponent<CollisionCapsule>();
+			col->SetUpdateActive(false);
 
-			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
-		}
-
+			HappyAction(3);
+			dathTime += App::GetApp()->GetElapsedTime();
+			if (draw2->GetCurrentAnimation() != L"Badjump"&&
+				draw2->GetCurrentAnimation() == L"Walk") {
+				draw2->ChangeCurrentAnimation(L"jump");
+			}
+			draw2->UpdateAnimation(dathTime);
+			if (dathTime > 1) {
+				auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+				goal->BadGoalCount();
+				goal->GameEndCount();
+				auto trans = GetComponent<Transform>();
+			
+				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+			}
+		}		
+		draw2->UpdateAnimation(time);
 	}
 	void RescurTarget_1::OnCollisionEnter(shared_ptr<GameObject>& obj) {
 		if (obj->FindTag(L"GoalObj")) {
-			HappyAction();
-			time += App::GetApp()->GetElapsedTime();
-			shared_ptr<GoalObject> target = nullptr;
-			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-			for (auto obj : gameobjects) {
-				target = dynamic_pointer_cast<GoalObject>(obj);
-				if (target) {
-					target->TargetCount();
-				}
-			}
-			GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
-		}else
+			Goal = true;
+		}
+		else
 		if (obj->FindTag(L"IncBox")) {
 			HP--;
 		}
@@ -316,37 +356,57 @@ namespace basecross {
 				flg = false;
 			}
 			if (flg) {
-				HappyAction();
+				HappyAction(1);
 			}
 			draw2->UpdateAnimation(time);
 		}
 
-		if (HP == 0) {
-			auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
-			goal->BadGoalCount();
-			goal->GameEndCount();
+		if (HP < 0) {
+			auto col = GetComponent<CollisionCapsule>();
+			col->SetUpdateActive(false);
+			HappyAction(3);
+			dathTime += App::GetApp()->GetElapsedTime();
+			if (draw2->GetCurrentAnimation() != L"Badjump"&&
+				draw2->GetCurrentAnimation() == L"Walk") {
+				draw2->ChangeCurrentAnimation(L"jump");
+			}
+			draw2->UpdateAnimation(dathTime);
 
-			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+			if (dathTime > 1) {
+				auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+				goal->BadGoalCount();
+				goal->GameEndCount();
+		
+				GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+			}
+		}
+
+		if (Goal) {
+			HappyAction(1);
+			HappyTime += App::GetApp()->GetElapsedTime();
+
+			if (draw2->GetCurrentAnimation() != L"jump"&&
+				draw2->GetCurrentAnimation() == L"Walk") {
+				draw2->ChangeCurrentAnimation(L"jump");
+			}
+			draw2->UpdateAnimation(HappyTime);
+			if (HappyTime > 1) {
+				shared_ptr<GoalObject> target = nullptr;
+				auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
+				for (auto obj : gameobjects) {
+					target = dynamic_pointer_cast<GoalObject>(obj);
+					if (target) {
+						target->TargetCount();
+					}
+				}
+				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+			}
 		}
 	}
 
 	void RescurTarget_2::OnCollisionEnter(shared_ptr<GameObject>& obj) {
-		time = App::GetApp()->GetElapsedTime();
-		auto draw2 = GetComponent<BcPNTBoneModelDraw>();
-		draw2->SetTextureResource(L"SURVIVOR_TX");
-		draw2->SetFogEnabled(true);
-
 		if (obj->FindTag(L"GoalObj")) {
-			HappyAction();
-			shared_ptr<GoalObject> target = nullptr;
-			auto gameobjects = App::GetApp()->GetScene<Scene>()->GetActiveStage()->GetGameObjectVec();
-			for (auto obj : gameobjects) {
-				target = dynamic_pointer_cast<GoalObject>(obj);
-				if (target) {
-					target->TargetCount();
-				}
-			}
-			GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
+			Goal = true;
 		}
 		else 
 		if (obj->FindTag(L"IncBox")) {

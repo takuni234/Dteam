@@ -60,9 +60,18 @@ namespace basecross {
 	void GoalObject::OnUpdate() {
 		auto obj = GetStage()->GetThis<GameStage>();
 		obj->SetGoalCount(GoalCount);
-
+		auto col = GetComponent<CollisionObb>();
+		Vec3 movepos;
 		if (count == GoalCount) {
 			Goalflg = true;
+			col->SetUpdateActive(false);
+			auto trans = GetComponent<Transform>();
+			auto Pos = trans->GetPosition();
+			m_Position = Pos;
+			movepos = Vec3(1, 0, 0);
+			m_Position += movepos * App::GetApp()->GetElapsedTime()*2.0f;
+			trans->SetPosition(m_Position);
+
 		}
 		if (EndCount == TargetEndCount) {
 			GameEndflg = true;

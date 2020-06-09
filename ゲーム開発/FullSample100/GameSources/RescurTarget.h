@@ -23,7 +23,8 @@ namespace basecross {
 		Vec3 GoalPos();
 		void PLAYERCHASE();
 		bool MoveSwitch();
-		void HappyAction();
+		void HappyAction(float jumpforce);
+		void DamegeAction(float jumpforce);
 		void ChangeScene() {
 			App::GetApp()->GetScene<Scene>()->
 				ChangeScene(SceneKey::Title);
@@ -44,7 +45,8 @@ namespace basecross {
 		int GoalInCount;
 		bool HPflg = false;
 		float time;
-
+		bool Goal = false;
+		float dathTime = 0, HappyTime = 0;
 		int HP;
 	};
 
@@ -52,11 +54,8 @@ namespace basecross {
 	//ì¡éÍãZî\éùÇøÇÃã~èoëŒè€
 	//
 	class RescurTarget_1 :public RescurTarget_Base {
-		//HelpSplite help;
 		Vec3 m_Position, m_Scale, m_Rotation;
 		int moveChangeCost;
-		//float time;
-		//shared_ptr<HelpSplite> hs;
 	public:
 		RescurTarget_1(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
 			:RescurTarget_Base(stage, pos, scale, rotate),//help(stage, pos),
@@ -72,7 +71,6 @@ namespace basecross {
 
 	class RescurTarget_2 :public RescurTarget_Base {
 		Vec3 m_Position, m_Scale, m_Rotation;
-		float DethTime;
 	public:
 		RescurTarget_2(const shared_ptr<Stage>& stage, Vec3 pos, Vec3 scale, Vec3 rotate)
 			:RescurTarget_Base(stage, pos, scale, rotate),

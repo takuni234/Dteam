@@ -82,7 +82,8 @@ namespace basecross {
 		if (FallFlg) {
 			Collision->SetFixed(true);
 		}
-		AddComponent<Gravity>();
+		auto gravity = AddComponent<Gravity>();
+		gravity->SetGravity(Vec3(0, -5, 0));
 		AddTag(L"ObjRock");
 	}
 	void ObjRock::OnUpdate() {
