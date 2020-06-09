@@ -110,10 +110,6 @@ namespace basecross {
 			m_SavePos = transComp->GetPosition();
 			m_Arrangement = true;
 		}
-		if (Other->FindTag(L"PlayerAttackArea")) {
-			SetDrawActive(false);
-			SetUpdateActive(false);
-		}
 	}
 	void ObjRock::OnCollisionExcute(shared_ptr<GameObject>& Other) {
 		if (Other->FindTag(L"PlayerGrabArea")) {

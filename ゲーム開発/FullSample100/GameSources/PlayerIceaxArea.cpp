@@ -67,7 +67,7 @@ namespace basecross {
 	}
 
 	void AttackArea::OnCollisionEnter(shared_ptr<GameObject>& Other) {
-		if (Other->FindTag(L"ColdBox")) {
+		if (Other->FindTag(L"ColdBox") || Other->FindTag(L"ObjRock")) {
 			m_Hit = true;
 			m_DestructionReservationObj = Other;
 		}

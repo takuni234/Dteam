@@ -65,6 +65,8 @@ namespace basecross {
 
 	void StageSelect::OnCreate() {
 		try {
+			m_SelectKey = App::GetApp()->GetScene<Scene>()->GetCurrentSceneKey();
+			m_SelectNum = static_cast<int>(m_SelectKey);
 			//ビューとライトの作成
 			CreateViewLight();
 			CreateSelectSprite();

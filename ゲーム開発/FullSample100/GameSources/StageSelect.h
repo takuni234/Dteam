@@ -35,7 +35,7 @@ namespace basecross {
 		int GetObjCountInCSV(const wstring& key);
 	public:
 		//\’z‚Æ”jŠü
-		StageSelect() :Stage(), m_SelectKey(SelectKey::Stage1), m_InputOnce(false), m_InputTime(0.0f), m_ArrowCursorScale(100.0f), m_RCursorTime(0.0f) {}
+		StageSelect() :Stage(), m_SelectKey(SelectKey(0)), m_InputOnce(false), m_InputTime(0.0f), m_ArrowCursorScale(100.0f), m_RCursorTime(0.0f) {}
 		virtual ~StageSelect() {}
 		//‰Šú‰»
 		virtual void OnCreate()override;

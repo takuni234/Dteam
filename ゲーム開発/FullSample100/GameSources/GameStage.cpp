@@ -69,7 +69,7 @@ namespace basecross {
 			true,
 			Vec2(65.0f, 130.0f),
 			Vec3(530.0f, 300.0f, 0.0f));
-		ptrScore->SetScore(App::GetApp()->GetScene<Scene>()->GetAllMember());
+		ptrScore->SetScore(float(App::GetApp()->GetScene<Scene>()->GetAllMember()));
 		ptrScore->SetDrawLayer(5);
 		SetSharedGameObject(L"StageMaxScoreSprite", ptrScore);
 	}
@@ -536,7 +536,7 @@ namespace basecross {
 		m_TotalTime -= elapsedTime;
 		//èïÇØÇΩêlêîÇÃçXêV
 		auto ptrObj = GetSharedGameObject<ScoreSprite>(L"StageScoreSprite");
-		ptrObj->SetScore(App::GetApp()->GetScene<Scene>()->GetRescueCount());
+		ptrObj->SetScore(float(App::GetApp()->GetScene<Scene>()->GetRescueCount()));
 		if (m_TotalTime <= 0&&TimeUpFlg==false) {
 			//App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::GameOver);
 			AddGameObject<GameEndSplite>(Vec3(-740, 0, 0), Vec2(900.0f, 300.0f), Vec3(0), L"GAMEOVER_TX");

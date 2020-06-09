@@ -218,21 +218,23 @@ namespace basecross {
 			{
 			case SelectKey::Stage1:
 				ptrScene->SetLimitTime(120.0f);
-				ptrScene->SetCurrentSceneKey(key);
+				ptrScene->SetCurrentSceneKey(static_cast<SelectKey>(static_cast<int>(key) + 1));
 				ptrScene->SetStageCSVKey(L"Stage2.csv");
+				ptrScene->ChangeScene(SceneKey::Game);
 				break;
 			case SelectKey::Stage2:
 				ptrScene->SetLimitTime(200.0f);
-				ptrScene->SetCurrentSceneKey(key);
+				ptrScene->SetCurrentSceneKey(static_cast<SelectKey>(static_cast<int>(key) + 1));
 				ptrScene->SetStageCSVKey(L"SaveData25.csv");
+				ptrScene->ChangeScene(SceneKey::Game);
 				break;
-			case SelectKey::Stage3:
+			case static_cast<SelectKey>((static_cast<int>(SelectKey::Max) - 1)): // 最後のキー
+				ptrScene->SetCurrentSceneKey(static_cast<SelectKey>(0)); // 最初のキー(0)で初期化
 				ptrScene->ChangeScene(SceneKey::Title);
 				break;
 			default:
 				break;
 			}
-			ptrScene->ChangeScene(SceneKey::Game);
 			break;
 		case ResultStageMenuKey::Select:
 			ptrScene->ChangeScene(SceneKey::Select);
