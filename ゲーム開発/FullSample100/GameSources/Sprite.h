@@ -79,5 +79,8 @@ namespace basecross {
 			UpdateHP();
 			return m_Hp;
 		}
+		float GetHp() const {
+			return m_Hp;
+		}
 	};
 }

@@ -49,5 +49,6 @@ namespace basecross {
 		}
 		bool GetGoalflg() { return Goalflg; }
 		bool GetEndflg() { return GameEndflg; }
+		void SetEndflg(const bool flg) { GameEndflg = flg; }
 	};
 }

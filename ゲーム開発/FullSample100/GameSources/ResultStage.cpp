@@ -145,6 +145,7 @@ namespace basecross {
 		auto CntlVec = App::GetApp()->GetInputDevice().GetControlerVec();
 		auto KeyState = App::GetApp()->GetInputDevice().GetKeyState();
 		auto elapsedTime = App::GetApp()->GetElapsedTime();
+		int currentNum = m_SelectNum;
 
 		if (CntlVec[0].bConnected) {
 			if (!m_InputOnce) {
@@ -193,6 +194,10 @@ namespace basecross {
 			}
 		}
 
+		if (currentNum != m_SelectNum) {
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"CURSOR_WAV", 0, 0.1f);
+		}
 		if (m_SelectNum <= 0) {
 			m_SelectNum = static_cast<int>(ResultStageMenuKey::Max);
 		}
