@@ -28,6 +28,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"WATER_TX", strTexture);
 		strTexture = DataDir + L"trace.png";
 		App::GetApp()->RegisterTexture(L"TRACE_TX", strTexture);
+		strTexture = DataDir + L"Fade.png";
+		App::GetApp()->RegisterTexture(L"FADE_TX", strTexture);
 		strTexture = DataDir + L"Pause.png";
 		App::GetApp()->RegisterTexture(L"PAUSE_TX", strTexture);
 		strTexture = DataDir + L"number.png";
@@ -110,6 +112,8 @@ namespace basecross {
 		App::GetApp()->RegisterTexture(L"HPGAUGE2_TX", strTexture);
 		strTexture = DataDir + L"volcanicash2.png";
 		App::GetApp()->RegisterTexture(L"SMOKE_TX", strTexture);
+		strTexture = DataDir + L"copyright.png";
+		App::GetApp()->RegisterTexture(L"COPYRIGHT_TX", strTexture);
 		
 		auto modelMesh = MeshResource::CreateBoneModelMesh(DataDir, L"Survivor7.bmf");
 		App::GetApp()->RegisterResource(L"SURVIVOR_1", modelMesh);
@@ -176,9 +180,9 @@ namespace basecross {
 
 	//スプライトの作成
 	void LoadStage::CreateTitleSprite() {
-		AddGameObject<Sprite>(L"WAIT_TX", Vec2(300.0f, 150.0f), Vec3(450.0f,-400.0f,0.0f));
+		AddGameObject<Sprite>(L"WAIT_TX", Vec2(200.0f, 100.0f), Vec3(400.0f,-350.0f,0.0f));
 		AddGameObject<SerialAnimeSprite>(L"LOADTEST_TX", true,
-			Vec2(256.0f, 256.0f), Vec2(400.0f, -200.0f), 4, 1, 0.1f);
+			Vec2(256.0f, 256.0f), Vec2(400.0f, -150.0f), 4, 1, 0.1f);
 	}
 
 	//初期化
@@ -209,7 +213,7 @@ namespace basecross {
 	void LoadStage::OnUpdate() {
 		if (m_Loaded) {
 			//リソースのロードが終了したらタイトルステージに移行
-			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Title);
+			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::CopyrightInfo);
 		}
 	}
 

@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Bullet.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Character.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CopyrightInfoStage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Enemy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameEvent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GameOverStage.h" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Bullet.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Character.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)CopyrightInfoStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Enemy.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameOverStage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)GameStage.cpp" />
