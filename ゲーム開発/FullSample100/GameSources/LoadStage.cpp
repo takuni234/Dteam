@@ -136,7 +136,9 @@ namespace basecross {
 		wstring strFolder = L"‰¹‘fÞ/";
 		wstring DataDirFolder = DataDir + strFolder;
 		wstring DataWav = DataDirFolder + L"cursor.wav";
-		App::GetApp()->RegisterWav(L"cursor", DataWav);
+		App::GetApp()->RegisterWav(L"CURSOR_WAV", DataWav);
+		DataWav = DataDirFolder + L"decision.wav";
+		App::GetApp()->RegisterWav(L"DECISION_WAV", DataWav);
 		DataWav = DataDirFolder + L"air_shot.wav";
 		App::GetApp()->RegisterWav(L"ICEAX_ATTACK_WAV", DataWav);
 		DataWav = DataDirFolder + L"Lava.wav";

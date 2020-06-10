@@ -145,6 +145,8 @@ namespace basecross {
 			ptrSprite->SetScale(m_ArrowCursorScale * 0.8f);
 			ptrSprite->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
 			m_RCursorTime = 0.0f;
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"CURSOR_WAV", 0, 0.1f);
 		}
 		else if(m_RCursorTime >= 0.1f) {
 			auto ptrSprite = GetSharedGameObject<Sprite>(L"RArrowCursorSprite");
@@ -160,6 +162,8 @@ namespace basecross {
 			ptrSprite->SetScale(m_ArrowCursorScale * 0.8f);
 			ptrSprite->SetTextureKey(L"CHOICE_RIGHTARROWCURSOL_TX");
 			m_LCursorTime = 0.0f;
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"CURSOR_WAV", 0, 0.1f);
 		}
 		else if(m_LCursorTime >= 0.1f) {
 			auto ptrSprite = GetSharedGameObject<Sprite>(L"LArrowCursorSprite");
