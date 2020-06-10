@@ -214,7 +214,7 @@ namespace basecross {
 			if (draw2->GetCurrentAnimation() != L"Walk") {
 				draw2->ChangeCurrentAnimation(L"Walk");
 			}
-			//draw2->UpdateAnimation(time);
+			draw2->UpdateAnimation(time);
 		}
 		else {
 			PLAYERCHASE();
@@ -230,7 +230,7 @@ namespace basecross {
 			if (flg) {
 				HappyAction(1);
 			}
-			//draw2->UpdateAnimation(time);
+			draw2->UpdateAnimation(time);
 		}		
 		
 		if (Goal) {
@@ -275,8 +275,16 @@ namespace basecross {
 			
 				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
 			}
-		}		
-		draw2->UpdateAnimation(time);
+		}
+		gratime = App::GetApp()->GetElapsedTime();
+		auto gravity = GetComponent<Gravity>();
+		auto gravityscale = gravity->GetGravityVelocity();
+		auto gra = gravity->GetGravity();
+		auto gr = (m_Position.y + (2 * gratime) + (2/(gra.y*(gratime*gratime))));
+		//if (gra.y != 0) {
+		//	HP = 0;
+		//	m_Position = Pos;
+		//}
 	}
 	void RescurTarget_1::OnCollisionEnter(shared_ptr<GameObject>& obj) {
 		if (obj->FindTag(L"GoalObj")) {

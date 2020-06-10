@@ -76,9 +76,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Scene.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)CopyrightInfoStage.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)StageObject.h">
@@ -158,9 +155,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RescurTarget.h">
       <Filter>StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)CopyrightInfoStage.h">
-      <Filter>Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
