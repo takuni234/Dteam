@@ -42,6 +42,9 @@ namespace basecross {
 			m_StartPos = pos;
 			GetComponent<Transform>()->SetPosition(m_StartPos);
 		}
+		float GetAlpha() const {
+			return m_Alpha;
+		}
 		void SetAlpha(const float& alpha) {
 			m_Alpha = alpha;
 			auto ptrDraw = GetComponent<PCTSpriteDraw>();

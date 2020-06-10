@@ -15,6 +15,7 @@
 #include "LoadStage.h"
 #include "ResultStage.h"
 #include "GameOverStage.h"
+#include "CopyrightInfoStage.h"
 #include "Character.h"
 #include "PlayerGrabArea.h"
 #include "PlayerIceaxArea.h"

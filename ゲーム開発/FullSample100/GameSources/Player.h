@@ -40,6 +40,7 @@ namespace basecross {
 
 		//‰¹ŠÖŒW
 		shared_ptr<SoundItem> m_BGM;
+		shared_ptr<SoundItem> m_BGM2;
 		float m_BGMInterval;
 		bool m_BGMflg; //‘«‰¹—p
 		float m_Stride;
@@ -66,6 +67,8 @@ namespace basecross {
 		//‰¹
 		void PlayerSound(bool active, const wstring& key);
 		void PlayerSound(bool active, const wstring& key, float volume);
+		void PlayerSound(bool active, const wstring& key, shared_ptr<SoundItem> bgm);
+		void PlayerSound(bool active, const wstring& key, float volume, bool loop, shared_ptr<SoundItem> bgm);
 		void ResetBGMInterval() {
 			m_BGMflg = false;
 			m_BGMInterval = 0.2f;
@@ -106,6 +109,12 @@ namespace basecross {
 		}
 		float GetKnockBackTime()const {
 			return m_KnockBackTime;
+		}
+		shared_ptr<SoundItem> GetSoundItem2() const {
+			return m_BGM2;
+		}
+		void SetSoundItem2(const shared_ptr<SoundItem>& bgm) {
+			m_BGM2 = bgm;
 		}
 	};
 

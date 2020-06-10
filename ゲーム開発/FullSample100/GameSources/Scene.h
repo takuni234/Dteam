@@ -15,6 +15,7 @@ namespace basecross{
 		Result,
 		GameOver,
 		Load,
+		CopyrightInfo,
 		Max
 	};
 

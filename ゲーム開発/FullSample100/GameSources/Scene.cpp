@@ -50,6 +50,9 @@ namespace basecross{
 		else if (event->m_MsgStr == L"ToGameOverStage") {
 			ResetActiveStage<GameOverStage>();
 		}
+		else if (event->m_MsgStr == L"ToCopyrightInfoStage") {
+			ResetActiveStage<CopyrightInfoStage>();
+		}
 	}
 
 	void Scene::ChangeScene(SceneKey key) {
@@ -72,6 +75,9 @@ namespace basecross{
 			break;
 		case SceneKey::Load:
 			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToLoadStage");
+			break;		
+		case SceneKey::CopyrightInfo:
+			PostEvent(0.0f, GetThis<ObjectInterface>(), GetThis<Scene>(), L"ToCopyrightInfoStage");
 			break;
 		default:
 			break;

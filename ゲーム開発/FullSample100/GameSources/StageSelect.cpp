@@ -34,7 +34,7 @@ namespace basecross {
 			true,
 			Vec2(65.0f, 130.0f),
 			Vec3(130.0f, 300.0f, 0.0f));
-		ptrScore->SetScore(static_cast<int>(App::GetApp()->GetScene<Scene>()->GetCurrentSceneKey()));
+		ptrScore->SetScore(static_cast<float>(App::GetApp()->GetScene<Scene>()->GetCurrentSceneKey()));
 		SetSharedGameObject(L"ScoreSprite", ptrScore);
 		//ステージのスクリーンショット
 		auto ptrSprite = AddGameObject<Sprite>(L"Stage1_TX", Vec2(1280.0f, 800.0f) * 0.5f, Vec3(0.0f));
