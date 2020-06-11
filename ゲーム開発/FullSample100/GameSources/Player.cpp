@@ -193,8 +193,18 @@ namespace basecross {
 		if (ptrGameStage->GetCameraSelect() == CameraSelect::openingCamera) {
 			return;
 		}
-
-		m_StateMachine->Update();
+		auto ptrHPSprite = GetStage()->GetSharedGameObject<HPSprite>(L"PlayerHPSprite");
+		if (ptrHPSprite->GetHp() <= 0.0f) {
+			auto goal = GetStage()->GetSharedGameObject<GoalObject>(L"Goal");
+			goal->SetEndflg(true);
+			auto ptrTrans = GetComponent<Transform>();
+			if (ptrTrans->GetScale().x >= 0.001f) {
+				ptrTrans->SetScale(ptrTrans->GetScale() * 0.97f);
+			}
+		}
+		else {
+			m_StateMachine->Update();
+		}
 	}
 
 	void Player::OnUpdate2() {
@@ -643,15 +653,17 @@ namespace basecross {
 		return instance;
 	}
 	void DamageState::Enter(const shared_ptr<Player>& Obj) {
+		auto ptrHPSprite = Obj->GetStage()->GetSharedGameObject<HPSprite>(L"PlayerHPSprite");
+		ptrHPSprite->AddHp(-1.0f);
 		m_Time = 0.0f;
 		auto ptrDraw = Obj->GetComponent<BcPNTBoneModelDraw>();
 		ptrDraw->ChangeCurrentAnimation(L"Walk");
-		auto ptrHPSprite = Obj->GetStage()->GetSharedGameObject<HPSprite>(L"PlayerHPSprite");
-		ptrHPSprite->AddHp(-1.0f);
 		auto ptrGra = Obj->GetComponent<Gravity>();
 		Vec3 playerBack = -Obj->GetComponent<Transform>()->GetForword().normalize();
 		Vec3 knockBackPos(playerBack.x, playerBack.y + 5.0f, playerBack.z);
-		ptrGra->SetGravityVerocity(knockBackPos);
+		if (ptrHPSprite->GetHp() > 0.0f) {
+			ptrGra->SetGravityVerocity(knockBackPos);
+		}
 		Obj->PlayerSound(true, L"BURN_WAV", 0.25f);
 	}
 	void DamageState::Execute(const shared_ptr<Player>& Obj) {
