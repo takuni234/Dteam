@@ -22,7 +22,7 @@ namespace basecross {
 		//マルチライトの作成
 		auto PtrMultiLight = CreateLight<MultiLight>();
 		//デフォルトのライティングを指定
-		PtrMultiLight->SetDefaultLighting();
+		PtrMultiLight->SetStageLighting();
 	}
 
 	void StageSelect::CreateSelectSprite() {
@@ -234,6 +234,8 @@ namespace basecross {
 			start = KeyState.m_bPressedKeyTbl[VK_SPACE];
 		}
 		if (start) {
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"DECISION_WAV", 0, 0.1f);
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Game);
 		}
 	}

@@ -199,7 +199,7 @@ namespace basecross {
 			goal->SetEndflg(true);
 			auto ptrTrans = GetComponent<Transform>();
 			if (ptrTrans->GetScale().x >= 0.001f) {
-				ptrTrans->SetScale(ptrTrans->GetScale() * 0.97f);
+				ptrTrans->SetScale(ptrTrans->GetScale() * 0.9f);
 			}
 		}
 		else {
@@ -490,7 +490,7 @@ namespace basecross {
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"Shoot");
 		auto ptrXA = App::GetApp()->GetXAudio2Manager();
-		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.1f));
+		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.05f));
 	}
 	void ShotState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerMove();
@@ -519,7 +519,7 @@ namespace basecross {
 		ptrDraw->SetTextureResource(L"RESCUECHARACTER_TX");
 		ptrDraw->ChangeCurrentAnimation(L"MovingShooting");
 		auto ptrXA = App::GetApp()->GetXAudio2Manager();
-		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.1f));
+		Obj->SetSoundItem2(ptrXA->Start(L"HOSE_WAV", XAUDIO2_LOOP_INFINITE, 0.05f));
 	}
 	void MovingShootingState::Execute(const shared_ptr<Player>& Obj) {
 		Obj->PlayerSneak();

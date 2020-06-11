@@ -72,6 +72,8 @@ namespace basecross {
 			KeyState.m_bPressedKeyTbl[VK_SPACE];
 
 		if (start) {
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"DECISION_WAV", 0, 0.1f);
 			App::GetApp()->GetScene<Scene>()->ChangeScene(SceneKey::Select);
 		}
 	}

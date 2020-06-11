@@ -847,6 +847,7 @@ namespace basecross {
 		*/
 		//--------------------------------------------------------------------------------------
 		void SetMyLighting();
+		void SetStageLighting();
 		virtual const Light& GetTargetLight() const override;
 		//--------------------------------------------------------------------------------------
 		/*!

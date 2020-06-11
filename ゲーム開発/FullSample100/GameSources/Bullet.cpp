@@ -10,7 +10,7 @@ namespace basecross {
 		m_MoveDir(MoveDirPtr),
 		m_Speed(SpeedPtr),
 		m_Hit(false),
-		m_ExistenceTime(0.5f),
+		m_ExistenceTime(1.0f),
 		m_Time(0.0f)
 	{}
 

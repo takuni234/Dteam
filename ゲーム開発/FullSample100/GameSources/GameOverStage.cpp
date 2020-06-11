@@ -107,6 +107,8 @@ namespace basecross {
 		UpdateCursor();
 
 		if (start) {
+			auto ptrXA = App::GetApp()->GetXAudio2Manager();
+			ptrXA->Start(L"DECISION_WAV", 0, 0.1f);
 			ChangeStageSceneSelected();
 		}
 	}

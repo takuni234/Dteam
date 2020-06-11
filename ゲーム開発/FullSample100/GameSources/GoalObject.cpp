@@ -27,13 +27,13 @@ namespace basecross {
 	void GoalObject::OnCreate() {
 		Mat4x4 spanMat; 
 		spanMat.affineTransformation(
-			Vec3(0.15f, 0.15f, 0.15f),
+			Vec3(0.2f, 0.15f, 0.1f),
 			Vec3(0.0f, 0.0f, 0.0f),
 			Vec3(0.0f, XM_PI, 0.0f),
 			Vec3(0.0f, 0.0f, 0.0f)
 		);
 		auto ptrTransform = GetComponent<Transform>();
-		ptrTransform->SetScale(m_Scale);
+		ptrTransform->SetScale(m_Scale.x * 0.75f, m_Scale.y, m_Scale.z * 1.5f);
 		ptrTransform->SetRotation(m_Rotation);
 		ptrTransform->SetPosition(m_Position);
 		//OBBè’ìÀjîªíËÇïtÇØÇÈ
@@ -68,7 +68,7 @@ namespace basecross {
 			auto trans = GetComponent<Transform>();
 			auto Pos = trans->GetPosition();
 			m_Position = Pos;
-			movepos = Vec3(1, 0, 0);
+			movepos = trans->GetForword();
 			m_Position += movepos * App::GetApp()->GetElapsedTime()*2.0f;
 			trans->SetPosition(m_Position);
 
