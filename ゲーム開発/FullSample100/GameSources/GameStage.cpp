@@ -229,8 +229,8 @@ namespace basecross {
 				(float)_wtof(torkns[6].c_str())
 			);
 			StagePos = col_Pos;
-			StageScale = col_Scale;
-			auto ground = AddGameObject<FixedBox>(col_Scale, Vec3(0.0f), col_Pos);
+			StageScale = Vec3(50.0f,1.0f,50.0f);
+			auto ground = AddGameObject<FixedBox>(StageScale, Vec3(0.0f), col_Pos);
 		}
 		ObjCsvfile.GetSelect(LineVec, 0, L"Wall");
 		for (auto& v : LineVec) {
@@ -357,8 +357,14 @@ namespace basecross {
 				(float)_wtof(torkns[1].c_str()),
 				(float)_wtof(torkns[2].c_str()-1),
 				(float)_wtof(torkns[3].c_str())
+			);			
+			Vec3 Rot(
+				(float)_wtof(torkns[7].c_str()),
+				(float)_wtof(torkns[8].c_str()),
+				(float)_wtof(torkns[9].c_str())
 			);
 			GoalPos = Pos;
+			GoalRot = Rot;
 			//AddGameObject<Enemy>(Vec3(Pos), Vec3(0.25f), Vec3(0));
 		}
 		App::GetApp()->GetScene<Scene>()->SetAllMember(GoalCount);
@@ -499,7 +505,7 @@ namespace basecross {
 			//ground->AddTag(L"Ground");
 			//SetSharedGameObject(L"Stage", ground);
 
-			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f, XM_PIDIV2, 0.0f), Vec3(GoalPos),GoalCount);
+			auto goalObj = AddGameObject<GoalObject>(Vec3(1.0f), Vec3(0.0f,XM_PI, 0.0f), GoalPos,GoalCount);
 			SetSharedGameObject(L"Goal", goalObj);
 
 			auto player = AddGameObject<Player>(Vec3(0.25f), Vec3(0.0f), PlayerPos);// Vec3(0.0f, 1.0f, 0.0f));
@@ -588,6 +594,8 @@ namespace basecross {
 			bool start = CntlVec[0].wPressedButtons & XINPUT_GAMEPAD_B || KeyState.m_bPressedKeyTbl[VK_SPACE];
 
 			if (start) {
+				auto ptrXA = App::GetApp()->GetXAudio2Manager();
+				ptrXA->Start(L"DECISION_WAV", 0, 0.1f);
 				ChangeStageSceneSelected();
 			}
 		}

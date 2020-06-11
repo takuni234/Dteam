@@ -42,6 +42,7 @@ namespace basecross {
 
 		Vec3 PlayerPos;
 		Vec3 GoalPos;
+		Vec3 GoalRot;
 		Vec3 magumaPos;
 		Vec3 StagePos, StageScale;
 		Vec2 StageWallScale;

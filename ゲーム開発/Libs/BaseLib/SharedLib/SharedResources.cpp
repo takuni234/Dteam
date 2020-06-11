@@ -673,6 +673,37 @@ namespace basecross {
 		pImpl->m_MainIndex = 2;
 	}
 
+	void MultiLight::SetStageLighting() {
+		static const bsm::Vec3 defaultDirections[3] =
+		{
+			{ -1.0f, -1.0f, -1.0f },
+			{ 0.7198464f,  0.3420201f,  0.6040227f },
+			{ 0.4545195f, -0.7660444f,  0.4545195f },
+		};
+
+		static const bsm::Col4 defaultDiffuse[3] =
+		{
+			{ 1.0000000f, 1.0f, 1.0f,0.0f },
+			{ 0.9647059f, 0.7607844f, 0.4078432f,0.0f },
+			{ 0.3231373f, 0.3607844f, 0.3937255f,0.0f },
+		};
+
+		static const bsm::Col4 defaultSpecular[3] =
+		{
+			{ 1.0000000f, 1.0f, 1.0f,0.0f },
+			{ 0.0000000f, 0.0000000f, 0.0000000f,0.0f },
+			{ 0.3231373f, 0.3607844f, 0.3937255f,0.0f },
+		};
+		static const bsm::Col4 defaultAmbient = { 1.0f, 1.0f, 1.0f ,0.0f };
+		for (size_t i = 0; i < 3; i++) {
+			pImpl->m_LightVec[i].m_Directional = defaultDirections[i];
+			pImpl->m_LightVec[i].m_DiffuseColor = defaultDiffuse[i];
+			pImpl->m_LightVec[i].m_SpecularColor = defaultSpecular[i];
+		}
+		SetAmbientLightColor(defaultAmbient);
+		pImpl->m_MainIndex = 2;
+	}
+
 	const Light& MultiLight::GetTargetLight() const {
 		return pImpl->m_LightVec[pImpl->m_MainIndex];
 	}
