@@ -491,7 +491,7 @@ namespace basecross {
 			wstring detadir;
 			App::GetApp()->GetDataDirectory(detadir);
 			ObjCsvfile.SetFileName(detadir + ptrScene->GetStageCSVKey()); // シーンクラスに保存されているステージを読み込む
-	        //ObjCsvfile.SetFileName(detadir + L"TestStage.csv");// L"SaveData25.csv");// SaveData.csv");// GameStageA.csv");
+	        //ObjCsvfile.SetFileName(detadir + L"TestStage6.csv");// L"SaveData25.csv");// SaveData.csv");// GameStageA.csv");
 			ObjCsvfile.ReadCsv();
 
 			CreateObjectB_CSV();

@@ -209,6 +209,12 @@ namespace basecross {
 			ptrScene->SetStageCSVKey(L"SaveData25.csv");
 			SetCSVKey();
 			break;
+		case SelectKey::Stage4:
+			GetSharedGameObject<Sprite>(L"StageTXSprite")->SetTextureKey(L"Stage4_TX");
+			ptrScene->SetLimitTime(250.0f);
+			ptrScene->SetStageCSVKey(L"TestStage6.csv");
+			SetCSVKey();
+			break;
 		default:
 			break;
 		}

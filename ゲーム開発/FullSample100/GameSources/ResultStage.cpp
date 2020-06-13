@@ -235,6 +235,12 @@ namespace basecross {
 				ptrScene->SetStageCSVKey(L"SaveData25.csv");
 				ptrScene->ChangeScene(SceneKey::Game);
 				break;
+			case SelectKey::Stage3:
+				ptrScene->SetLimitTime(200.0f);
+				ptrScene->SetCurrentSceneKey(static_cast<SelectKey>(static_cast<int>(key) + 1));
+				ptrScene->SetStageCSVKey(L"TestStage6.csv");
+				ptrScene->ChangeScene(SceneKey::Game);
+				break;
 			case static_cast<SelectKey>((static_cast<int>(SelectKey::Max) - 1)): // 最後のキー
 				ptrScene->SetCurrentSceneKey(static_cast<SelectKey>(0)); // 最初のキー(0)で初期化
 				ptrScene->ChangeScene(SceneKey::Title);

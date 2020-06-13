@@ -74,7 +74,7 @@ namespace basecross {
 
 		auto Trans = GetComponent<Transform>();
 		Trans->SetPosition(m_Position.x, m_Position.y, m_Position.z);
-		Trans->SetScale(m_Scale.x + 0.1f, m_Scale.y, m_Scale.z + 0.1f);
+		Trans->SetScale(m_Scale.x + 0.0f, m_Scale.y+0.05f, m_Scale.z + 0.0f);
 		Trans->SetRotation(m_Rotation);
 		//Trans->SetPivot(m_Position.x, m_Position.y, m_Position.z);
 

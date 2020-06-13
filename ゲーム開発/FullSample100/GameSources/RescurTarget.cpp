@@ -276,6 +276,7 @@ namespace basecross {
 				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
 			}
 		}
+		
 		gratime = App::GetApp()->GetElapsedTime();
 		auto gravity = GetComponent<Gravity>();
 		auto gravityscale = gravity->GetGravityVelocity();
@@ -407,7 +408,7 @@ namespace basecross {
 						target->TargetCount();
 					}
 				}
-				GetStage()->RemoveGameObject<RescurTarget_1>(GetThis<RescurTarget_1>());
+				GetStage()->RemoveGameObject<RescurTarget_2>(GetThis<RescurTarget_2>());
 			}
 		}
 	}
